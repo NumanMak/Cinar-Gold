@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#000000">
+<title>Sayfa bulunamadı | Çınar Gold Kuyumculuk</title>
+<link rel="stylesheet" href="assets/css/fonts.css">
+<link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/icons/favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{
+    font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+    background:#000 radial-gradient(ellipse 60% 50% at 50% 42%,rgba(201,163,78,.10),transparent 70%);
+    color:#f2eee6;display:grid;place-items:center;padding:2rem;text-align:center;
+    -webkit-font-smoothing:antialiased;
+  }
+  main{max-width:36rem;animation:in 1s cubic-bezier(.2,.7,.2,1) both}
+  .mark{width:88px;height:88px;display:block;margin:0 auto 2.25rem;filter:drop-shadow(0 0 24px rgba(201,163,78,.18))}
+  .code{font-size:.75rem;letter-spacing:.5em;color:#c9a34e;margin:0 0 1rem;font-weight:500}
+  h1{font-weight:200;font-size:clamp(2rem,6vw,3.25rem);line-height:1.1;letter-spacing:-.02em;margin:0 0 1.25rem}
+  p.lead{color:#8d8a84;font-size:1.05rem;line-height:1.6;margin:0 0 2.5rem;font-weight:300}
+  .btn{
+    position:relative;display:inline-flex;align-items:center;gap:.6rem;overflow:hidden;
+    padding:.95rem 2rem;border-radius:999px;border:1px solid rgba(201,163,78,.55);
+    color:#e9c979;text-decoration:none;font-size:.9rem;letter-spacing:.08em;font-weight:500;
+    transition:border-color .4s,box-shadow .4s,color .4s;
+  }
+  .btn::after{
+    content:"";position:absolute;inset:0;transform:translateX(-120%) skewX(-20deg);
+    background:linear-gradient(90deg,transparent,rgba(251,240,207,.35),transparent);
+    transition:transform .8s cubic-bezier(.2,.7,.2,1);
+  }
+  .btn:hover,.btn:focus-visible{border-color:#e9c979;color:#fbf0cf;box-shadow:0 0 28px rgba(201,163,78,.35),inset 0 0 12px rgba(201,163,78,.12)}
+  .btn:hover::after,.btn:focus-visible::after{transform:translateX(120%) skewX(-20deg)}
+  .btn:focus-visible{outline:2px solid #e9c979;outline-offset:4px}
+  @keyframes in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){
+    main{animation:none}
+    .btn,.btn::after{transition:none}
+    .btn::after{display:none}
+  }
+</style>
+</head>
+<body>
+<main>
+  <svg class="mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true">
+    <defs>
+      <linearGradient id="cg-gold" x1="12" y1="6" x2="52" y2="62" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#f8e7b0"/>
+        <stop offset=".42" stop-color="#dcb65c"/>
+        <stop offset=".7" stop-color="#b8893a"/>
+        <stop offset="1" stop-color="#f1d589"/>
+      </linearGradient>
+    </defs>
+    <path d="M45.4 14.6A19 19 0 1 0 45.4 41.4" fill="none" stroke="url(#cg-gold)" stroke-width="3" stroke-linecap="round"/>
+    <path d="M27 49.2h10l3 3.3L32 61l-8-8.5z" fill="none" stroke="url(#cg-gold)" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M24.4 52.5h15.2M29.6 49.2l-1.7 3.3L32 61l4.1-8.5-1.7-3.3" fill="none" stroke="url(#cg-gold)" stroke-width="1.1" stroke-linejoin="round" opacity=".85"/>
+  </svg>
+  <p class="code">HATA 404</p>
+  <h1>Aradığınız sayfa bulunamadı</h1>
+  <p class="lead">Bağlantı eskimiş ya da sayfa taşınmış olabilir.</p>
+  <a class="btn" href="/">Ana sayfaya dön</a>
+</main>
+</body>
+</html>

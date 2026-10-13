@@ -1,0 +1,13 @@
+# Yerel araç çıktıları (sitede yayınlanmaz)
+tools/.edge-profile/
+tools/img/
+tools/video/
+tools/shots/
+tools/shots_log.txt
+tools/fonts/
+tools/qa_test/
+tools/sess_*.py
+__pycache__/
+*.tmp
+Thumbs.db
+desktop.ini

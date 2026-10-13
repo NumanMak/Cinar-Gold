@@ -1,0 +1,259 @@
+{
+ "hero": {
+  "widths": [
+   1280,
+   1920,
+   2560
+  ],
+  "aspect": "16:9",
+  "width": 2560,
+  "height": 1440,
+  "color": "#110903",
+  "focal": "65% 52%",
+  "alt_tr": "Siyah zemin üzerinde dramatik ışıkla parlayan işlemeli altın bilezikler",
+  "desc_en": "Stack of ornate yellow-gold bangles on a dark reflective surface, subject right of center, dark negative space left",
+  "source_url": "https://unsplash.com/photos/a-stack-of-ornate-gold-bangles-on-a-dark-surface-wreS7kv_tLE",
+  "photographer": "Zayed Ahmed Zadu",
+  "license": "Unsplash License (free commercial use, no attribution required)"
+ },
+ "hero-m": {
+  "widths": [
+   720,
+   1080
+  ],
+  "aspect": "9:16",
+  "width": 1080,
+  "height": 1920,
+  "color": "#0f0803",
+  "focal": "50% 33%",
+  "alt_tr": "Siyah zemin üzerinde işlemeli altın bilezikler",
+  "desc_en": "Portrait crop of the hero bangles, subject upper-middle, dark space below",
+  "source_url": "https://unsplash.com/photos/a-stack-of-ornate-gold-bangles-on-a-dark-surface-wreS7kv_tLE",
+  "photographer": "Zayed Ahmed Zadu",
+  "license": "Unsplash License (free commercial use, no attribution required)"
+ },
+ "about": {
+  "widths": [
+   640,
+   1080
+  ],
+  "aspect": "4:5",
+  "width": 1080,
+  "height": 1350,
+  "color": "#3e3122",
+  "focal": "45% 50%",
+  "alt_tr": "Kuyumcu tezgahında el işçiliğiyle mücevher işleyen usta eller",
+  "desc_en": "Jeweler hands working a small piece at the bench, dark workshop",
+  "source_url": "https://unsplash.com/photos/a-man-is-working-on-a-piece-of-metal-bfk68pL0EJ0",
+  "photographer": "Tahlia Doyle",
+  "license": "Unsplash License (free commercial use, no attribution required)"
+ },
+ "craft": {
+  "widths": [
+   1280,
+   1920
+  ],
+  "aspect": "16:9",
+  "width": 1920,
+  "height": 1080,
+  "color": "#4b4236",
+  "focal": "50% 50%",
+  "alt_tr": "Kuyumcu şalumosu alevi altında şekillenen altın yüzük",
+  "desc_en": "Jeweler torch flame heating a ring on the bench, dramatic warm light",
+  "source_url": "https://unsplash.com/photos/fire-in-close-up-photography-R5wsYX-xEZI",
+  "photographer": "Tahlia Doyle",
+  "license": "Unsplash License (free commercial use, no attribution required)"
+ },
+ "cat-ring": {
+  "widths": [
+   480,
+   800
+  ],
+  "aspect": "3:4",
+  "width": 800,
+  "height": 1067,
+  "color": "#221406",
+  "focal": "50% 50%",
+  "alt_tr": "Koyu zemin üzerinde işlemeli altın yüzük koleksiyonu",
+  "desc_en": "Collection of ornate yellow-gold rings on dark charcoal",
+  "source_url": "https://unsplash.com/photos/gold-rings-on-dark-charcoal-BUVGUhqNbUM",
+  "photographer": "Zayed Ahmed Zadu",
+  "license": "Unsplash License (free commercial use, no attribution required)"
+ },
+ "cat-necklace": {
+  "widths": [
+   480,
+   800
+  ],
+  "aspect": "3:4",
+  "width": 800,
+  "height": 1067,
+  "color": "#4a3113",
+  "focal": "40% 55%",
+  "alt_tr": "Siyah zemin üzerinde işlemeli altın kolye",
+  "desc_en": "Ornate yellow-gold necklace arc on black",
+  "source_url": "https://unsplash.com/photos/gold-and-purple-beaded-necklace-G3Hrl6WzQYQ",
+  "photographer": "Vaibhav Nagare",
+  "license": "Unsplash License (free commercial use, no attribution required)"
+ },
+ "cat-bracelet": {
+  "widths": [
+   480,
+   800
+  ],
+  "aspect": "3:4",
+  "width": 800,
+  "height": 1067,
+  "color": "#2b170b",
+  "focal": "50% 50%",
+  "alt_tr": "Koyu zeminde dokulu iki altın bilezik",
+  "desc_en": "Two textured yellow-gold bangles on a dark reflective surface",
+  "source_url": "https://unsplash.com/photos/gold-bangles-with-dark-inlays-m2fKc6_pa8c",
+  "photographer": "Zayed Ahmed Zadu",
+  "license": "Unsplash License (free commercial use, no attribution required)"
+ },
+ "cat-diamond": {
+  "widths": [
+   480,
+   800
+  ],
+  "aspect": "3:4",
+  "width": 800,
+  "height": 1067,
+  "color": "#181613",
+  "focal": "50% 50%",
+  "alt_tr": "Siyah zemin üzerinde yansımalı pırlanta taş",
+  "desc_en": "Single faceted diamond with reflection on black",
+  "source_url": "https://unsplash.com/photos/a-diamond-on-a-black-background-with-a-reflection-7HwNaKAFAsw",
+  "photographer": "A Chosen Soul",
+  "license": "Unsplash License (free commercial use, no attribution required)"
+ },
+ "p-solitaire": {
+  "widths": [
+   640,
+   1080
+  ],
+  "aspect": "4:5",
+  "width": 1080,
+  "height": 1350,
+  "color": "#362422",
+  "focal": "50% 60%",
+  "alt_tr": "Saten üzerinde altın tektaş pırlanta yüzük",
+  "desc_en": "Yellow-gold solitaire diamond ring on dark satin",
+  "source_url": "https://unsplash.com/photos/gold-ring-with-a-large-diamond-on-satin--2f63tr8Oac",
+  "photographer": "Ali Sarvari",
+  "license": "Unsplash License (free commercial use, no attribution required)"
+ },
+ "p-bands": {
+  "widths": [
+   640,
+   1080
+  ],
+  "aspect": "4:5",
+  "width": 1080,
+  "height": 1350,
+  "color": "#140c02",
+  "focal": "50% 50%",
+  "alt_tr": "Koyu yansıtıcı zeminde iki altın alyans",
+  "desc_en": "Two gold wedding bands on a dark reflective surface",
+  "source_url": "https://unsplash.com/photos/two-gold-rings-on-a-dark-reflective-surface-w4IlgRAqpx0",
+  "photographer": "McFollis",
+  "license": "Unsplash License (free commercial use, no attribution required)"
+ },
+ "p-chain": {
+  "widths": [
+   640,
+   1080
+  ],
+  "aspect": "4:5",
+  "width": 1080,
+  "height": 1350,
+  "color": "#1a1512",
+  "focal": "45% 45%",
+  "alt_tr": "Siyah zemin üzerinde sıralanmış altın zincir ve bileklikler",
+  "desc_en": "Rows of gold chains and bracelets displayed on black",
+  "source_url": "https://unsplash.com/photos/gold-chains-and-bracelets-on-velvet-3YztZlOvwxY",
+  "photographer": "Zayed Ahmed Zadu",
+  "license": "Unsplash License (free commercial use, no attribution required)"
+ },
+ "p-pendant": {
+  "widths": [
+   640,
+   1080
+  ],
+  "aspect": "4:5",
+  "width": 1080,
+  "height": 1350,
+  "color": "#040302",
+  "focal": "50% 56%",
+  "alt_tr": "Siyah zemin üzerinde güneş motifli altın kolye ucu",
+  "desc_en": "Gold chain with sun pendant on black",
+  "source_url": "https://unsplash.com/photos/yellow-fireworks-in-the-sky-g3AvTGzHe9I",
+  "photographer": "Or Hakim",
+  "license": "Unsplash License (free commercial use, no attribution required)"
+ },
+ "p-bangle": {
+  "widths": [
+   640,
+   1080
+  ],
+  "aspect": "4:5",
+  "width": 1080,
+  "height": 1350,
+  "color": "#180f07",
+  "focal": "50% 50%",
+  "alt_tr": "Kömür taşları üzerinde işlemeli altın bilezik",
+  "desc_en": "Ornate gold bangle resting on dark charcoal",
+  "source_url": "https://unsplash.com/photos/gold-bangle-on-charcoal-pieces-6E-H2OB7idc",
+  "photographer": "Zayed Ahmed Zadu",
+  "license": "Unsplash License (free commercial use, no attribution required)"
+ },
+ "p-bracelet": {
+  "widths": [
+   640,
+   1080
+  ],
+  "aspect": "4:5",
+  "width": 1080,
+  "height": 1350,
+  "color": "#120c06",
+  "focal": "50% 50%",
+  "alt_tr": "Koyu zeminde çiçek motifli altın bileklik",
+  "desc_en": "Gold chain bracelet with flower charm on dark charcoal",
+  "source_url": "https://unsplash.com/photos/gold-flower-bracelet-on-charcoal-274p-MOrhW8",
+  "photographer": "Zayed Ahmed Zadu",
+  "license": "Unsplash License (free commercial use, no attribution required)"
+ },
+ "p-earrings": {
+  "widths": [
+   640,
+   1080
+  ],
+  "aspect": "4:5",
+  "width": 1080,
+  "height": 1350,
+  "color": "#0e0a05",
+  "focal": "50% 50%",
+  "alt_tr": "Siyah kumaş üzerinde işlemeli altın küpeler",
+  "desc_en": "Pair of ornate gold jhumka earrings on black fabric",
+  "source_url": "https://unsplash.com/photos/a-gold-and-black-necklace-fVeujn3i5ZE",
+  "photographer": "Subham Hait",
+  "license": "Unsplash License (free commercial use, no attribution required)"
+ },
+ "p-ring": {
+  "widths": [
+   640,
+   1080
+  ],
+  "aspect": "4:5",
+  "width": 1080,
+  "height": 1350,
+  "color": "#20160e",
+  "focal": "50% 50%",
+  "alt_tr": "Kömür taşları üzerinde telkari altın yüzük",
+  "desc_en": "Intricate gold filigree ring on dark charcoal",
+  "source_url": "https://unsplash.com/photos/gold-filigree-ring-on-charcoal-5eCyR8DpSdM",
+  "photographer": "Zayed Ahmed Zadu",
+  "license": "Unsplash License (free commercial use, no attribution required)"
+ }
+}

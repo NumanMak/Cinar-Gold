@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Çınar Gold">
+  <defs>
+    <linearGradient id="cg-gold" x1="12" y1="6" x2="52" y2="62" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f8e7b0"/>
+      <stop offset=".42" stop-color="#dcb65c"/>
+      <stop offset=".7" stop-color="#b8893a"/>
+      <stop offset="1" stop-color="#f1d589"/>
+    </linearGradient>
+  </defs>
+  <!-- Ç: halka formunda C -->
+  <path d="M45.4 14.6A19 19 0 1 0 45.4 41.4" fill="none" stroke="url(#cg-gold)" stroke-width="3" stroke-linecap="round"/>
+  <!-- Cedâlın yerine pırlanta -->
+  <path d="M27 49.2h10l3 3.3L32 61l-8-8.5z" fill="none" stroke="url(#cg-gold)" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M24.4 52.5h15.2M29.6 49.2l-1.7 3.3L32 61l4.1-8.5-1.7-3.3" fill="none" stroke="url(#cg-gold)" stroke-width="1.1" stroke-linejoin="round" opacity=".85"/>
+</svg>
