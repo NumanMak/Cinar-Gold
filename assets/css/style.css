@@ -731,7 +731,9 @@ html.js [data-reveal="mask"].is-in img { scale: 1; }
 .rail__btn:disabled { opacity: .28; cursor: default; }
 @media (max-width: 699px) {
   .product { flex-basis: 78vw; }
-  .rail__btn { width: 44px; height: 44px; }
+  /* Telefonda kaydırma parmakla yapılır; oklar WhatsApp butonuyla çakışmasın */
+  .rail__btn { display: none; }
+  .rail__progress { margin-right: 0; }
 }
 
 /* --- Özel tasarım bandı ---------------------------------------------------- */
@@ -883,7 +885,8 @@ html.js .is-in .why__icon path { stroke-dashoffset: 0; }
 .footer__bottom {
   display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
   margin-top: clamp(48px, 6vw, 72px);
-  padding-block: 24px calc(24px + env(safe-area-inset-bottom));
+  /* Sağda sabit WhatsApp butonu için boşluk */
+  padding: 24px max(var(--pad), 96px) calc(24px + env(safe-area-inset-bottom)) var(--pad);
   border-top: 1px solid var(--line-soft);
   font-size: .8125rem; color: var(--muted);
 }
@@ -897,7 +900,6 @@ html.js .is-in .why__icon path { stroke-dashoffset: 0; }
 }
 @media (max-width: 479px) {
   .footer__grid { grid-template-columns: 1fr; }
-  .footer__bottom { padding-right: 76px; }
 }
 
 /* --- WhatsApp yüzen buton ---------------------------------------------------- */
@@ -988,23 +990,32 @@ html.menu-open .wa-float { opacity: 0; pointer-events: none; }
   .modal__actions .btn { flex: 1 1 auto; }
 }
 
-/* --- Mobil hero ve küçük ekran ayarları ------------------------------------ */
-@media (max-width: 760px) {
+/* --- Dikey ekranlar (telefon, dikey tablet): dikey hero fotoğrafı, metin altta --- */
+@media (max-width: 760px), (max-aspect-ratio: 4/5) {
   .hero {
     align-items: flex-end;
     padding-block: calc(var(--nav-h) + 24px) calc(92px + env(safe-area-inset-bottom));
   }
+  .hero__zoom { transform-origin: 50% 35%; }
+  .hero__video { display: none; }
   .hero__still img { object-position: 50% 30%; }
   .hero__shade {
     background:
       linear-gradient(0deg, #000 0%, rgba(0, 0, 0, .86) 26%, rgba(0, 0, 0, .25) 56%, rgba(0, 0, 0, .05) 72%, rgba(0, 0, 0, .45) 100%);
   }
+  .hero__cue { display: none; }
+}
+
+/* --- Küçük ekranlar ---------------------------------------------------------- */
+@media (max-width: 760px) {
   .hero__title { font-size: clamp(2.9rem, 13.2vw, 4.4rem); }
   .hero__sub { letter-spacing: .08em; }
   .hero__sub .sep { margin-inline: .45em; }
   .hero__actions .btn { width: 100%; }
-  .hero__cue { display: none; }
   .section { padding-block: 88px; }
+}
+@media (max-width: 559px) {
+  .contact__actions .btn { flex: 1 1 100%; }
 }
 
 /* --- Hareket azaltma ---------------------------------------------------------- */
@@ -1026,8 +1037,8 @@ html.menu-open .wa-float { opacity: 0; pointer-events: none; }
   .hero__zoom, .hero__light, .ambient__glow { animation: none !important; }
   .hero__light { display: none; }
 }
-/* Hareket azaltılmış masaüstü: video yerine hero fotoğrafı (nesne sağda, solda boşluk) */
-@media (min-width: 761px) and (prefers-reduced-motion: reduce) {
+/* Hareket azaltılmış yatay ekran: video yerine hero fotoğrafı (nesne sağda, solda boşluk) */
+@media (min-width: 761px) and (min-aspect-ratio: 801/1000) and (prefers-reduced-motion: reduce) {
   .hero__still img { object-position: 65% 52%; }
 }
 

@@ -33,8 +33,9 @@
 
 <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/inter-latin-ext.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" as="image" href="assets/video/hero-poster.webp" media="(min-width: 761px) and (prefers-reduced-motion: no-preference)" fetchpriority="high">
-<link rel="preload" as="image" imagesrcset="assets/img/hero-m-720.webp 720w, assets/img/hero-m-1080.webp 1080w" imagesizes="100vw" media="(max-width: 760px)" fetchpriority="high">
+<link rel="preload" as="image" href="assets/video/hero-poster.webp" media="(min-width: 761px) and (min-aspect-ratio: 801/1000) and (prefers-reduced-motion: no-preference)" fetchpriority="high">
+<link rel="preload" as="image" imagesrcset="assets/img/hero-m-720.webp 720w, assets/img/hero-m-1080.webp 1080w" imagesizes="100vw" media="(max-width: 760px), (max-aspect-ratio: 4/5)" fetchpriority="high">
+<link rel="preconnect" href="https://finans.truncgil.com" crossorigin>
 <link rel="stylesheet" href="assets/css/fonts.css">
 <link rel="stylesheet" href="assets/css/style.css">
 <script>
@@ -210,7 +211,7 @@
     <div class="hero__media" aria-hidden="true">
       <div class="hero__zoom">
         <picture class="hero__still">
-          <source media="(max-width: 760px)" srcset="assets/img/hero-m-720.webp 720w, assets/img/hero-m-1080.webp 1080w" sizes="100vw">
+          <source media="(max-width: 760px), (max-aspect-ratio: 4/5)" srcset="assets/img/hero-m-720.webp 720w, assets/img/hero-m-1080.webp 1080w" sizes="100vw">
           <source media="(prefers-reduced-motion: reduce)" srcset="assets/img/hero-1280.webp 1280w, assets/img/hero-1920.webp 1920w, assets/img/hero-2560.webp 2560w" sizes="100vw">
           <img src="assets/video/hero-poster.webp" alt="" width="1920" height="1080" fetchpriority="high" decoding="async">
         </picture>

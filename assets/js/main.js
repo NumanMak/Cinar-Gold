@@ -291,7 +291,8 @@
     if (!video || !hero || !motionOK()) return;
     const conn = navigator.connection || {};
     if (conn.saveData || /2g|3g/.test(conn.effectiveType || '')) return;
-    const desktop = mq('(min-width: 761px)');
+    // Dikey ekranlarda (telefon, dikey tablet) dikey fotoğraf kullanılır, video yüklenmez
+    const portrait = mq('(max-width: 760px), (max-aspect-ratio: 4/5)');
     let loaded = false;
     let visible = true;
 
@@ -301,23 +302,24 @@
     };
     const sync = () => {
       if (!loaded) return;
-      if (visible && !document.hidden && desktop.matches) play();
+      if (visible && !document.hidden && !portrait.matches) play();
       else video.pause();
+      if (portrait.matches) hero.classList.remove('is-playing');
     };
     const load = () => {
-      if (loaded || !desktop.matches) return;
+      if (loaded || portrait.matches) return;
       loaded = true;
       const hd = window.innerWidth * (window.devicePixelRatio || 1) > 1500;
       video.muted = true;
       video.src = hd ? video.dataset.srcHd : video.dataset.srcSd;
-      video.addEventListener('playing', () => hero.classList.add('is-playing'), { once: true });
+      video.addEventListener('playing', () => { if (!portrait.matches) hero.classList.add('is-playing'); });
       video.addEventListener('error', () => hero.classList.remove('is-playing'), { once: true });
       sync();
     };
 
     new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync(); }).observe(hero);
     document.addEventListener('visibilitychange', sync);
-    desktop.addEventListener('change', () => { load(); sync(); });
+    portrait.addEventListener('change', () => { load(); sync(); });
     load();
   }
 
