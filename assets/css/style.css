@@ -854,15 +854,11 @@ html.js .is-in .why__icon path { stroke-dashoffset: 0; }
 .contact__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: clamp(32px, 4vw, 44px); }
 .map {
   position: relative; min-height: 440px; overflow: hidden;
-  border-radius: var(--r-card); background: var(--graphite); border: 1px solid var(--line);
+  border-radius: var(--r-card); background: var(--graphite); border: 1px solid rgba(201, 163, 78, .4);
+  box-shadow: 0 30px 70px -40px rgba(0, 0, 0, .9);
 }
 .map iframe {
   position: absolute; inset: 0; width: 100%; height: 100%; border: 0;
-  filter: grayscale(1) invert(.92) contrast(.86) brightness(.92) sepia(.22);
-}
-.map::after {
-  content: ""; position: absolute; inset: 0; pointer-events: none;
-  box-shadow: inset 0 0 0 1px rgba(201, 163, 78, .14), inset 0 0 90px rgba(0, 0, 0, .55);
 }
 @media (max-width: 999px) {
   .contact__grid { grid-template-columns: 1fr; }
