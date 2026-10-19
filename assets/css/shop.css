@@ -1,0 +1,229 @@
+/* ===== Açık tema =====
+   Koyu tema varsayılan tasarımdır. Açık temada zemin ve metin token'ları değişir;
+   görsel / video üzerindeki bölümler okunaklı kalmak için koyu kalır. */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --black: #faf6ee;
+  --graphite: #f3ede0;
+  --graphite-2: #ece4d3;
+  --graphite-3: #e4dac5;
+  --line: #d6c9ae;
+  --line-soft: rgba(40, 30, 10, .1);
+  --muted: #6b6558;
+  --text-2: #4a4538;
+  --pearl: #1c1812;
+  --gold: #8e6b26;
+  --gold-light: #8a6420;
+  --gold-spec: #5d4410;
+}
+
+/* Görsel veya video üzerindeki alanlar her temada koyu paletle çalışır. */
+:root[data-theme="light"] .intro,
+:root[data-theme="light"] .hero,
+:root[data-theme="light"] .cat__link,
+:root[data-theme="light"] .product__card,
+:root[data-theme="light"] .craft,
+:root[data-theme="light"] .mmenu,
+:root[data-theme="light"] .nav:not(.is-scrolled),
+:root[data-theme="light"] .modal {
+  --black: #000;
+  --graphite: #0f0f11;
+  --graphite-2: #17171a;
+  --graphite-3: #1f1f23;
+  --line: #2a2a2e;
+  --line-soft: rgba(242, 238, 230, .08);
+  --muted: #8d8a84;
+  --text-2: #b8b3a9;
+  --pearl: #f2eee6;
+  --gold: #c9a34e;
+  --gold-light: #e9c979;
+  --gold-spec: #fbf0cf;
+}
+
+:root[data-theme="light"] .nav.is-scrolled::after { background: rgba(250, 246, 238, .86); }
+:root[data-theme="light"] body { background: var(--black); color: var(--pearl); }
+
+/* Renk token'ı yeniden tanımlamak miras alınan metin rengini değiştirmez; açıkça uygula. */
+:root[data-theme="light"] :is(.intro, .hero, .cat__link, .product__card, .craft, .mmenu, .nav:not(.is-scrolled), .modal) {
+  color: var(--pearl);
+}
+
+:root[data-theme="light"] .market { background: linear-gradient(180deg, rgba(236, 228, 211, .9), rgba(243, 237, 224, .6)); }
+:root[data-theme="light"] .footer { background: linear-gradient(180deg, rgba(243, 237, 224, 0), rgba(236, 228, 211, .9)); }
+:root[data-theme="light"] .btn--line { background-color: rgba(255, 255, 255, .5); border-color: rgba(142, 107, 38, .6); }
+:root[data-theme="light"] .status.is-open { color: #1f5a2c; border-color: rgba(31, 90, 44, .35); }
+:root[data-theme="light"] .market__chg.is-up { color: #1f6b33; }
+:root[data-theme="light"] .market__chg.is-down { color: #9a3b26; }
+
+/* ===== Duyuru şeridi ===== */
+:root { --promo-h: 36px; }
+.promo {
+  position: fixed; inset: 0 0 auto; z-index: 70; height: var(--promo-h);
+  display: flex; align-items: center; overflow: hidden;
+  background-image: var(--gold-grad); color: #000;
+  font-size: .8125rem; font-weight: 500; letter-spacing: .04em; white-space: nowrap;
+}
+.promo__track { display: flex; width: max-content; animation: promo-scroll 32s linear infinite; }
+.promo:hover .promo__track, .promo:focus-within .promo__track { animation-play-state: paused; }
+.promo__group { display: flex; }
+.promo__item { padding: 0 2.4rem; }
+.promo__item::after { content: "\25C6"; margin-left: 2.4rem; font-size: .6em; vertical-align: middle; opacity: .7; }
+@keyframes promo-scroll { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+@media (prefers-reduced-motion: reduce) {
+  .promo { justify-content: center; }
+  .promo__track { animation: none; }
+  .promo__group:nth-child(2), .promo__item:nth-child(n+2) { display: none; }
+  .promo__item::after { content: none; }
+}
+html.has-promo .nav { inset: var(--promo-h) 0 auto; }
+html.has-promo .mmenu { padding-top: calc(var(--nav-h) + var(--promo-h) + 24px); }
+
+/* ===== Üst bilgi eylemleri ===== */
+.shop-actions { display: flex; align-items: center; gap: 6px; }
+.shop-act {
+  position: relative; display: inline-flex; align-items: center; gap: 8px; min-height: 40px; min-width: 40px;
+  padding: 0 10px; justify-content: center; border-radius: 999px; color: var(--gold-light);
+  border: 1px solid transparent; font-size: .8125rem; letter-spacing: .03em; cursor: pointer; background: none;
+}
+.shop-act:hover, .shop-act:focus-visible { border-color: var(--gold-light); }
+.shop-act svg { width: 20px; height: 20px; }
+.shop-act__label { display: none; }
+@media (min-width: 900px) { .shop-act__label { display: inline; } }
+.shop-act__badge {
+  min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px; font-size: .6875rem; line-height: 18px;
+  text-align: center; font-weight: 600; background: var(--gold-light); color: #000;
+}
+@media (max-width: 899px) { .shop-act__badge { position: absolute; top: 0; right: 0; } }
+
+/* ===== Mağaza sayfaları ===== */
+.shop-page { padding-top: var(--promo-h); background: var(--black); color: var(--pearl); min-height: 100vh; display: flex; flex-direction: column; }
+.shop-page > main { flex: 1; }
+.shop-nav { position: sticky; top: var(--promo-h); z-index: 60; background: var(--black); border-bottom: 1px solid var(--line); }
+.shop-nav__inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 68px; }
+.shop-nav__links { display: flex; gap: 20px; margin-left: auto; font-size: .875rem; }
+.shop-nav__links a { color: var(--text-2); padding: 8px 2px; }
+.shop-nav__links a:hover, .shop-nav__links a[aria-current="page"] { color: var(--pearl); }
+.shop-nav .brand { display: flex; align-items: center; gap: 12px; }
+.shop-nav .brand__mark { width: 34px; height: 34px; }
+.shop-foot { border-top: 1px solid var(--line); padding: 32px 0; color: var(--muted); font-size: .8125rem; }
+.shop-foot p + p { margin-top: 6px; }
+.shop-error { margin: 16px auto; max-width: 40rem; padding: 12px 16px; border: 1px solid #dc9583; border-radius: var(--r-card); }
+
+/* ===== İzin penceresi ===== */
+.consent {
+  width: min(34rem, calc(100vw - 32px)); padding: 28px; border-radius: var(--r-card);
+  border: 1px solid rgba(201, 163, 78, .45); background: var(--graphite); color: var(--pearl);
+}
+.consent::backdrop { background: rgba(0, 0, 0, .65); }
+.consent__title { font-size: 1.375rem; font-weight: 400; margin-bottom: 12px; }
+.consent__text { font-size: .875rem; line-height: 1.6; color: var(--text-2); margin-bottom: 18px; }
+.consent__row { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; font-size: .875rem; line-height: 1.5; cursor: pointer; }
+.consent__row input { margin-top: 3px; width: 18px; height: 18px; accent-color: var(--gold); flex: none; }
+.consent__actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: flex-end; margin-top: 22px; }
+.consent .btn[disabled] { opacity: .45; cursor: not-allowed; }
+.nav .shop-act__label { display: none; }
+.nav .shop-act__badge { position: absolute; top: 0; right: 0; }
+.nav__link { white-space: nowrap; }
+
+/* ===== Katalog ===== */
+.shop-main { padding-block: clamp(28px, 5vw, 56px); }
+.shop-title { font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -.01em; line-height: 1.1; }
+.shop-lead { margin-top: 10px; color: var(--text-2); max-width: 40rem; }
+.shop-lead strong { color: var(--gold-light); letter-spacing: .06em; }
+.shop-back { margin-bottom: 18px; font-size: .875rem; color: var(--text-2); }
+.shop-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; margin: 26px 0 10px; }
+.shop-filters__types { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { min-height: 40px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--line); color: var(--text-2); font-size: .875rem; }
+.chip:hover { border-color: var(--gold-light); color: var(--pearl); }
+.chip[aria-pressed="true"] { border-color: var(--gold-light); background: color-mix(in srgb, var(--gold) 18%, transparent); color: var(--pearl); }
+.field { display: grid; gap: 6px; font-size: .8125rem; color: var(--text-2); margin-bottom: 12px; }
+.field--inline { display: inline-flex; align-items: center; gap: 10px; margin: 0; }
+.field input, .field select, select#model, select#adet {
+  min-height: 42px; padding: 0 12px; border-radius: var(--r-media); border: 1px solid var(--line);
+  background: var(--graphite); color: var(--pearl); font: inherit;
+}
+.check { display: inline-flex; align-items: center; gap: 10px; font-size: .875rem; color: var(--text-2); cursor: pointer; }
+.check input { width: 18px; height: 18px; accent-color: var(--gold); }
+.shop-count { font-size: .8125rem; color: var(--muted); margin-bottom: 18px; }
+.shop-empty { padding: 40px 0; color: var(--text-2); }
+.shop-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(14px, 2vw, 26px); grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); }
+.pcard { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--graphite); overflow: hidden; }
+.pcard__media { display: block; aspect-ratio: 4 / 5; overflow: hidden; background: var(--graphite-2); }
+.pcard__media img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s var(--ease-out); }
+.pcard:hover .pcard__media img { transform: scale(1.04); }
+.pcard__body { display: grid; gap: 6px; padding: 14px 16px 16px; flex: 1; align-content: start; }
+.pcard__name { font-size: 1rem; line-height: 1.3; }
+.pcard__meta { font-size: .8125rem; color: var(--muted); }
+.pcard__row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 4px; }
+.pcard__price { font-weight: 500; font-variant-numeric: tabular-nums; }
+.pcard__actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+.stock { font-size: .75rem; padding: 3px 10px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
+.stock--ok { color: #3f8f55; }
+.stock--low { color: #b8791f; }
+.stock--out { color: #b0432d; }
+:root:not([data-theme="light"]) .stock--ok { color: #8fc89b; }
+:root:not([data-theme="light"]) .stock--low { color: #e3b668; }
+:root:not([data-theme="light"]) .stock--out { color: #dc9583; }
+.form-msg { font-size: .8125rem; color: var(--text-2); min-height: 1.2em; }
+
+/* ===== Ürün detayı ===== */
+.pdetail { display: grid; gap: clamp(24px, 4vw, 56px); grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 900px) { .pdetail { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); align-items: start; } }
+.pdetail__media { border-radius: var(--r-card); overflow: hidden; border: 1px solid var(--line); }
+.pdetail__media img { width: 100%; height: auto; }
+.pdetail__info { display: grid; gap: 14px; align-content: start; }
+.pdetail__eyebrow { font-size: .8125rem; letter-spacing: .08em; text-transform: uppercase; color: var(--gold-light); }
+.pdetail__price { font-size: 1.75rem; font-variant-numeric: tabular-nums; }
+.pdetail__desc { color: var(--text-2); line-height: 1.65; max-width: 36rem; }
+.pdetail__specs { display: flex; gap: 32px; margin: 4px 0; }
+.pdetail__specs dt { font-size: .75rem; color: var(--muted); }
+.pdetail__specs dd { margin: 2px 0 0; }
+.pdetail__buy { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 8px; }
+
+/* ===== Sepet ===== */
+.cart-grid { display: grid; gap: clamp(24px, 4vw, 48px); margin-top: 24px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 900px) { .cart-grid { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); align-items: start; } }
+.clines { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.cline { display: grid; grid-template-columns: 88px minmax(0, 1fr) auto; gap: 16px; align-items: center; padding: 12px; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--graphite); }
+.cline__img img { width: 88px; height: 110px; object-fit: cover; border-radius: var(--r-media); }
+.cline__info { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; }
+.cline__name { flex-basis: 100%; font-size: 1rem; }
+.cline__unit { font-size: .8125rem; color: var(--muted); }
+.cline__total { font-variant-numeric: tabular-nums; }
+.link-btn { font-size: .8125rem; color: var(--gold-light); text-decoration: underline; text-underline-offset: 3px; }
+.problems { margin-top: 14px; padding: 12px 16px; border: 1px solid #b0432d; border-radius: var(--r-card); font-size: .875rem; display: grid; gap: 8px; }
+.problems ul { margin: 0; padding-left: 18px; }
+.cart-side { display: grid; gap: 22px; padding: 20px; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--graphite); }
+.sum { margin: 0; display: grid; gap: 8px; }
+.sum__row { display: flex; justify-content: space-between; font-variant-numeric: tabular-nums; }
+.sum__row dd, .sum__row dt { margin: 0; }
+.sum__row--disc { color: var(--gold-light); }
+.sum__row--total { padding-top: 10px; border-top: 1px solid var(--line); font-size: 1.25rem; font-weight: 500; }
+.coupon { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 10px; align-items: end; }
+.coupon .form-msg { grid-column: 1 / -1; }
+.coupon .field { margin: 0; }
+.order-form { display: grid; gap: 4px; }
+.order-form__title { font-size: 1.125rem; margin-bottom: 8px; }
+.order-form__pay { border: 0; padding: 0; margin: 4px 0 8px; display: grid; gap: 8px; }
+.order-form__pay legend { font-size: .8125rem; color: var(--text-2); margin-bottom: 6px; padding: 0; }
+.field input[type="text"], .field input[type="tel"], .field input[type="email"], .field input[type="password"] { width: 100%; }
+.done { display: grid; gap: 12px; margin-top: 24px; max-width: 36rem; }
+.done__title { font-size: 1.75rem; }
+.done__list { margin: 0; padding-left: 18px; color: var(--text-2); }
+
+/* ===== Hesap ===== */
+.auth { display: grid; gap: 18px; max-width: 26rem; margin-top: 24px; }
+.auth-form { display: grid; gap: 4px; }
+.account { display: grid; gap: 12px; margin-top: 24px; max-width: 40rem; }
+.orders { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.order { padding: 14px 16px; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--graphite); }
+.order__head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; margin-bottom: 6px; }
+
+/* ===== Altın çember bölümleri ===== */
+.kicker { font-size: .75rem; letter-spacing: .22em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 14px; }
+.chapter { padding-top: clamp(56px, 8vw, 104px); margin-bottom: -16px; }
+.why-lead .h-section { max-width: 16em; }
+.why-lead .lead { margin-top: clamp(18px, 2vw, 28px); }
+.sec-more { margin-top: clamp(28px, 4vw, 44px); }
+.storage-warn { margin: 0; padding: 8px var(--pad); font-size: .8125rem; text-align: center; background: #5a2a1b; color: #ffe7de; }
+html.has-promo .storage-warn { margin-top: var(--promo-h); }

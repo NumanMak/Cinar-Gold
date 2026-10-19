@@ -5,8 +5,8 @@ Tek sayfalık, statik (sunucu tarafı kod gerektirmeyen) web sitesi. Herhangi bi
 
 ## Yerelde açmak
 
-`index.html` dosyasına çift tıklamak çalışır, ancak video ve harita gibi bazı özellikler en doğru şekilde
-yerel bir sunucuyla görünür:
+Mağaza sayfaları (`magaza.html`, `urun.html`, `sepet.html`, `hesap.html`) ES modülleri ve `fetch` kullanır,
+bu yüzden çift tıklayarak (`file://`) açılmaz; yerel bir sunucu gerekir (GitHub Pages ve benzeri barındırmada sorun olmaz):
 
 ```
 python -m http.server 8000
@@ -22,7 +22,10 @@ Ardından tarayıcıda `http://localhost:8000` adresini açın.
 | Çalışma saatleri ve kapalı günler | `assets/js/main.js` içinde `HOURS` (ör. Pazar kapalıysa `days` listesinden `0` çıkarılır) ve `index.html` içindeki JSON-LD `openingHoursSpecification` |
 | Adres ve harita | `index.html` iletişim bölümü, harita `iframe` adresi ve JSON-LD `address` |
 | Alan adı | `index.html` (canonical, og:url, og:image, JSON-LD), `robots.txt`, `sitemap.xml`. Şu an `https://www.cinargold.com.tr/` yazılı |
-| Ürünler | `index.html` içindeki `data-product` öğeleri: ad, açıklama, özellikler (`data-specs`, `|` ile ayrılır) ve görsel (`data-img`) |
+| Ana sayfadaki vitrin ürünleri | `index.html` içindeki `data-product` öğeleri: ad, açıklama, özellikler (`data-specs`, `|` ile ayrılır) ve görsel (`data-img`) |
+| Mağaza kataloğu (60 ürün: fiyat, stok, model) | `tools/gen_products.py` dosyasını düzenleyip `python tools/gen_products.py` çalıştırın; çıktı `assets/data/products.json` |
+| Kupon kodu ve oranı | `assets/js/shop/coupon.js` |
+| Kayan duyuru metni | `assets/js/shop/shell.js` içinde `PROMO_TEXT` |
 
 ## Özellikler
 
@@ -36,6 +39,18 @@ Ardından tarayıcıda `http://localhost:8000` adresini açın.
 - "Hareketi azalt" tercihine saygı: animasyonlar kapanır, video yerine fotoğraf gösterilir
 - SEO: başlık ve açıklama, Open Graph görseli, `JewelryStore` yapılandırılmış verisi, `sitemap.xml`, `robots.txt`
 
+## Mağaza (demo)
+
+Online alışveriş akışı sunucusuz çalışır: hesaplar, sepet, stok düşümü, "Bana bildir" kayıtları ve siparişler
+yalnızca ziyaretçinin tarayıcısında (`localStorage`) tutulur. Ödeme alınmaz; sipariş WhatsApp ile onaylanır.
+Gerçek hesap/stok/ödeme için bir arka uç gerekir. Temel sürüm kapsamı için `MVP.md` dosyasına bakın.
+
+- Katalog: 4 tür × 5 model × 3 ürün (60 ürün), tür/model/stok filtresi
+- Stok bitince "Sepete ekle" yerine "Bana bildir"
+- `CINAR10` kuponu (%10) ve soldan sağa kayan duyuru şeridi
+- Koyu / açık tema (sistem tercihiyle başlar)
+- Kişisel veri alınmadan önce izin penceresi (KVKK), izin hesap sayfasından geri alınabilir
+
 ## Görsel ve video lisansları
 
 Tüm fotoğraflar Unsplash Lisansı, hero videosu Pexels Lisansı ile ticari kullanıma uygundur ve kaynak
@@ -48,4 +63,6 @@ adlı dosyalarla değiştirilmesi önerilir (`tools/img_build.py` aynı ölçü 
 ## Araçlar
 
 - `python tools\check.py` : JSON-LD, yinelenen id, kırık bağlantı ve eksik dosya kontrolü
+- `node --test tests/` : mağaza mantığı birim testleri (Node 20+)
+- `python tools\e2e_shop.py` : Edge ile mağaza uçtan uca senaryosu (katalog, kupon, sipariş, izin, hesap)
 - `python tools\qa.py` : Edge ile masaüstü, dizüstü, tablet ve telefonda ekran görüntüsü ve hata raporu
