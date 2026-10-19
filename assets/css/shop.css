@@ -1,0 +1,56 @@
+/* ===== Açık tema =====
+   Koyu tema varsayılan tasarımdır. Açık temada zemin ve metin token'ları değişir;
+   görsel / video üzerindeki bölümler okunaklı kalmak için koyu kalır. */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --black: #faf6ee;
+  --graphite: #f3ede0;
+  --graphite-2: #ece4d3;
+  --graphite-3: #e4dac5;
+  --line: #d6c9ae;
+  --line-soft: rgba(40, 30, 10, .1);
+  --muted: #6b6558;
+  --text-2: #4a4538;
+  --pearl: #1c1812;
+  --gold: #8e6b26;
+  --gold-light: #8a6420;
+  --gold-spec: #5d4410;
+}
+
+/* Görsel veya video üzerindeki alanlar her temada koyu paletle çalışır. */
+:root[data-theme="light"] .intro,
+:root[data-theme="light"] .hero,
+:root[data-theme="light"] .cat__link,
+:root[data-theme="light"] .product__card,
+:root[data-theme="light"] .craft,
+:root[data-theme="light"] .mmenu,
+:root[data-theme="light"] .nav:not(.is-scrolled),
+:root[data-theme="light"] .modal {
+  --black: #000;
+  --graphite: #0f0f11;
+  --graphite-2: #17171a;
+  --graphite-3: #1f1f23;
+  --line: #2a2a2e;
+  --line-soft: rgba(242, 238, 230, .08);
+  --muted: #8d8a84;
+  --text-2: #b8b3a9;
+  --pearl: #f2eee6;
+  --gold: #c9a34e;
+  --gold-light: #e9c979;
+  --gold-spec: #fbf0cf;
+}
+
+:root[data-theme="light"] .nav.is-scrolled::after { background: rgba(250, 246, 238, .86); }
+:root[data-theme="light"] body { background: var(--black); color: var(--pearl); }
+
+/* Renk token'ı yeniden tanımlamak miras alınan metin rengini değiştirmez; açıkça uygula. */
+:root[data-theme="light"] :is(.intro, .hero, .cat__link, .product__card, .craft, .mmenu, .nav:not(.is-scrolled), .modal) {
+  color: var(--pearl);
+}
+
+:root[data-theme="light"] .market { background: linear-gradient(180deg, rgba(236, 228, 211, .9), rgba(243, 237, 224, .6)); }
+:root[data-theme="light"] .footer { background: linear-gradient(180deg, rgba(243, 237, 224, 0), rgba(236, 228, 211, .9)); }
+:root[data-theme="light"] .btn--line { background-color: rgba(255, 255, 255, .5); border-color: rgba(142, 107, 38, .6); }
+:root[data-theme="light"] .status.is-open { color: #1f5a2c; border-color: rgba(31, 90, 44, .35); }
+:root[data-theme="light"] .market__chg.is-up { color: #1f6b33; }
+:root[data-theme="light"] .market__chg.is-down { color: #9a3b26; }
