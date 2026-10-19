@@ -179,3 +179,34 @@ html.has-promo .mmenu { padding-top: calc(var(--nav-h) + var(--promo-h) + 24px);
 .pdetail__specs dt { font-size: .75rem; color: var(--muted); }
 .pdetail__specs dd { margin: 2px 0 0; }
 .pdetail__buy { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 8px; }
+
+/* ===== Sepet ===== */
+.cart-grid { display: grid; gap: clamp(24px, 4vw, 48px); margin-top: 24px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 900px) { .cart-grid { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); align-items: start; } }
+.clines { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.cline { display: grid; grid-template-columns: 88px minmax(0, 1fr) auto; gap: 16px; align-items: center; padding: 12px; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--graphite); }
+.cline__img img { width: 88px; height: 110px; object-fit: cover; border-radius: var(--r-media); }
+.cline__info { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; }
+.cline__name { flex-basis: 100%; font-size: 1rem; }
+.cline__unit { font-size: .8125rem; color: var(--muted); }
+.cline__total { font-variant-numeric: tabular-nums; }
+.link-btn { font-size: .8125rem; color: var(--gold-light); text-decoration: underline; text-underline-offset: 3px; }
+.problems { margin-top: 14px; padding: 12px 16px; border: 1px solid #b0432d; border-radius: var(--r-card); font-size: .875rem; display: grid; gap: 8px; }
+.problems ul { margin: 0; padding-left: 18px; }
+.cart-side { display: grid; gap: 22px; padding: 20px; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--graphite); }
+.sum { margin: 0; display: grid; gap: 8px; }
+.sum__row { display: flex; justify-content: space-between; font-variant-numeric: tabular-nums; }
+.sum__row dd, .sum__row dt { margin: 0; }
+.sum__row--disc { color: var(--gold-light); }
+.sum__row--total { padding-top: 10px; border-top: 1px solid var(--line); font-size: 1.25rem; font-weight: 500; }
+.coupon { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 10px; align-items: end; }
+.coupon .form-msg { grid-column: 1 / -1; }
+.coupon .field { margin: 0; }
+.order-form { display: grid; gap: 4px; }
+.order-form__title { font-size: 1.125rem; margin-bottom: 8px; }
+.order-form__pay { border: 0; padding: 0; margin: 4px 0 8px; display: grid; gap: 8px; }
+.order-form__pay legend { font-size: .8125rem; color: var(--text-2); margin-bottom: 6px; padding: 0; }
+.field input[type="text"], .field input[type="tel"], .field input[type="email"], .field input[type="password"] { width: 100%; }
+.done { display: grid; gap: 12px; margin-top: 24px; max-width: 36rem; }
+.done__title { font-size: 1.75rem; }
+.done__list { margin: 0; padding-left: 18px; color: var(--text-2); }

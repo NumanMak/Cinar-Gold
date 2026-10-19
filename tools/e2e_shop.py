@@ -176,7 +176,55 @@ def t_missing_and_xss(pg):
     check("<img" in pg.text("#xss .pcard__name"), "ürün adı düz metin olarak görünmüyor")
 
 
-SCENARIOS = [t_catalog, t_promo, t_theme, t_soldout, t_missing_and_xss]
+@step("sepet: CINAR10 toplamı %10 düşürür (büyük/küçük harf ve boşluk duyarsız); geçersiz kupon uyarı verir")
+def t_cart_coupon(pg):
+    pg.goto(f"urun.html?id={IN_STOCK['id']}")
+    pg.wait("!!document.querySelector('.pdetail__buy button')")
+    pg.click(".pdetail__buy button")
+    pg.wait("document.querySelector('.form-msg[role=status]').textContent.includes('Sepete eklendi')")
+    check(pg.text("#sepet-sayac") == "1", "sepet sayacı güncellenmedi")
+    pg.goto("sepet.html")
+    pg.wait("!!document.querySelector('.sum')")
+    price = IN_STOCK["price"]
+    pg.set_value("input[name=kupon]", " cinar10 ")
+    pg.click(".coupon button")
+    pg.wait("!!document.querySelector('.sum__row--disc')")
+    disc = round(price * 0.1)
+    check(f"{(price - disc):,}".replace(",", ".") in pg.text(".sum__row--total"), f"toplam yanlış: {pg.text('.sum__row--total')}")
+    pg.set_value("input[name=kupon]", "YANLIS")
+    pg.click(".coupon button")
+    pg.wait("!!document.querySelector('.coupon .form-msg')")
+    check("geçerli değil" in pg.text(".coupon .form-msg"), "geçersiz kupon uyarısı yok")
+    check(pg.ev("!!document.querySelector('.sum__row--disc')") is False, "geçersiz kuponda indirim görünüyor")
+    pg.set_value("input[name=kupon]", "CINAR10")
+    pg.click(".coupon button")
+    pg.wait("!!document.querySelector('.sum__row--disc')")
+
+
+@step("sipariş: izinden vazgeçilirse oluşmaz; izin verilirse oluşur, stok düşer, sepet boşalır")
+def t_order(pg):
+    pg.goto("sepet.html")
+    pg.ev("localStorage.removeItem('cg:consent')")  # önceki adımda verilen izin sıfırlanır
+    pg.wait("!!document.querySelector('.order-form')")
+    pg.set_value("input[name=ad]", "Test Kullanıcı")
+    pg.set_value("input[name=telefon]", "05551112233")
+    pg.click(".order-form button[type=submit]")
+    pg.decline_consent()
+    pg.wait("document.querySelector('.order-form .form-msg[role=alert]').textContent.includes('izin')")
+    check(pg.ev("JSON.parse(localStorage.getItem('cg:orders')||'[]').length") == 0, "izin yokken sipariş oluştu")
+    pg.click(".order-form button[type=submit]")
+    pg.accept_consent()
+    pg.wait("!!document.querySelector('.done')")
+    check("CG-" in pg.text(".done"), "sipariş numarası yok")
+    check(pg.ev("JSON.parse(localStorage.getItem('cg:orders')).length") == 1, "sipariş kaydedilmedi")
+    left = pg.ev(f"JSON.parse(localStorage.getItem('cg:stock'))[{json.dumps(IN_STOCK['id'])}]")
+    check(left == IN_STOCK["stock"] - 1, f"stok düşmedi: {left}")
+    check(pg.text("#sepet-sayac") == "0", "sepet boşalmadı")
+    pg.goto(f"urun.html?id={IN_STOCK['id']}")
+    pg.wait("!!document.querySelector('.stock')")
+
+
+SCENARIOS = [t_catalog, t_promo, t_theme, t_soldout, t_missing_and_xss, t_cart_coupon, t_order]
 
 
 def main() -> int:
