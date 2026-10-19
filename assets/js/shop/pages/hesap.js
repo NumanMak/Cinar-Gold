@@ -17,6 +17,8 @@ const ERRORS = {
   IPTAL_EDILEMEZ: 'Bu sipariş artık iptal edilemez.',
   SUNUCU_YOK: 'Sunucuya ulaşılamadı, tekrar deneyin.',
   SIPARIS_YOK: 'Sipariş bulunamadı.',
+  SUNUCU_HATASI: 'Sunucu hatası, lütfen biraz sonra tekrar deneyin.',
+  EMAIL_DOGRULANMADI: 'E-posta adresiniz henüz doğrulanmadı. Gelen kutunuzdaki bağlantıya tıklayın.',
 };
 
 const errorText = (code, fallback) => t(ERRORS[code] ?? fallback);
@@ -52,6 +54,17 @@ function authForm(kind) {
     field(t('Şifre'), 'sifre', 'password', register ? 'new-password' : 'current-password', register ? { minlength: '8' } : {}),
     ...(register ? [el('p', { class: 'form-msg' }, t('Şifreniz en az 8 karakter olmalı.'))] : []),
     msg, submit);
+  // Şifremi unuttum: yalnızca e-posta gönderebilen arka uçta (Supabase) gösterilir.
+  if (!register && api.auth.recover) {
+    const forgot = el('button', { class: 'link-btn', type: 'button' }, t('Şifremi unuttum'));
+    forgot.addEventListener('click', async () => {
+      const email = form.elements.email.value.trim();
+      if (!email) { msg.textContent = t('Önce e-posta adresinizi yazın.'); return; }
+      try { await api.auth.recover(email); msg.textContent = t('Şifre sıfırlama bağlantısı e-postanıza gönderildi.'); }
+      catch (err) { msg.textContent = errorText(err.message, 'İşlem tamamlanamadı, tekrar deneyin.'); }
+    });
+    form.insertBefore(forgot, submit);
+  }
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     submit.disabled = true;
@@ -62,8 +75,15 @@ function authForm(kind) {
         return;
       }
       const f = form.elements;
-      if (register) await api.auth.signUp({ name: f.ad.value, email: f.email.value, password: f.sifre.value });
-      else await api.auth.signIn(f.email.value, f.sifre.value);
+      if (register) {
+        const created = await api.auth.signUp({ name: f.ad.value, email: f.email.value, password: f.sifre.value });
+        if (created.needsConfirmation) {
+          msg.textContent = t('Doğrulama e-postası gönderildi. Lütfen e-postanızdaki bağlantıya tıklayın, sonra giriş yapın.');
+          return;
+        }
+      } else {
+        await api.auth.signIn(f.email.value, f.sifre.value);
+      }
       await ctx.reloadMe();
       await render();
     } catch (err) {

@@ -11,27 +11,33 @@ export function contract(label, makeApi) {
   const [a, b] = sold;
   const customer = { name: 'Ayşe Yılmaz', phone: '05551112233', payment: 'havale', delivery: 'magaza', address: '' };
   const pw = 'gizli-sifre-1';
-  const T = (name, fn) => test(`${label}: ${name}`, async () => fn(await makeApi()));
+  // Her testte arka uç bağlamı yenilenir: { api, makeAdmin(api) -> { email, password }, mail(ad) -> benzersiz e-posta, exactStock }.
+  let mail = (n) => `${n}@ornek.com`;
+  const T = (name, fn) => test(`${label}: ${name}`, async () => {
+    const ctx = await makeApi();
+    mail = ctx.mail ?? mail;
+    await fn(ctx);
+  });
   const code = async (p) => { try { await p; } catch (e) { return e.message; } return 'HATA YOK'; };
   const stockOf = async (api, id) => (await api.stock.load())[id];
 
   T('kayit, cikis, giris dongusu; yanlis sifre GIRIS_HATALI; user() oturumu yansitir', async ({ api }) => {
     assert.equal(await api.auth.user(), null);
-    const u = await api.auth.signUp({ name: 'Ayşe', email: 'ayse@ornek.com', password: pw });
+    const u = await api.auth.signUp({ name: 'Ayşe', email: mail('ayse'), password: pw });
     assert.equal(u.role, 'customer');
-    assert.equal((await api.auth.user()).email, 'ayse@ornek.com');
+    assert.equal((await api.auth.user()).email, mail('ayse'));
     await api.auth.signOut();
     assert.equal(await api.auth.user(), null);
-    assert.equal(await code(api.auth.signIn('ayse@ornek.com', 'yanlis-sifre')), 'GIRIS_HATALI');
-    const again = await api.auth.signIn('AYSE@ornek.com', pw);
-    assert.equal(again.email, 'ayse@ornek.com');
+    assert.equal(await code(api.auth.signIn(mail('ayse'), 'yanlis-sifre')), 'GIRIS_HATALI');
+    const again = await api.auth.signIn(mail('ayse').toUpperCase(), pw);
+    assert.equal(again.email, mail('ayse'));
   });
 
   T('ayni e-posta EMAIL_KAYITLI, kisa sifre SIFRE_KISA', async ({ api }) => {
-    await api.auth.signUp({ name: 'Ayşe', email: 'ayse@ornek.com', password: pw });
+    await api.auth.signUp({ name: 'Ayşe', email: mail('ayse'), password: pw });
     await api.auth.signOut();
-    assert.equal(await code(api.auth.signUp({ name: 'X', email: 'ayse@ornek.com', password: pw })), 'EMAIL_KAYITLI');
-    assert.equal(await code(api.auth.signUp({ name: 'X', email: 'baska@ornek.com', password: 'kisa' })), 'SIFRE_KISA');
+    assert.equal(await code(api.auth.signUp({ name: 'X', email: mail('ayse'), password: pw })), 'EMAIL_KAYITLI');
+    assert.equal(await code(api.auth.signUp({ name: 'X', email: mail('baska'), password: 'kisa' })), 'SIFRE_KISA');
   });
 
   T('siparis stogu dusurur; toplam katalog fiyatindan hesaplanir; istemci fiyati yok sayilir', async ({ api }) => {
@@ -71,20 +77,20 @@ export function contract(label, makeApi) {
   });
 
   T('musteri yalniz kendi siparislerini gorur', async ({ api }) => {
-    await api.auth.signUp({ name: 'A', email: 'a@ornek.com', password: pw });
+    await api.auth.signUp({ name: 'A', email: mail('a'), password: pw });
     const o1 = await api.orders.place([{ id: a.id, qty: 1 }], customer, '');
     await api.auth.signOut();
-    await api.auth.signUp({ name: 'B', email: 'b@ornek.com', password: pw });
+    await api.auth.signUp({ name: 'B', email: mail('b'), password: pw });
     assert.deepEqual(await api.orders.mine(), []);
     const o2 = await api.orders.place([{ id: b.id, qty: 1 }], customer, '');
     assert.deepEqual((await api.orders.mine()).map((o) => o.id), [o2.id]);
     await api.auth.signOut();
-    await api.auth.signIn('a@ornek.com', pw);
+    await api.auth.signIn(mail('a'), pw);
     assert.deepEqual((await api.orders.mine()).map((o) => o.id), [o1.id]);
   });
 
   T('musteri bekleyen siparisini iptal eder ve stok geri gelir; baskasinin siparisini iptal edemez', async ({ api }) => {
-    await api.auth.signUp({ name: 'A', email: 'a@ornek.com', password: pw });
+    await api.auth.signUp({ name: 'A', email: mail('a'), password: pw });
     const before = await stockOf(api, a.id);
     const o = await api.orders.place([{ id: a.id, qty: 2 }], customer, '');
     assert.equal(await stockOf(api, a.id), before - 2);
@@ -93,12 +99,12 @@ export function contract(label, makeApi) {
     assert.equal(await stockOf(api, a.id), before);
     assert.equal(await code(api.orders.cancelMine(o.id)), 'IPTAL_EDILEMEZ');
     await api.auth.signOut();
-    await api.auth.signUp({ name: 'B', email: 'b@ornek.com', password: pw });
+    await api.auth.signUp({ name: 'B', email: mail('b'), password: pw });
     assert.equal(await code(api.orders.cancelMine(o.id)), 'SIPARIS_YOK');
   });
 
   T('yonetici islemleri musteriye YETKI_YOK; yonetici tum siparisleri gorur ve durum gunceller', async ({ api, makeAdmin }) => {
-    await api.auth.signUp({ name: 'A', email: 'a@ornek.com', password: pw });
+    await api.auth.signUp({ name: 'A', email: mail('a'), password: pw });
     const o = await api.orders.place([{ id: a.id, qty: 1 }], customer, '');
     assert.equal(await code(api.orders.adminList()), 'YETKI_YOK');
     assert.equal(await code(api.orders.adminSetStatus(o.id, 'onaylandi')), 'YETKI_YOK');
@@ -114,17 +120,17 @@ export function contract(label, makeApi) {
   });
 
   T('onaylanmis siparis musteri tarafindan iptal edilemez; yonetici iptali stogu geri verir', async ({ api, makeAdmin }) => {
-    await api.auth.signUp({ name: 'A', email: 'a@ornek.com', password: pw });
+    await api.auth.signUp({ name: 'A', email: mail('a'), password: pw });
     const before = await stockOf(api, a.id);
     const o = await api.orders.place([{ id: a.id, qty: 2 }], customer, '');
     await api.auth.signOut();
-    await makeAdmin(api);
+    const admin = await makeAdmin(api);
     await api.orders.adminSetStatus(o.id, 'onaylandi');
     await api.auth.signOut();
-    await api.auth.signIn('a@ornek.com', pw);
+    await api.auth.signIn(mail('a'), pw);
     assert.equal(await code(api.orders.cancelMine(o.id)), 'IPTAL_EDILEMEZ');
     await api.auth.signOut();
-    await api.auth.signIn('yonetici@cinargold.test', 'Yonetici-Sifre-2026');
+    await api.auth.signIn(admin.email, admin.password);
     await api.orders.adminSetStatus(o.id, 'iptal');
     assert.equal(await stockOf(api, a.id), before);
     assert.equal(await code(api.orders.adminSetStatus(o.id, 'iptal')), 'DURUM_GECERSIZ');
@@ -141,10 +147,11 @@ export function contract(label, makeApi) {
     assert.equal(await code(api.stock.adminSet('yok-urun', 1)), 'URUN_YOK');
   });
 
-  T('stok tum urunler icin yuklenir', async ({ api }) => {
+  T('stok tum urunler icin yuklenir', async (c0) => {
+    const { api } = c0;
     const s = await api.stock.load();
     assert.equal(Object.keys(s).length, products.length);
-    assert.equal(s[a.id], a.stock);
+    if (c0.exactStock !== false) assert.equal(s[a.id], a.stock);
   });
 
   T('favoriler: misafirde ve oturumda ekle/cikar; giriste misafir favorileri hesaba tasinir', async ({ api }) => {
@@ -153,16 +160,16 @@ export function contract(label, makeApi) {
     assert.equal(await api.wishlist.toggle(a.id), false);
     assert.deepEqual(await api.wishlist.list(), []);
     await api.wishlist.toggle(b.id);
-    await api.auth.signUp({ name: 'A', email: 'a@ornek.com', password: pw });
+    await api.auth.signUp({ name: 'A', email: mail('a'), password: pw });
     assert.deepEqual(await api.wishlist.list(), [b.id]);
     await api.auth.signOut();
     assert.deepEqual(await api.wishlist.list(), []);
-    await api.auth.signIn('a@ornek.com', pw);
+    await api.auth.signIn(mail('a'), pw);
     assert.deepEqual(await api.wishlist.list(), [b.id]);
   });
 
   T('adres defteri: ekle, ilki varsayilan, varsayilan degistir, sil; kisa adres ZORUNLU_ALAN', async ({ api }) => {
-    await api.auth.signUp({ name: 'A', email: 'a@ornek.com', password: pw });
+    await api.auth.signUp({ name: 'A', email: mail('a'), password: pw });
     assert.equal(await code(api.auth.addresses.add({ title: 'Ev', text: 'kisa' })), 'ZORUNLU_ALAN');
     const a1 = await api.auth.addresses.add({ title: 'Ev', text: 'Atatürk Cd. No:5 Fethiye Muğla' });
     const a2 = await api.auth.addresses.add({ title: 'İş', text: 'Çarşı Mah. 12. Sk. No:3 Fethiye' });
@@ -180,7 +187,7 @@ export function contract(label, makeApi) {
   });
 
   T('profil guncelleme ve sifre degistirme', async ({ api }) => {
-    await api.auth.signUp({ name: 'Ayşe', email: 'a@ornek.com', password: pw });
+    await api.auth.signUp({ name: 'Ayşe', email: mail('a'), password: pw });
     const u = await api.auth.updateProfile({ name: 'Ayşe Y.', phone: '0555 111 22 33' });
     assert.equal(u.name, 'Ayşe Y.');
     assert.equal(u.phone, '0555 111 22 33');
@@ -189,23 +196,23 @@ export function contract(label, makeApi) {
     assert.equal(await code(api.auth.changePassword(pw, 'kisa')), 'SIFRE_KISA');
     await api.auth.changePassword(pw, 'yeni-sifre-22');
     await api.auth.signOut();
-    assert.equal(await code(api.auth.signIn('a@ornek.com', pw)), 'GIRIS_HATALI');
-    await api.auth.signIn('a@ornek.com', 'yeni-sifre-22');
+    assert.equal(await code(api.auth.signIn(mail('a'), pw)), 'GIRIS_HATALI');
+    await api.auth.signIn(mail('a'), 'yeni-sifre-22');
   });
 
   T('profil guncellemesi rol veya e-postayi degistiremez', async ({ api }) => {
-    await api.auth.signUp({ name: 'Ayşe', email: 'a@ornek.com', password: pw });
-    await api.auth.updateProfile({ name: 'Ayşe', role: 'admin', email: 'x@ornek.com' });
+    await api.auth.signUp({ name: 'Ayşe', email: mail('a'), password: pw });
+    await api.auth.updateProfile({ name: 'Ayşe', role: 'admin', email: mail('x') });
     const u = await api.auth.user();
     assert.equal(u.role, 'customer');
-    assert.equal(u.email, 'a@ornek.com');
+    assert.equal(u.email, mail('a'));
   });
 
   T('stok bildirimi: misafir ekler, bos istek reddedilir, yonetici listeler, musteri kendi isteklerini gorur ve siler', async ({ api, makeAdmin }) => {
     assert.equal(await code(api.alerts.add({ productId: a.id })), 'ZORUNLU_ALAN');
-    await api.alerts.add({ productId: a.id, email: 'misafir@ornek.com' });
-    await api.auth.signUp({ name: 'A', email: 'a@ornek.com', password: pw });
-    await api.alerts.add({ productId: b.id, email: 'a@ornek.com' });
+    await api.alerts.add({ productId: a.id, email: mail('misafir') });
+    await api.auth.signUp({ name: 'A', email: mail('a'), password: pw });
+    await api.alerts.add({ productId: b.id, email: mail('a') });
     const mine = await api.alerts.mine();
     assert.equal(mine.length, 1);
     assert.equal(mine[0].productId, b.id);
@@ -214,7 +221,7 @@ export function contract(label, makeApi) {
     assert.equal((await api.alerts.mine()).length, 0);
     await api.auth.signOut();
     await makeAdmin(api);
-    assert.ok((await api.alerts.adminList()).some((x) => x.email === 'misafir@ornek.com'));
+    assert.ok((await api.alerts.adminList()).some((x) => x.email === mail('misafir')));
   });
 }
 
@@ -224,9 +231,11 @@ const localFactory = async () => {
   const store = createStore(memoryBackend());
   const api = createLocalApi({ store, products });
   const makeAdmin = async (apiRef) => {
-    await apiRef.auth.createAdmin({ name: 'Admin Yonetici', email: 'yonetici@cinargold.test', password: 'Yonetici-Sifre-2026' });
+    const creds = { email: 'yonetici@cinargold.test', password: 'Yonetici-Sifre-2026' };
+    await apiRef.auth.createAdmin({ name: 'Admin Yonetici', ...creds });
+    return creds;
   };
-  return { api, store, makeAdmin };
+  return { api, store, makeAdmin, mail: (n) => `${n}@ornek.com`, exactStock: true };
 };
 
 contract('local', localFactory);

@@ -224,6 +224,12 @@ export const EN = {
   'Sayfa bulunamadı | Çınar Gold Kuyumculuk': 'Page not found | Çınar Gold Jewelry',
 
   /* ---------- Yönetim paneli ---------- */
+  'Sunucu hatası, lütfen biraz sonra tekrar deneyin.': 'Server error, please try again shortly.',
+  'E-posta adresiniz henüz doğrulanmadı. Gelen kutunuzdaki bağlantıya tıklayın.': 'Your email address is not verified yet. Click the link in your inbox.',
+  'Doğrulama e-postası gönderildi. Lütfen e-postanızdaki bağlantıya tıklayın, sonra giriş yapın.': 'A verification email has been sent. Please click the link in your email, then sign in.',
+  'Şifremi unuttum': 'Forgot my password',
+  'Önce e-posta adresinizi yazın.': 'Enter your email address first.',
+  'Şifre sıfırlama bağlantısı e-postanıza gönderildi.': 'A password reset link has been sent to your email.',
   'Tüm alanları doldurun.': 'Fill in all fields.',
   'Sunucuya ulaşılamadı, tekrar deneyin.': 'The server could not be reached, please try again.',
   'Bu işlem için yönetici yetkisi gerekir.': 'Admin permission is required for this action.',

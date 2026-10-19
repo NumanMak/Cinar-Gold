@@ -99,6 +99,13 @@ export async function mountShell({ page }) {
 
   // Arka uç (yerel veya Supabase). Ulaşılamazsa sayfa çökmez: katalogdaki başlangıç stoğu ve misafir görünümü kullanılır.
   const api = await createApi(CONFIG, { store, products });
+  // Gerçek arka uçta fiyatlar sunucudaki products_priced görünümünden gelir (sipariş tutarıyla aynı kaynak).
+  if (api.prices) {
+    try {
+      const priced = await api.prices();
+      for (const p of products) if (Number.isFinite(priced[p.id])) p.price = priced[p.id];
+    } catch (e) { console.error(e); }
+  }
   const banner = (text) => document.querySelector('.promo').after(el('p', { class: 'shop-error', role: 'alert' }, text));
   let stock = Object.fromEntries(products.map((p) => [p.id, p.stock]));
   let me = null;
