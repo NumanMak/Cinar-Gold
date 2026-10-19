@@ -225,3 +225,5 @@ html.has-promo .mmenu { padding-top: calc(var(--nav-h) + var(--promo-h) + 24px);
 .why-lead .h-section { max-width: 16em; }
 .why-lead .lead { margin-top: clamp(18px, 2vw, 28px); }
 .sec-more { margin-top: clamp(28px, 4vw, 44px); }
+.storage-warn { margin: 0; padding: 8px var(--pad); font-size: .8125rem; text-align: center; background: #5a2a1b; color: #ffe7de; }
+html.has-promo .storage-warn { margin-top: var(--promo-h); }

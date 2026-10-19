@@ -6,6 +6,7 @@ const ctx = await mountShell({ page: 'cart' });
 const { cart, store, inventory, products, auth } = ctx;
 const root = document.getElementById('sepet');
 let code = store.get('coupon', '');
+let flash = ''; // sepet yeniden çizildikten sonra formda gösterilecek hata metni
 
 const ERRORS = {
   SIPARIS_GECERSIZ: 'Sepetinizdeki bazı ürünlerin stoğu değişti. Lütfen sepeti gözden geçirin.',
@@ -67,7 +68,8 @@ function orderForm(q) {
   const name = el('input', { type: 'text', name: 'ad', autocomplete: 'name', required: '', value: user ? user.name : '' });
   const phone = el('input', { type: 'tel', name: 'telefon', autocomplete: 'tel', required: '' });
   const pay = (value, text, checked) => el('label', { class: 'check' }, el('input', { type: 'radio', name: 'odeme', value, ...(checked ? { checked: '' } : {}) }), el('span', {}, text));
-  const msg = el('p', { class: 'form-msg', role: 'alert' });
+  const msg = el('p', { class: 'form-msg', role: 'alert' }, flash);
+  flash = '';
   const submit = el('button', { class: 'btn btn--gold', type: 'submit' }, 'Siparişi tamamla');
   if (q.problems.length) submit.disabled = true;
   const form = el('form', { class: 'order-form' },
@@ -99,8 +101,14 @@ function orderForm(q) {
       ctx.refresh();
       showSuccess(order);
     } catch (err) {
-      msg.textContent = ERRORS[err.message] ?? 'Sipariş oluşturulamadı, tekrar deneyin.';
-      changed();
+      const text = ERRORS[err.message] ?? 'Sipariş oluşturulamadı, tekrar deneyin.';
+      if (err.message === 'SIPARIS_GECERSIZ' || err.message === 'STOK_YETERSIZ' || err.message === 'SEPET_BOS') {
+        flash = text; // sepet değişmiş olabilir: yeniden çiz, mesajı yeni formda göster
+        changed();
+      } else {
+        msg.textContent = text; // form olduğu gibi kalır, yazılanlar silinmez
+        submit.disabled = false;
+      }
     }
   });
   return form;

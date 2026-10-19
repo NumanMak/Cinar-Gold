@@ -41,3 +41,32 @@ test('remove kaydi siler', () => {
   s.remove('a');
   assert.equal(s.get('a', 0), 0);
 });
+
+test('gecerli ama yanlis tipte JSON varsayilana doner (null, nesne, metin, sayi)', () => {
+  const b = memoryBackend();
+  const s = createStore(b);
+  for (const raw of ['null', '{}', '"x"', '5']) {
+    b.setItem('cg:cart', raw);
+    assert.deepEqual(s.get('cart', []), [], raw);
+  }
+  b.setItem('cg:stock', 'null');
+  assert.deepEqual(s.get('stock', {}), {});
+  b.setItem('cg:stock', '[]');
+  assert.deepEqual(s.get('stock', {}), {});
+  b.setItem('cg:orderSeq', '"abc"');
+  assert.equal(s.get('orderSeq', 100000), 100000);
+});
+
+test('null varsayilanli anahtar her tipi kabul eder', () => {
+  const b = memoryBackend();
+  b.setItem('cg:session', '"u1"');
+  assert.equal(createStore(b).get('session', null), 'u1');
+});
+
+test('persistent: calisan depolamada true, engelli depolamada false', () => {
+  assert.equal(createStore(memoryBackend()).persistent(), true);
+  const bad = memoryBackend();
+  bad.setItem = () => { throw new Error('engelli'); };
+  assert.equal(createStore(bad).persistent(), false);
+  assert.equal(createStore(null).persistent(), false);
+});

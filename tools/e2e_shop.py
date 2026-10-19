@@ -258,7 +258,30 @@ def t_account(pg):
     pg.wait("!!document.querySelector('.account')")
 
 
-SCENARIOS = [t_catalog, t_promo, t_theme, t_soldout, t_missing_and_xss, t_cart_coupon, t_order, t_account]
+@step("sipariş formu: boşluktan oluşan telefon hatası görünür kalır ve yazılan ad silinmez")
+def t_order_error(pg):
+    pg.goto(f"urun.html?id={IN_STOCK['id']}")
+    pg.wait("!!document.querySelector('.pdetail__buy button')")
+    pg.click(".pdetail__buy button")
+    pg.wait("document.querySelector('.form-msg[role=status]').textContent.includes('Sepete eklendi')")
+    pg.goto("sepet.html")
+    pg.wait("!!document.querySelector('.order-form')")
+    pg.set_value("input[name=ad]", "Test Kişi")
+    pg.set_value("input[name=telefon]", "   ")
+    pg.click(".order-form button[type=submit]")
+    pg.wait("document.querySelector('.order-form .form-msg[role=alert]').textContent.includes('doldurun')")
+    check(pg.ev("document.querySelector('input[name=ad]').value") == "Test Kişi", "ad alanı silindi")
+
+
+@step("depolama engelliyse görünür uyarı çıkar")
+def t_blocked_storage(pg):
+    pg.cdp.send("Page.addScriptToEvaluateOnNewDocument", {"source": "Storage.prototype.setItem = function(){ throw new Error('engelli'); };"})
+    pg.goto("magaza.html")
+    pg.wait("!!document.querySelector('.storage-warn')")
+    check("depolama" in pg.text(".storage-warn"), "uyarı metni yok")
+
+
+SCENARIOS = [t_catalog, t_promo, t_theme, t_soldout, t_missing_and_xss, t_cart_coupon, t_order, t_account, t_order_error, t_blocked_storage]
 
 
 def main() -> int:

@@ -5,7 +5,8 @@ export function createInventory(store, products) {
   const stockOf = (id) => {
     if (!base.has(id)) return 0;
     const left = store.get('stock', {});
-    return Object.prototype.hasOwnProperty.call(left, id) ? left[id] : base.get(id);
+    const v = Object.prototype.hasOwnProperty.call(left, id) ? left[id] : base.get(id);
+    return Number.isInteger(v) && v >= 0 ? v : base.get(id);
   };
 
   return {

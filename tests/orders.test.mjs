@@ -84,3 +84,12 @@ test('listOrders yalnizca ilgili kullanicinin siparislerini en yenisi basta veri
   assert.deepEqual(listOrders(store, 'u1').map((o) => o.id), [o2.id, o1.id]);
   assert.equal(listOrders(store, 'u2').length, 1);
 });
+
+test('ayni urun iki satirda tekrarlanirsa toplam adet stogu asarsa siparis reddedilir ve stok degismez', () => {
+  const { deps, store, inventory } = setup();
+  const p = products.find((x) => x.stock >= 4);
+  store.set('cart', [{ id: p.id, qty: p.stock - 1 }, { id: p.id, qty: p.stock - 1 }, { id: b.id, qty: 1 }]);
+  assert.throws(() => placeOrder(deps, buyer), /SIPARIS_GECERSIZ/);
+  assert.equal(inventory.stockOf(p.id), p.stock);
+  assert.equal(inventory.stockOf(b.id), b.stock);
+});

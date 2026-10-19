@@ -36,3 +36,11 @@ test('bilinmeyen id icin stockOf 0 doner', () => {
   assert.equal(inv.stockOf('yok'), 0);
   assert.equal(inv.isSoldOut('yok'), true);
 });
+
+test('bozuk stok kaydi (negatif, metin) baslangic stoguna doner', () => {
+  const store = createStore(memoryBackend());
+  store.set('stock', { [inStock.id]: -1 });
+  assert.equal(createInventory(store, products).stockOf(inStock.id), inStock.stock);
+  store.set('stock', { [inStock.id]: '3' });
+  assert.equal(createInventory(store, products).stockOf(inStock.id), inStock.stock);
+});

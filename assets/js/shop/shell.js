@@ -74,6 +74,11 @@ export async function mountShell({ page }) {
     document.body.append(buildShopFooter());
   }
 
+  if (!store.persistent()) {
+    document.querySelector('.promo').after(el('p', { class: 'storage-warn', role: 'status' },
+      'Tarayıcı depolaması kapalı: sepetiniz ve hesabınız sayfalar arasında korunmayabilir.'));
+  }
+
   let products = [];
   try {
     products = await loadProducts();

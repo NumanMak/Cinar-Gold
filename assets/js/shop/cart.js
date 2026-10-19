@@ -2,7 +2,14 @@ import { applyCoupon } from './coupon.js';
 
 export function createCart(store, products, inventory) {
   const byId = new Map(products.map((p) => [p.id, p]));
-  const read = () => store.get('cart', []).filter((i) => i && typeof i.id === 'string' && Number.isInteger(i.qty) && i.qty > 0);
+  // Aynı ürünün tekrarlanan satırları birleştirilir; stok denetimi ürün başına toplam adet üzerinden yapılır.
+  const read = () => {
+    const merged = new Map();
+    for (const i of store.get('cart', [])) {
+      if (i && typeof i.id === 'string' && Number.isInteger(i.qty) && i.qty > 0) merged.set(i.id, (merged.get(i.id) ?? 0) + i.qty);
+    }
+    return [...merged].map(([id, qty]) => ({ id, qty }));
+  };
   const write = (items) => store.set('cart', items);
 
   function setQty(id, qty) {
