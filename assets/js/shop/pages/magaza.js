@@ -1,9 +1,12 @@
 import { mountShell } from '../shell.js';
 import { modelsOf, filterProducts, searchProducts, sortProducts } from '../catalog.js';
 import { el, productCard } from '../ui.js';
+import { t, translateDocument } from '../i18n.js';
+import { modelLabel } from '../names.js';
 
 const TYPES = [['', 'Tümü'], ['yuzuk', 'Yüzük'], ['kolye', 'Kolye'], ['bilezik', 'Bilezik'], ['pirlanta', 'Pırlanta']];
 
+translateDocument();
 const ctx = await mountShell({ page: 'shop' });
 const q = new URLSearchParams(location.search);
 const SORTS = ['onerilen', 'fiyat-artan', 'fiyat-azalan', 'ad'];
@@ -32,7 +35,7 @@ function syncUrl() {
 
 function renderTypes() {
   typesBox.replaceChildren(...TYPES.map(([value, label]) => {
-    const b = el('button', { class: 'chip', type: 'button', 'aria-pressed': String(state.type === value) }, label);
+    const b = el('button', { class: 'chip', type: 'button', 'aria-pressed': String(state.type === value) }, t(label));
     b.addEventListener('click', () => { state.type = value; state.model = ''; render(); });
     return b;
   }));
@@ -40,8 +43,8 @@ function renderTypes() {
 
 function renderModels() {
   const models = state.type ? modelsOf(ctx.products, state.type) : [];
-  modelSel.replaceChildren(el('option', { value: '' }, state.type ? 'Tüm modeller' : 'Önce tür seçin'),
-    ...models.map((m) => el('option', { value: m }, m)));
+  modelSel.replaceChildren(el('option', { value: '' }, state.type ? t('Tüm modeller') : t('Önce tür seçin')),
+    ...models.map((m) => el('option', { value: m }, modelLabel(ctx.products.find((x) => x.type === state.type && x.model === m)))));
   modelSel.disabled = !state.type;
   if (!models.includes(state.model)) state.model = '';
   modelSel.value = state.model;
@@ -56,7 +59,7 @@ function render() {
   sortSel.value = state.sort;
   grid.replaceChildren(...list.map((p) => productCard(p, ctx)));
   empty.hidden = list.length > 0;
-  count.textContent = `${list.length} ürün`;
+  count.textContent = t('{n} ürün', { n: list.length });
   syncUrl();
 }
 

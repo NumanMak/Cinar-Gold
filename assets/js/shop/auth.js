@@ -9,7 +9,7 @@ const addressesOf = (u) => u.addresses ?? (u.address ? [{ id: 'adres-1', title: 
 const defaultAddress = (list) => list.find((a) => a.isDefault) ?? list[0];
 const pub = (u) => {
   const addresses = addressesOf(u);
-  return { id: u.id, name: u.name, email: u.email, phone: u.phone ?? '', address: defaultAddress(addresses)?.text ?? '', addresses };
+  return { id: u.id, name: u.name, email: u.email, role: u.role === 'admin' ? 'admin' : 'customer', phone: u.phone ?? '', address: defaultAddress(addresses)?.text ?? '', addresses };
 };
 
 async function hash(password, saltBytes) {
@@ -28,6 +28,18 @@ const newId = () => hex(globalThis.crypto.getRandomValues(new Uint8Array(6)));
 
 export function createAuth(store) {
   const users = () => store.get('users', []);
+  async function create({ name, email, password }, role) {
+    const n = String(name ?? '').trim();
+    const e = norm(email);
+    if (!n || !e) throw new Error('ZORUNLU_ALAN');
+    if (String(password ?? '').length < 8) throw new Error('SIFRE_KISA');
+    if (users().some((u) => u.email === e)) throw new Error('EMAIL_KAYITLI');
+    const salt = globalThis.crypto.getRandomValues(new Uint8Array(16));
+    const user = { id: hex(globalThis.crypto.getRandomValues(new Uint8Array(8))), name: n, email: e, role, salt: hex(salt), hash: await hash(password, salt) };
+    store.set('users', [...users(), user]);
+    store.set('session', user.id);
+    return pub(user);
+  }
   const saveAddresses = (user, addresses) => {
     const next = { ...user, addresses };
     delete next.address;
@@ -35,17 +47,18 @@ export function createAuth(store) {
   };
 
   return {
-    async register({ name, email, password }) {
-      const n = String(name ?? '').trim();
-      const e = norm(email);
-      if (!n || !e) throw new Error('ZORUNLU_ALAN');
-      if (String(password ?? '').length < 8) throw new Error('SIFRE_KISA');
-      if (users().some((u) => u.email === e)) throw new Error('EMAIL_KAYITLI');
-      const salt = globalThis.crypto.getRandomValues(new Uint8Array(16));
-      const user = { id: hex(globalThis.crypto.getRandomValues(new Uint8Array(8))), name: n, email: e, salt: hex(salt), hash: await hash(password, salt) };
-      store.set('users', [...users(), user]);
-      store.set('session', user.id);
-      return pub(user);
+    async register(input) {
+      return create(input, 'customer');
+    },
+    // Bu tarayıcının ilk yöneticisi. Zaten bir yönetici varsa ADMIN_VAR hatası verir.
+    async createAdmin(input) {
+      if (users().some((u) => u.role === 'admin')) throw new Error('ADMIN_VAR');
+      return create(input, 'admin');
+    },
+    hasAdmin: () => users().some((u) => u.role === 'admin'),
+    isAdmin() {
+      const user = users().find((u) => u.id === store.get('session', null));
+      return !!user && user.role === 'admin';
     },
     async login(email, password) {
       const user = users().find((u) => u.email === norm(email));

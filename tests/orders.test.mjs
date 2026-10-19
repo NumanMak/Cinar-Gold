@@ -143,3 +143,56 @@ test('cancelOrder baska kullanicinin siparisi icin SIPARIS_YOK, iki kez iptal ic
   assert.throws(() => cancelOrder({ store, inventory }, o.id, 'u1'), /IPTAL_EDILEMEZ/);
   assert.equal(inventory.stockOf(a.id), a.stock);
 });
+
+import { listAllOrders, setOrderStatus } from '../assets/js/shop/orders.js';
+
+test('listAllOrders tum kullanicilarin siparislerini en yenisi basta verir', () => {
+  const { deps, cart, store } = setup();
+  cart.add(a.id, 1);
+  const o1 = placeOrder(deps, buyer);
+  cart.add(b.id, 1);
+  const o2 = placeOrder(deps, { ...buyer, userId: 'u2' });
+  assert.deepEqual(listAllOrders(store).map((o) => o.id), [o2.id, o1.id]);
+});
+
+test('setOrderStatus beklemede -> onaylandi -> tamamlandi gecer ve zaman damgasi yazar', () => {
+  const { deps, cart, store, inventory } = setup();
+  cart.add(a.id, 1);
+  const o = placeOrder(deps, buyer);
+  const c = setOrderStatus({ store, inventory }, o.id, 'onaylandi');
+  assert.equal(c.status, 'onaylandi');
+  assert.ok(c.confirmedAt);
+  const d = setOrderStatus({ store, inventory }, o.id, 'tamamlandi');
+  assert.equal(d.status, 'tamamlandi');
+  assert.equal(listAllOrders(store)[0].status, 'tamamlandi');
+});
+
+test('setOrderStatus iptal stogu geri verir; iptal edilmis siparis tekrar acilamaz', () => {
+  const { deps, cart, store, inventory } = setup();
+  cart.add(a.id, 2);
+  const o = placeOrder(deps, buyer);
+  assert.equal(inventory.stockOf(a.id), a.stock - 2);
+  setOrderStatus({ store, inventory }, o.id, 'iptal');
+  assert.equal(inventory.stockOf(a.id), a.stock);
+  assert.throws(() => setOrderStatus({ store, inventory }, o.id, 'onaylandi'), /DURUM_GECERSIZ/);
+  assert.throws(() => setOrderStatus({ store, inventory }, o.id, 'iptal'), /DURUM_GECERSIZ/);
+  assert.equal(inventory.stockOf(a.id), a.stock);
+});
+
+test('setOrderStatus gecersiz durum, geriye gecis ve bilinmeyen siparis icin hata verir', () => {
+  const { deps, cart, store, inventory } = setup();
+  cart.add(a.id, 1);
+  const o = placeOrder(deps, buyer);
+  assert.throws(() => setOrderStatus({ store, inventory }, o.id, 'bitti'), /DURUM_GECERSIZ/);
+  assert.throws(() => setOrderStatus({ store, inventory }, 'CG-000000', 'onaylandi'), /SIPARIS_YOK/);
+  setOrderStatus({ store, inventory }, o.id, 'tamamlandi');
+  assert.throws(() => setOrderStatus({ store, inventory }, o.id, 'beklemede'), /DURUM_GECERSIZ/);
+});
+
+test('musteri iptali yalnizca beklemedeki siparise izin verir (onaylanmis siparis IPTAL_EDILEMEZ)', () => {
+  const { deps, cart, store, inventory } = setup();
+  cart.add(a.id, 1);
+  const o = placeOrder(deps, buyer);
+  setOrderStatus({ store, inventory }, o.id, 'onaylandi');
+  assert.throws(() => cancelOrder({ store, inventory }, o.id, 'u1'), /IPTAL_EDILEMEZ/);
+});

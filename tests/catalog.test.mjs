@@ -8,11 +8,11 @@ import { products, memoryBackend } from './helpers.mjs';
 const inv = () => createInventory(createStore(memoryBackend()), products);
 
 test('modelsOf yuzuk icin 5 model verir', () => {
-  assert.deepEqual(modelsOf(products, 'yuzuk'), ['Tektaş', 'Telkari', 'Alyans', 'Baget', 'Zarif']);
+  assert.deepEqual(modelsOf(products, 'yuzuk'), ['Tektaş', 'Telkari', 'Alyans', 'Taşlı', 'Zarif']);
 });
 
 test('filterProducts tur ve model ile 3 urun verir', () => {
-  assert.equal(filterProducts(products, { type: 'kolye', model: 'Nazar' }, inv()).length, 3);
+  assert.equal(filterProducts(products, { type: 'kolye', model: 'Madalyon' }, inv()).length, 3);
 });
 
 test('filterProducts filtre vermezse hepsini verir', () => {
@@ -47,8 +47,8 @@ test('searchProducts Turkce karakterlere duyarsiz, ad ve model uzerinden arar', 
 
 test('searchProducts bos metinde hepsini doner, birden fazla kelimeyi ve ile eslestirir', () => {
   assert.equal(searchProducts(products, '  ').length, 60);
-  const r = searchProducts(products, 'kolye nazar');
-  assert.ok(r.length === 3 && r.every((p) => p.type === 'kolye' && p.model === 'Nazar'));
+  const r = searchProducts(products, 'kolye madalyon');
+  assert.ok(r.length === 3 && r.every((p) => p.type === 'kolye' && p.model === 'Madalyon'));
 });
 
 test('sortProducts fiyat artan/azalan ve ada gore siralar, girdiyi degistirmez', () => {

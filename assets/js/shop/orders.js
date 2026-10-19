@@ -54,3 +54,20 @@ export function cancelOrder({ store, inventory }, orderId, userId) {
   store.set('orders', orders.map((o) => (o === order ? cancelled : o)));
   return cancelled;
 }
+
+export const listAllOrders = (store) => [...store.get('orders', [])].reverse();
+
+// Yönetici durum geçişleri. Geriye dönüş yoktur; iptal stoğu geri verir ve son durumdur.
+const NEXT = { beklemede: ['onaylandi', 'tamamlandi', 'iptal'], onaylandi: ['tamamlandi', 'iptal'], tamamlandi: [], iptal: [] };
+
+export function setOrderStatus({ store, inventory }, orderId, status) {
+  const orders = store.get('orders', []);
+  const order = orders.find((o) => o.id === orderId);
+  if (!order) throw new Error('SIPARIS_YOK');
+  if (!Object.hasOwn(NEXT, status) || !NEXT[order.status]?.includes(status)) throw new Error('DURUM_GECERSIZ');
+  if (status === 'iptal') for (const l of order.lines) inventory.restore(l.id, l.qty);
+  const stamp = { onaylandi: 'confirmedAt', tamamlandi: 'completedAt', iptal: 'cancelledAt' }[status];
+  const next = { ...order, status, [stamp]: new Date().toISOString() };
+  store.set('orders', orders.map((o) => (o === order ? next : o)));
+  return next;
+}

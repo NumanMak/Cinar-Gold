@@ -59,7 +59,9 @@
   })(document.documentElement);
 </script>
 <script type="module">
+  import { translateDocument } from "./assets/js/shop/i18n.js";
   import { mountShell } from "./assets/js/shop/shell.js";
+  translateDocument();
   mountShell({ page: "home" });
 </script>
 <script src="assets/js/vendor/lenis.min.js" defer></script>

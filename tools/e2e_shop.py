@@ -135,7 +135,7 @@ def t_theme(pg):
     pg.goto("magaza.html")
     pg.wait("!!document.querySelector('.shop-actions button')")
     first = pg.ev("document.documentElement.dataset.theme")
-    pg.click(".shop-actions button")
+    pg.click(".shop-actions button:not(.shop-lang)")
     second = pg.ev("document.documentElement.dataset.theme")
     check(first != second and second in ("dark", "light"), f"tema değişmedi: {first} -> {second}")
     pg.goto("magaza.html")
@@ -287,9 +287,9 @@ def t_blocked_storage(pg):
 def t_search_sort(pg):
     pg.goto("magaza.html")
     pg.wait("document.querySelectorAll('#urunler .pcard').length === 60")
-    pg.set_value("#ara", "KOLYE nazar")
+    pg.set_value("#ara", "KOLYE madalyon")
     pg.wait("document.querySelectorAll('#urunler .pcard').length === 3")
-    pg.set_value("#ara", "pirlanta tektas")
+    pg.set_value("#ara", "pirlanta kupe")
     pg.wait("document.querySelectorAll('#urunler .pcard').length === 3")
     pg.set_value("#ara", "")
     pg.set_value("#sirala", "fiyat-azalan")
@@ -523,7 +523,208 @@ def t_pricing_images(pg):
     check(not res["bad"], f"görseli yüklenemeyen ürünler: {res['bad'][:3]}")
 
 
-SCENARIOS = [t_catalog, t_promo, t_theme, t_soldout, t_missing_and_xss, t_cart_coupon, t_order, t_login_button, t_account, t_user_menu, t_favorites, t_addresses, t_order_error, t_search_sort, t_similar, t_delivery_account, t_cancel_order, t_alerts, t_pricing_images, t_mobile_overflow, t_gold, t_blocked_storage]
+LEAK_ALLOWED = ["Müşteri Kişi", "Ayşe", "AYŞE", "ÇINAR GOLD", "Çınar Gold", "Çınar", "ÇINAR", "Fethiye", "Muğla", "Atatürk", "Özsafir", "Reşat", "Cumhuriyet", "Çeyrek"]
+LEAK_WORDS = r"\b(Sepet|Giriş|Mağaza|Ürün|Hesap|Hesabım|Sipariş|Toplam|Adet|Kayıt|Şifre|Tükendi|Stokta|Favori|Adres|Telefon|Yüzük|Kolye|Bilezik|Çıkış|Kapat|Vazgeç|Uygula|Sil|Ara toplam|Teslimat|Ödeme|Hakkımızda|Koleksiyonlar|İletişim)\b"
+
+
+def english_text_leaks(pg):
+    """Görünen metinde Türkçe harf veya bilinen Türkçe arayüz sözcüğü kalmış mı?"""
+    txt = pg.ev("document.body.innerText")
+    for a in LEAK_ALLOWED:
+        txt = txt.replace(a, "")
+    import re
+    letters = sorted(set(re.findall(r"[çğıöşüÇĞİÖŞÜ]", txt)))
+    words = sorted(set(re.findall(LEAK_WORDS, txt)))
+    return letters, words, txt
+
+
+@step("dil düğmesi: EN/TR tek tuşla değişir, sayfa ve para biçimi dile uyar, seçim hatırlanır")
+def t_language_toggle(pg):
+    pg.ev("localStorage.removeItem('cg:lang')")
+    pg.goto("magaza.html")
+    pg.wait("document.querySelectorAll('#urunler .pcard').length === 60")
+    check(pg.text(".shop-lang").strip() == "EN", "Türkçe iken düğme EN göstermeli")
+    check(pg.ev("document.documentElement.lang") == "tr", "html lang tr olmalı")
+    pg.click(".shop-lang")
+    pg.wait("document.documentElement.lang === 'en' && document.querySelectorAll('#urunler .pcard').length === 60")
+    check(pg.text(".shop-lang").strip() == "TR", "İngilizce iken düğme TR göstermeli")
+    check(pg.text("h1") == "Shop", f"başlık İngilizce değil: {pg.text('h1')}")
+    check(pg.ev("document.getElementById('ara').placeholder").startswith("Search"), "arama kutusu İngilizce değil")
+    price = pg.text("#urunler .pcard__price")
+    check(price.startswith("₺"), f"İngilizce para biçimi ₺12,560 olmalı: {price}")
+    name = pg.text("#urunler .pcard__name")
+    check(name.isascii(), f"ürün adı İngilizce olmalı: {name}")
+    pg.goto("magaza.html")
+    pg.wait("document.documentElement.lang === 'en'")
+    check(pg.ev("JSON.parse(localStorage.getItem('cg:lang'))") == "en", "seçim saklanmadı")
+    pg.click(".shop-lang")
+    pg.wait("document.documentElement.lang === 'tr' && !!document.querySelector('#urunler .pcard')")
+    check(pg.text("h1") == "Mağaza", "Türkçe'ye dönülemedi")
+    pg.goto("magaza.html?lang=en")
+    pg.wait("document.documentElement.lang === 'en'")
+    pg.ev("localStorage.removeItem('cg:lang')")
+
+
+@step("İngilizce mod: ana sayfa, mağaza, ürün, sepet ve hesap sayfalarında Türkçe metin kalmaz")
+def t_english_no_leaks(pg):
+    pg.ev("localStorage.setItem('cg:lang', '\"en\"')")
+    try:
+        for path in ("index.html", "magaza.html?tur=kolye", f"urun.html?id={IN_STOCK['id']}", "urun.html?id=yok", "sepet.html", "hesap.html#genel"):
+            pg.goto(path)
+            time.sleep(1.2)
+            letters, words, txt = english_text_leaks(pg)
+            check(not letters and not words, f"{path}: Türkçe kalıntı harf={letters} sözcük={words}")
+        # sepette ürün varken
+        pg.goto(f"urun.html?id={IN_STOCK['id']}")
+        pg.wait("!!document.querySelector('.pdetail__buy button')")
+        pg.click(".pdetail__buy button")
+        pg.goto("sepet.html")
+        pg.wait("!!document.querySelector('.order-form')")
+        letters, words, txt = english_text_leaks(pg)
+        check(not letters and not words, f"sepet (dolu): harf={letters} sözcük={words}")
+        check("Place order" in txt and "Subtotal" in txt, "sepet İngilizce başlıkları yok")
+        # giriş yapmış kullanıcı: menü ve hesap bölümleri
+        for section in ("siparisler", "favoriler", "adresler", "bildirimler", "bilgiler", "izinler"):
+            pg.goto(f"hesap.html#{section}")
+            time.sleep(0.5)
+            letters, words, txt = english_text_leaks(pg)
+            check(not letters and not words, f"hesap #{section}: harf={letters} sözcük={words}")
+        pg.click(".usermenu__btn")
+        letters, words, txt = english_text_leaks(pg)
+        check(not letters and not words, f"kullanıcı menüsü: harf={letters} sözcük={words}")
+        check("My orders" in txt and "Sign out" in txt, "menü İngilizce değil")
+        # tükenmiş ürün ve bildirim penceresi
+        pg.goto(f"urun.html?id={SOLD_OUT['id']}")
+        pg.wait("!!document.querySelector('.pdetail__buy button')")
+        check("Notify me" in pg.text(".pdetail__buy"), "Notify me yok")
+    finally:
+        pg.ev("localStorage.removeItem('cg:lang')")
+
+
+@step("İngilizce arama: İngilizce ürün adıyla bulunur")
+def t_english_search(pg):
+    pg.goto("magaza.html")
+    pg.wait("document.querySelectorAll('#urunler .pcard').length === 60")
+    pg.set_value("#ara", "solitaire ring")
+    pg.wait("document.querySelectorAll('#urunler .pcard').length >= 3 && document.querySelectorAll('#urunler .pcard').length < 60")
+    pg.set_value("#ara", "")
+
+
+@step("yönetici: ilk kurulum, müşteri yetkisiz, giriş, sipariş onayı, stok düzenleme, bildirim listesi, menü bağlantısı")
+def t_admin(pg):
+    # temiz başlangıç: yalnızca yönetici akışı için kullanıcılar, siparişler ve oturum sıfırlanır
+    pg.ev("['users','session','orders','orderSeq','stock','cart','notify','consent'].forEach(k=>localStorage.removeItem('cg:'+k))")
+    pg.goto("admin.html")
+    pg.wait("!!document.querySelector('#form-admin-kurulum')")
+    check("yönetici hesabı yok" in pg.text("#yonetim"), "kurulum mesajı yok")
+    # kısa şifre reddedilir
+    pg.set_value("#form-admin-kurulum input[name=ad]", "Admin Yonetici")
+    pg.set_value("#form-admin-kurulum input[name=email]", "yonetici@cinargold.test")
+    pg.set_value("#form-admin-kurulum input[name=sifre]", "kisa")
+    pg.click("#form-admin-kurulum button[type=submit]")
+    pg.accept_consent()
+    pg.wait("document.querySelector('#form-admin-kurulum .form-msg[role=alert]').textContent.includes('8 karakter')")
+    pg.set_value("#form-admin-kurulum input[name=sifre]", "Yonetici-Sifre-2026")
+    pg.click("#form-admin-kurulum button[type=submit]")
+    pg.wait("!!document.querySelector('.admin')")
+    check(pg.ev("JSON.parse(localStorage.getItem('cg:users'))[0].role") == "admin", "rol admin değil")
+    # menüde Yönetim paneli bağlantısı
+    pg.click(".usermenu__btn")
+    labels = pg.ev("[...document.querySelectorAll('#kullanici-menusu [role=menuitem]')].map(e=>e.textContent)")
+    check(any(l.startswith("Yönetim paneli") for l in labels), f"menüde yönetim paneli yok: {labels}")
+    # çıkış, müşteri kaydı: yönetim paneline erişemez
+    pg.ev("document.querySelector('.usermenu__btn').click()")
+    pg.goto("hesap.html")
+    pg.wait("!!document.querySelector('.account-layout')")
+    pg.click(".account__side .btn")
+    pg.wait("!!document.querySelector('.auth')")
+    pg.ev("[...document.querySelectorAll('.auth .chip')].find(b=>b.textContent==='Kayıt ol').click()")
+    pg.set_value("#form-kayit input[name=ad]", "Müşteri Kişi")
+    pg.set_value("#form-kayit input[name=email]", "musteri@ornek.com")
+    pg.set_value("#form-kayit input[name=sifre]", "musteri-sifre-1")
+    pg.click("#form-kayit button[type=submit]")
+    pg.wait("!!document.querySelector('.account-layout')")
+    check(pg.ev("JSON.parse(localStorage.getItem('cg:users')).find(u=>u.email==='musteri@ornek.com').role") == "customer", "müşteri rolü customer olmalı")
+    pg.goto("admin.html")
+    pg.wait("!!document.querySelector('#form-admin-giris')")
+    check("yetkisi yok" in pg.text("#yonetim"), "yetkisiz müşteri mesajı yok")
+    check(pg.ev("!document.querySelector('.admin')"), "müşteri yönetim panelini görüyor")
+    # müşteri sipariş verir
+    pg.goto(f"urun.html?id={IN_STOCK['id']}")
+    pg.wait("!!document.querySelector('.pdetail__buy button')")
+    pg.click(".pdetail__buy button")
+    pg.wait("document.querySelector('.form-msg[role=status]').textContent.includes('Sepete eklendi')")
+    pg.goto("sepet.html")
+    pg.wait("!!document.querySelector('.order-form')")
+    pg.set_value("input[name=telefon]", "05551112233")
+    pg.click(".order-form button[type=submit]")
+    pg.wait("!!document.querySelector('.done')")
+    stock_after = pg.ev(f"JSON.parse(localStorage.getItem('cg:stock'))[{json.dumps(IN_STOCK['id'])}]")
+    # müşteri çıkış, yönetici girişi
+    pg.goto("hesap.html")
+    pg.wait("!!document.querySelector('.account-layout')")
+    pg.click(".account__side .btn")
+    pg.goto("admin.html")
+    pg.wait("!!document.querySelector('#form-admin-giris')")
+    pg.set_value("#form-admin-giris input[name=email]", "yonetici@cinargold.test")
+    pg.set_value("#form-admin-giris input[name=sifre]", "yanlis")
+    pg.click("#form-admin-giris button[type=submit]")
+    pg.wait("document.querySelector('#form-admin-giris .form-msg[role=alert]').textContent.includes('hatalı')")
+    pg.set_value("#form-admin-giris input[name=sifre]", "Yonetici-Sifre-2026")
+    pg.click("#form-admin-giris button[type=submit]")
+    pg.wait("!!document.querySelector('.admin')")
+    # bekleyen sipariş görünür ve onaylanır
+    pg.wait("document.querySelectorAll('#yonetim-siparisler > li').length === 1")
+    check("CG-" in pg.text("#yonetim-siparisler"), "sipariş numarası yok")
+    check("Müşteri Kişi" in pg.text("#yonetim-siparisler"), "müşteri adı yok")
+    pg.click("#yonetim-siparisler button[data-status=onaylandi]")
+    pg.wait("document.querySelectorAll('#yonetim-siparisler > li').length === 0")
+    pg.ev("document.querySelector('[data-filter=onaylandi]').click()")
+    pg.wait("document.querySelectorAll('#yonetim-siparisler > li').length === 1")
+    check(pg.ev("JSON.parse(localStorage.getItem('cg:orders'))[0].status") == "onaylandi", "durum kaydedilmedi")
+    # onaylanan sipariş müşteri tarafından iptal edilemez (hesapta düğme yok)
+    pg.ev("document.querySelector('[data-filter=iptal]')||0")
+    # yönetici iptal eder: stok geri gelir
+    pg.click("#yonetim-siparisler button[data-status=iptal]")
+    pg.wait("!![...document.querySelectorAll('#yonetim-siparisler .btn')].find(b=>b.textContent==='Evet, iptal et')")
+    pg.ev("[...document.querySelectorAll('#yonetim-siparisler .btn')].find(b=>b.textContent==='Evet, iptal et').click()")
+    pg.wait("JSON.parse(localStorage.getItem('cg:orders'))[0].status === 'iptal'")
+    restored = pg.ev(f"JSON.parse(localStorage.getItem('cg:stock'))[{json.dumps(IN_STOCK['id'])}]")
+    check(restored == stock_after + 1, f"stok geri gelmedi: {stock_after} -> {restored}")
+    # stok düzenleme
+    pg.ev("document.querySelector('[data-tab=stok]').click()")
+    pg.wait("document.querySelectorAll('.stockrow').length === 60")
+    pid = SOLD_OUT["id"]
+    pg.set_value(f"input[data-id={json.dumps(pid)}]", "7")
+    pg.ev(f"document.querySelector('input[data-id={json.dumps(pid)}]').closest('li').querySelector('button').click()")
+    pg.wait(f"JSON.parse(localStorage.getItem('cg:stock'))[{json.dumps(pid)}] === 7")
+    pg.set_value(f"input[data-id={json.dumps(pid)}]", "-3")
+    pg.ev(f"document.querySelector('input[data-id={json.dumps(pid)}]').closest('li').querySelector('button').click()")
+    pg.wait(f"document.querySelector('input[data-id={json.dumps(pid)}]').closest('li').querySelector('.form-msg').textContent.includes('0 veya')")
+    check(pg.ev(f"JSON.parse(localStorage.getItem('cg:stock'))[{json.dumps(pid)}]") == 7, "geçersiz stok kaydedildi")
+    # bildirim istekleri sekmesi
+    pg.ev("document.querySelector('[data-tab=bildirimler]').click()")
+    pg.wait("document.body.textContent.includes('Stok bildirim isteği yok')")
+
+
+@step("yönetici paneli İngilizce modda Türkçe metin içermez")
+def t_admin_english(pg):
+    pg.ev("localStorage.setItem('cg:lang', '\"en\"')")
+    try:
+        pg.goto("admin.html")
+        pg.wait("!!document.querySelector('.admin')")
+        time.sleep(0.6)
+        for tab in ("siparisler", "stok", "bildirimler"):
+            pg.ev(f"document.querySelector('[data-tab={tab}]').click()")
+            time.sleep(0.4)
+            letters, words, txt = english_text_leaks(pg)
+            check(not letters and not words, f"admin {tab}: harf={letters} sözcük={words}")
+        check("Orders" in txt or "Stock" in txt, "panel İngilizce başlıkları yok")
+    finally:
+        pg.ev("localStorage.removeItem('cg:lang')")
+
+
+SCENARIOS = [t_catalog, t_promo, t_theme, t_soldout, t_missing_and_xss, t_cart_coupon, t_order, t_login_button, t_account, t_user_menu, t_favorites, t_addresses, t_order_error, t_search_sort, t_similar, t_delivery_account, t_cancel_order, t_alerts, t_pricing_images, t_mobile_overflow, t_gold, t_language_toggle, t_english_no_leaks, t_english_search, t_admin, t_admin_english, t_blocked_storage]
 
 
 def main() -> int:

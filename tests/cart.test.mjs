@@ -86,3 +86,13 @@ test('stogu sonradan azalan satir problems icinde raporlanir', () => {
   assert.equal(cart.quote().problems.length, 1);
   assert.ok(store);
 });
+
+test('quote.issues sorunlari yapilandirilmis verir: gone ve stock', () => {
+  const { cart, store, inventory } = setup();
+  store.set('cart', [{ id: 'eski-urun', qty: 1 }]);
+  assert.deepEqual(cart.quote().issues, [{ kind: 'gone', id: 'eski-urun' }]);
+  store.set('cart', []);
+  cart.add(inStock.id, inStock.stock);
+  inventory.decrement(inStock.id, 1);
+  assert.deepEqual(cart.quote().issues, [{ kind: 'stock', id: inStock.id, left: inStock.stock - 1 }]);
+});

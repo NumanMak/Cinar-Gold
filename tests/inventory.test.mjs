@@ -54,3 +54,14 @@ test('restore stogu artirir ve bilinmeyen id veya gecersiz adette hata firlatir'
   assert.throws(() => inv.restore(inStock.id, 0), /STOK_GECERSIZ/);
   assert.throws(() => inv.restore(inStock.id, 1.5), /STOK_GECERSIZ/);
 });
+
+test('setStock stogu dogrudan ayarlar; negatif, kesirli ve bilinmeyen urun icin hata verir', () => {
+  const inv = createInventory(createStore(memoryBackend()), products);
+  inv.setStock(inStock.id, 0);
+  assert.equal(inv.isSoldOut(inStock.id), true);
+  inv.setStock(inStock.id, 25);
+  assert.equal(inv.stockOf(inStock.id), 25);
+  assert.throws(() => inv.setStock(inStock.id, -1), /STOK_GECERSIZ/);
+  assert.throws(() => inv.setStock(inStock.id, 1.5), /STOK_GECERSIZ/);
+  assert.throws(() => inv.setStock('yok', 1), /URUN_YOK/);
+});

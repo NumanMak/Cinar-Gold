@@ -1,55 +1,58 @@
 import { mountShell } from '../shell.js';
-import { el, formatTL, productImg, stockBadge, addToCart, openNotify, productCard, favoriteButton } from '../ui.js';
+import { el, formatTL, formatGram, productImg, stockBadge, addToCart, openNotify, productCard, favoriteButton } from '../ui.js';
+import { t, translateDocument } from '../i18n.js';
+import { productName, productDesc, modelLabel, typeLabel } from '../names.js';
 
 // Pixabay fotoğrafları temsilidir; fotoğrafçı adı kaynağa bağlanır.
 function photoCredit(p) {
   const c = p.imageCredit;
   if (!c) return el('span', {});
-  return el('p', { class: 'pdetail__credit' }, 'Görsel temsilidir. Fotoğraf: ',
+  return el('p', { class: 'pdetail__credit' }, t('Görsel temsilidir. Fotoğraf: '),
     el('a', { href: c.url, target: '_blank', rel: 'noopener' }, c.author), ` / ${c.source}`);
 }
 
+translateDocument();
 const ctx = await mountShell({ page: 'product' });
 const root = document.getElementById('urun');
 const id = new URLSearchParams(location.search).get('id');
 const p = ctx.products.find((x) => x.id === id);
 
 if (!p) {
-  root.append(el('h1', { class: 'shop-title' }, 'Ürün bulunamadı'),
-    el('p', { class: 'shop-lead' }, 'Aradığınız ürün artık satışta olmayabilir. Mağazadaki diğer modellere göz atın.'),
-    el('a', { class: 'btn btn--gold', href: 'magaza.html' }, 'Mağazaya git'));
-  document.title = 'Ürün bulunamadı | Çınar Gold Kuyumculuk';
+  root.append(el('h1', { class: 'shop-title' }, t('Ürün bulunamadı')),
+    el('p', { class: 'shop-lead' }, t('Aradığınız ürün artık satışta olmayabilir. Mağazadaki diğer modellere göz atın.')),
+    el('a', { class: 'btn btn--gold', href: 'magaza.html' }, t('Mağazaya git')));
+  document.title = `${t('Ürün bulunamadı')} | ${t('Çınar Gold Kuyumculuk')}`;
 } else {
-  document.title = `${p.name} | Çınar Gold Kuyumculuk`;
+  document.title = `${productName(p)} | ${t('Çınar Gold Kuyumculuk')}`;
   const stock = ctx.inventory.stockOf(p.id);
   const msg = el('p', { class: 'form-msg', role: 'status' });
   const buy = el('div', { class: 'pdetail__buy' });
 
   if (stock > 0) {
-    const qty = el('select', { id: 'adet', 'aria-label': 'Adet' },
+    const qty = el('select', { id: 'adet', 'aria-label': t('Adet') },
       ...Array.from({ length: Math.min(stock, 10) }, (_, i) => el('option', { value: String(i + 1) }, String(i + 1))));
-    const add = el('button', { class: 'btn btn--gold', type: 'button' }, 'Sepete ekle');
+    const add = el('button', { class: 'btn btn--gold', type: 'button' }, t('Sepete ekle'));
     add.addEventListener('click', () => addToCart(p, Number(qty.value), ctx, msg));
-    buy.append(el('label', { class: 'field field--inline' }, el('span', {}, 'Adet'), qty), add,
-      el('a', { class: 'btn btn--line', href: 'sepet.html' }, 'Sepete git'));
+    buy.append(el('label', { class: 'field field--inline' }, el('span', {}, t('Adet')), qty), add,
+      el('a', { class: 'btn btn--line', href: 'sepet.html' }, t('Sepete git')));
   } else {
-    const notify = el('button', { class: 'btn btn--line', type: 'button' }, 'Bana bildir');
+    const notify = el('button', { class: 'btn btn--line', type: 'button' }, t('Bana bildir'));
     notify.addEventListener('click', () => openNotify(p, ctx));
-    buy.append(el('p', { class: 'form-msg' }, 'Bu ürün şu an tükendi. Stok gelince haber verebiliriz.'), notify);
+    buy.append(el('p', { class: 'form-msg' }, t('Bu ürün şu an tükendi. Stok gelince haber verebiliriz.')), notify);
   }
 
   root.append(el('div', { class: 'pdetail' },
     el('div', { class: 'pdetail__media' }, productImg(p), photoCredit(p)),
     el('div', { class: 'pdetail__info' },
-      el('p', { class: 'pdetail__eyebrow' }, `${p.typeLabel}, ${p.model} modeli`),
-      el('h1', { class: 'shop-title' }, p.name),
+      el('p', { class: 'pdetail__eyebrow' }, t('{tur}, {model} modeli', { tur: typeLabel(p), model: modelLabel(p) })),
+      el('h1', { class: 'shop-title' }, productName(p)),
       el('p', { class: 'pdetail__price' }, formatTL(p.price)),
       el('p', {}, stockBadge(stock)),
-      el('p', { class: 'pdetail__desc' }, p.desc),
-      el('div', { class: 'pdetail__fav' }, favoriteButton(p, ctx), el('span', {}, 'Favorilere ekle')),
+      el('p', { class: 'pdetail__desc' }, productDesc(p)),
+      el('div', { class: 'pdetail__fav' }, favoriteButton(p, ctx), el('span', {}, t('Favorilere ekle'))),
       el('dl', { class: 'pdetail__specs' },
-        el('div', {}, el('dt', {}, 'Ayar'), el('dd', {}, `${p.karat} ayar`)),
-        el('div', {}, el('dt', {}, 'Ağırlık'), el('dd', {}, `${String(p.gram).replace('.', ',')} gram`))),
+        el('div', {}, el('dt', {}, t('Ayar')), el('dd', {}, t('{karat} ayar', { karat: p.karat }))),
+        el('div', {}, el('dt', {}, t('Ağırlık')), el('dd', {}, t('{gram} gram', { gram: formatGram(p.gram) })))),
       buy, msg)));
   root.querySelector('img').setAttribute('loading', 'eager');
 
@@ -58,7 +61,7 @@ if (!p) {
   const similar = [...same.filter((x) => x.model === p.model), ...same.filter((x) => x.model !== p.model)].slice(0, 4);
   if (similar.length) {
     root.append(el('section', { class: 'similar', 'aria-labelledby': 'benzer-baslik' },
-      el('h2', { id: 'benzer-baslik', class: 'order-form__title' }, 'Benzer ürünler'),
+      el('h2', { id: 'benzer-baslik', class: 'order-form__title' }, t('Benzer ürünler')),
       el('ul', { class: 'shop-grid' }, ...similar.map((x) => productCard(x, ctx)))));
   }
 }

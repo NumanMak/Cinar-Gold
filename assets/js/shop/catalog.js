@@ -24,7 +24,7 @@ export function searchProducts(products, text) {
   const tokens = fold(text).split(/\s+/).filter(Boolean);
   if (!tokens.length) return products;
   return products.filter((p) => {
-    const hay = fold(`${p.name} ${p.typeLabel} ${p.model} ${p.type}`);
+    const hay = fold(`${p.name} ${p.typeLabel} ${p.model} ${p.type} ${p.nameEn ?? ''} ${p.typeLabelEn ?? ''} ${p.modelEn ?? ''}`);
     return tokens.every((t) => hay.includes(t));
   });
 }
