@@ -241,6 +241,8 @@ export const EN = {
   'Verileriniz indirildi.': 'Your data has been downloaded.',
   'Hesabınız silindi.': 'Your account has been deleted.',
   'Yönetici hesabı bu ekrandan silinemez.': 'The admin account cannot be deleted from this screen.',
+  'Göster': 'Show',
+  'Gizle': 'Hide',
   'Tüm alanları doldurun.': 'Fill in all fields.',
   'Çok fazla deneme yapıldı, lütfen biraz bekleyip tekrar deneyin.': 'Too many attempts, please wait a moment and try again.',
   'Sunucuya ulaşılamadı, tekrar deneyin.': 'The server could not be reached, please try again.',

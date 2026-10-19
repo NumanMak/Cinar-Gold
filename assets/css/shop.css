@@ -137,6 +137,13 @@ html.has-promo .mmenu { padding-top: calc(var(--nav-h) + var(--promo-h) + 24px);
 .chip:hover { border-color: var(--gold-light); color: var(--pearl); }
 .chip[aria-pressed="true"] { border-color: var(--gold-light); background: color-mix(in srgb, var(--gold) 18%, transparent); color: var(--pearl); }
 .field { display: grid; gap: 6px; font-size: .8125rem; color: var(--text-2); margin-bottom: 12px; }
+.field__pw { position: relative; display: grid; }
+.field__pw input { padding-right: 78px; }
+.field__toggle {
+  position: absolute; inset-block: 0; right: 0; padding: 0 14px; background: none; border: 0; cursor: pointer;
+  color: var(--gold); font: inherit; font-size: .8125rem;
+}
+.field__toggle:focus-visible { outline: 2px solid var(--gold); outline-offset: -2px; border-radius: var(--r-media); }
 .field--inline { display: inline-flex; align-items: center; gap: 10px; margin: 0; }
 .field input, .field select, select#model, select#adet {
   min-height: 42px; padding: 0 12px; border-radius: var(--r-media); border: 1px solid var(--line);

@@ -1,5 +1,5 @@
 import { mountShell } from '../shell.js';
-import { el, formatTL, productCard } from '../ui.js';
+import { el, formatTL, productCard, formField } from '../ui.js';
 import { t, locale, translateDocument } from '../i18n.js';
 import { productName } from '../names.js';
 
@@ -43,7 +43,7 @@ const currentSection = () => {
 };
 
 function field(label, name, type, autocomplete, extra = {}) {
-  return el('label', { class: 'field' }, el('span', {}, label), el('input', { type, name, autocomplete, required: '', ...extra }));
+  return formField(label, name, type, autocomplete, extra);
 }
 
 /* ---------- Misafir: giriş ve kayıt ---------- */

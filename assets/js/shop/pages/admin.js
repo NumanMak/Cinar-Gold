@@ -1,7 +1,7 @@
 // Yönetim paneli: siparişleri onaylama/tamamlama/iptal etme, stok düzenleme ve stok bildirim istekleri.
 // Yerel modda yalnızca bu tarayıcıdaki siparişleri görür; Supabase modunda tüm müşterilerin siparişlerini görür.
 import { mountShell } from '../shell.js';
-import { el, formatTL } from '../ui.js';
+import { el, formatTL, formField } from '../ui.js';
 import { t, locale, translateDocument } from '../i18n.js';
 import { productName } from '../names.js';
 
@@ -50,7 +50,7 @@ const waPhone = (phone) => {
 const isAdmin = () => ctx.me()?.role === 'admin';
 
 function field(label, name, type, autocomplete, extra = {}) {
-  return el('label', { class: 'field' }, el('span', {}, label), el('input', { type, name, autocomplete, required: '', ...extra }));
+  return formField(label, name, type, autocomplete, extra);
 }
 
 /* ---------- Giriş / ilk kurulum ---------- */

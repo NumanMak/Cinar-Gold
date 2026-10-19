@@ -2,6 +2,21 @@
 import { t, getLang } from './i18n.js';
 import { productName } from './names.js';
 
+// Form alanı. Şifre alanlarına yazılanı görmek için Göster/Gizle düğmesi eklenir.
+export function formField(label, name, type, autocomplete, extra = {}) {
+  const input = el('input', { type, name, autocomplete, required: '', ...extra });
+  if (type !== 'password') return el('label', { class: 'field' }, el('span', {}, label), input);
+  const toggle = el('button', { class: 'field__toggle', type: 'button', 'aria-pressed': 'false' }, t('Göster'));
+  toggle.addEventListener('click', () => {
+    const show = input.type === 'password';
+    input.type = show ? 'text' : 'password';
+    toggle.textContent = show ? t('Gizle') : t('Göster');
+    toggle.setAttribute('aria-pressed', String(show));
+  });
+  return el('div', { class: 'field' }, el('label', { for: `pw-${name}` }, label),
+    el('div', { class: 'field__pw' }, Object.assign(input, { id: `pw-${name}` }), toggle));
+}
+
 export function el(tag, props = {}, ...kids) {
   const node = document.createElement(tag);
   for (const [k, v] of Object.entries(props)) {
