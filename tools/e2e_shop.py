@@ -185,12 +185,13 @@ def t_cart_coupon(pg):
     check(pg.text("#sepet-sayac") == "1", "sepet sayacı güncellenmedi")
     pg.goto("sepet.html")
     pg.wait("!!document.querySelector('.sum')")
-    price = IN_STOCK["price"]
+    # Fiyat canlı altın fiyatından hesaplandığı için ara toplam sayfadan okunur.
+    price = pg.ev("Number(document.querySelector('.sum__row:first-child dd').textContent.replace(/[^0-9]/g,''))")
     pg.set_value("input[name=kupon]", " cinar10 ")
     pg.click(".coupon button")
     pg.wait("!!document.querySelector('.sum__row--disc')")
     disc = round(price * 0.1)
-    check(f"{(price - disc):,}".replace(",", ".") in pg.text(".sum__row--total"), f"toplam yanlış: {pg.text('.sum__row--total')}")
+    check(f"{(price - disc):,}".replace(",", ".") in pg.text(".sum__row--total"), f"toplam yanlış: {pg.text('.sum__row--total')} (ara toplam {price})")
     pg.set_value("input[name=kupon]", "YANLIS")
     pg.click(".coupon button")
     pg.wait("!!document.querySelector('.coupon .form-msg')")
@@ -724,7 +725,33 @@ def t_admin_english(pg):
         pg.ev("localStorage.removeItem('cg:lang')")
 
 
-SCENARIOS = [t_catalog, t_promo, t_theme, t_soldout, t_missing_and_xss, t_cart_coupon, t_order, t_login_button, t_account, t_user_menu, t_favorites, t_addresses, t_order_error, t_search_sort, t_similar, t_delivery_account, t_cancel_order, t_alerts, t_pricing_images, t_mobile_overflow, t_gold, t_language_toggle, t_english_no_leaks, t_english_search, t_admin, t_admin_english, t_blocked_storage]
+@step("güvenlik: her sayfada CSP var; enjekte edilen satır içi betik ve dış betik çalışmaz, ihlal raporlanır")
+def t_csp(pg):
+    for path in ("index.html", "magaza.html", "urun.html?id=yok", "sepet.html", "hesap.html", "admin.html", "404.html"):
+        pg.goto(path)
+        csp = pg.ev("(document.querySelector('meta[http-equiv=Content-Security-Policy]')||{}).content||''")
+        check("default-src 'none'" in csp and "object-src 'none'" in csp and "base-uri 'none'" in csp, f"{path}: CSP eksik")
+        check("'unsafe-inline'" not in csp and "'unsafe-eval'" not in csp, f"{path}: CSP zayıf")
+    pg.goto("magaza.html")
+    pg.wait("document.querySelectorAll('#urunler .pcard').length === 60")
+    res = pg.ev("""(async () => {
+      const violations = [];
+      document.addEventListener('securitypolicyviolation', (e) => violations.push(e.violatedDirective));
+      window.__pwned = 0;
+      const a = document.createElement('script'); a.textContent = 'window.__pwned = 1'; document.body.append(a);
+      const b = document.createElement('script'); b.src = 'https://example.com/x.js'; document.body.append(b);
+      const img = document.createElement('img'); img.src = 'https://example.com/pixel.png'; document.body.append(img);
+      await new Promise((r) => setTimeout(r, 600));
+      return { pwned: window.__pwned, violations };
+    })()""")
+    check(res["pwned"] == 0, "satır içi betik çalıştı: CSP etkin değil")
+    check(any(v.startswith("script-src") for v in res["violations"]), f"betik ihlali raporlanmadı: {res['violations']}")
+    check(any(v.startswith("img-src") for v in res["violations"]), f"dış görsel engellenmedi: {res['violations']}")
+    # CSP ihlal denemesi konsola hata düşürür; bu adımın hata saymaması için sayaç geri alınır.
+    pg.errors[:] = [e for e in pg.errors if "Content Security Policy" not in e and "Refused to" not in e]
+
+
+SCENARIOS = [t_catalog, t_promo, t_theme, t_soldout, t_missing_and_xss, t_cart_coupon, t_order, t_login_button, t_account, t_user_menu, t_favorites, t_addresses, t_order_error, t_search_sort, t_similar, t_delivery_account, t_cancel_order, t_alerts, t_pricing_images, t_mobile_overflow, t_gold, t_language_toggle, t_english_no_leaks, t_english_search, t_admin, t_admin_english, t_csp, t_blocked_storage]
 
 
 def main() -> int:

@@ -63,6 +63,12 @@ img_ok = all((ROOT / i).is_file() for i in imgs) and len(set(imgs)) == len(imgs)
 print("ürün görselleri:", len(imgs), "TAMAM" if img_ok else "SORUN (eksik veya tekrarlı görsel)")
 ok &= img_ok
 
+print("== güvenlik (CSP)")
+import subprocess, sys as _sys
+csp_ok = subprocess.run([_sys.executable, str(ROOT / "tools" / "csp.py"), "--check"], capture_output=True, text=True).returncode == 0
+print("CSP özetleri güncel:", "TAMAM" if csp_ok else "SORUN (python tools/csp.py çalıştırın)")
+ok &= csp_ok
+
 print("== altın fiyatı")
 gold = json.loads((ROOT / "assets" / "data" / "gold.json").read_text(encoding="utf-8"))
 gold_ok = (set(gold["items"]) == {"gram22", "quarter", "half", "full", "ata", "resat"}
