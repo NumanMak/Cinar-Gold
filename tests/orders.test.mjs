@@ -93,3 +93,29 @@ test('ayni urun iki satirda tekrarlanirsa toplam adet stogu asarsa siparis redde
   assert.equal(inventory.stockOf(p.id), p.stock);
   assert.equal(inventory.stockOf(b.id), b.stock);
 });
+
+test('adrese teslimde adres zorunlu: bos veya kisa adres ZORUNLU_ALAN, stok degismez', () => {
+  const { deps, cart, inventory } = setup();
+  cart.add(a.id, 1);
+  assert.throws(() => placeOrder(deps, { ...buyer, delivery: 'adres', address: '' }), /ZORUNLU_ALAN/);
+  assert.throws(() => placeOrder(deps, { ...buyer, delivery: 'adres', address: 'kisa' }), /ZORUNLU_ALAN/);
+  assert.equal(inventory.stockOf(a.id), a.stock);
+});
+
+test('adrese teslim siparisi adresi kaydeder, magazadan teslim adres istemez', () => {
+  const { deps, cart } = setup();
+  cart.add(a.id, 1);
+  const o1 = placeOrder(deps, { ...buyer, delivery: 'adres', address: 'Atatürk Cd. No:25 Fethiye Muğla' });
+  assert.equal(o1.delivery, 'adres');
+  assert.equal(o1.address, 'Atatürk Cd. No:25 Fethiye Muğla');
+  cart.add(b.id, 1);
+  const o2 = placeOrder(deps, { ...buyer, delivery: 'magaza' });
+  assert.equal(o2.delivery, 'magaza');
+  assert.equal(o2.address, '');
+});
+
+test('gecersiz teslimat yontemi ZORUNLU_ALAN', () => {
+  const { deps, cart } = setup();
+  cart.add(a.id, 1);
+  assert.throws(() => placeOrder(deps, { ...buyer, delivery: 'ucak' }), /ZORUNLU_ALAN/);
+});

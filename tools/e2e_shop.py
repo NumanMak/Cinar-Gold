@@ -236,7 +236,7 @@ def t_account(pg):
     pg.set_value("#form-kayit input[name=sifre]", "gizli-sifre-1")
     pg.click("#form-kayit button[type=submit]")
     pg.decline_consent()
-    pg.wait("document.querySelector('#form-kayit .form-msg').textContent.includes('izin')")
+    pg.wait("document.querySelector('#form-kayit .form-msg[role=alert]').textContent.includes('izin')")
     check(pg.ev("JSON.parse(localStorage.getItem('cg:users')||'[]').length") == 0, "izin yokken kullanıcı oluştu")
     pg.click("#form-kayit button[type=submit]")
     pg.accept_consent()
@@ -252,7 +252,7 @@ def t_account(pg):
     pg.set_value("#form-giris input[name=email]", "ayse@ornek.com")
     pg.set_value("#form-giris input[name=sifre]", "yanlis-sifre")
     pg.click("#form-giris button[type=submit]")
-    pg.wait("document.querySelector('#form-giris .form-msg').textContent.includes('hatalı')")
+    pg.wait("document.querySelector('#form-giris .form-msg[role=alert]').textContent.includes('hatalı')")
     pg.set_value("#form-giris input[name=sifre]", "gizli-sifre-1")
     pg.click("#form-giris button[type=submit]")
     pg.wait("!!document.querySelector('.account')")
@@ -281,7 +281,122 @@ def t_blocked_storage(pg):
     check("depolama" in pg.text(".storage-warn"), "uyarı metni yok")
 
 
-SCENARIOS = [t_catalog, t_promo, t_theme, t_soldout, t_missing_and_xss, t_cart_coupon, t_order, t_account, t_order_error, t_blocked_storage]
+@step("mağaza: arama Türkçe karakterden bağımsız, sıralama fiyata göre çalışır, URL'ye yazılır")
+def t_search_sort(pg):
+    pg.goto("magaza.html")
+    pg.wait("document.querySelectorAll('#urunler .pcard').length === 60")
+    pg.set_value("#ara", "KOLYE nazar")
+    pg.wait("document.querySelectorAll('#urunler .pcard').length === 3")
+    pg.set_value("#ara", "pirlanta tektas")
+    pg.wait("document.querySelectorAll('#urunler .pcard').length === 3")
+    pg.set_value("#ara", "")
+    pg.set_value("#sirala", "fiyat-azalan")
+    pg.wait("document.querySelectorAll('#urunler .pcard').length === 60")
+    prices = pg.ev("[...document.querySelectorAll('#urunler .pcard__price')].map(e=>Number(e.textContent.replace(/[^0-9]/g,'')))")
+    check(prices == sorted(prices, reverse=True), "fiyat sıralaması yanlış")
+    check("sirala=fiyat-azalan" in pg.ev("location.search"), "sıralama URL'ye yazılmadı")
+    pg.set_value("#ara", "xyzxyz")
+    pg.wait("document.querySelectorAll('#urunler .pcard').length === 0 && !document.getElementById('bos').hidden")
+
+
+@step("ürün sayfası: benzer ürünler gösterilir")
+def t_similar(pg):
+    pg.goto(f"urun.html?id={IN_STOCK['id']}")
+    pg.wait("document.querySelectorAll('.similar .pcard').length === 4")
+    check(pg.ev("[...document.querySelectorAll('.similar .pcard a')].every(a=>!a.href.includes('id=%s'))" % IN_STOCK['id']), "ürünün kendisi benzerlerde")
+
+
+@step("teslimat ve hesap: adrese teslim adres ister, sipariş hesapta görünür, profil ve şifre güncellenir")
+def t_delivery_account(pg):
+    pg.goto("urun.html?id=" + IN_STOCK["id"])
+    pg.wait("!!document.querySelector('.pdetail__buy button')")
+    pg.click(".pdetail__buy button")
+    pg.wait("document.querySelector('.form-msg[role=status]').textContent.includes('Sepete eklendi')")
+    pg.goto("sepet.html")
+    pg.wait("!!document.querySelector('.order-form')")
+    check(pg.ev("document.querySelector('input[name=ad]').value") == "<b>Ayşe</b> Yılmaz", "ad hesaptan dolmadı")
+    check(pg.ev("document.getElementById('adres-alani').hidden") is True, "mağazadan teslimde adres alanı görünüyor")
+    pg.click("input[name=teslimat][value=adres]")
+    check(pg.ev("document.getElementById('adres-alani').hidden") is False, "adrese teslimde adres alanı yok")
+    pg.set_value("input[name=telefon]", "05551112233")
+    pg.set_value("textarea[name=adres]", "kısa")
+    pg.click(".order-form button[type=submit]")
+    pg.wait("document.querySelector('.order-form .form-msg[role=alert]').textContent.includes('adres')")
+    check(pg.ev("JSON.parse(localStorage.getItem('cg:orders')||'[]').length") == 1, "kısa adresle sipariş oluştu")
+    pg.set_value("textarea[name=adres]", "Atatürk Cd. No:25 Fethiye Muğla")
+    pg.click(".order-form button[type=submit]")
+    pg.wait("!!document.querySelector('.done')")
+    check("Atatürk Cd. No:25" in pg.text(".done"), "başarı ekranında adres yok")
+    pg.goto("hesap.html")
+    pg.wait("!!document.querySelector('.orders')")
+    check("Adrese teslim: Atatürk Cd. No:25" in pg.text(".orders"), "sipariş adresi hesapta yok")
+    check(pg.ev("document.querySelector('#form-profil textarea').value") == "Atatürk Cd. No:25 Fethiye Muğla", "adres profile kaydedilmedi")
+    pg.set_value("#form-profil input[name=ad]", "Ayşe Y.")
+    pg.click("#form-profil button[type=submit]")
+    pg.wait("document.querySelector('#form-profil .form-msg[role=status]').textContent.includes('kaydedildi')")
+    check("Ayşe" in pg.text("[data-account-label]"), "üst bilgideki ad güncellenmedi")
+    pg.set_value("#form-sifre input[name=eski]", "yanlis-sifre")
+    pg.set_value("#form-sifre input[name=yeni]", "yeni-sifre-22")
+    pg.click("#form-sifre button[type=submit]")
+    pg.wait("document.querySelector('#form-sifre .form-msg').textContent.includes('hatalı')")
+    pg.set_value("#form-sifre input[name=eski]", "gizli-sifre-1")
+    pg.click("#form-sifre button[type=submit]")
+    pg.wait("document.querySelector('#form-sifre .form-msg').textContent.includes('değiştirildi')")
+
+
+@step("hesap: stok bildirimi isteği hesapta listelenir ve vazgeçilebilir")
+def t_alerts(pg):
+    pg.ev("localStorage.setItem('cg:notify', JSON.stringify([{id:'x1',productId:%s,email:'a@b.com',phone:'',createdAt:new Date().toISOString()}]))" % json.dumps(SOLD_OUT["id"]))
+    pg.goto("hesap.html")
+    pg.ev("(()=>{const u=JSON.parse(localStorage.getItem('cg:users'));u[0].email='a@b.com';localStorage.setItem('cg:users',JSON.stringify(u));})()")
+    pg.goto("hesap.html")
+    pg.wait("!!document.querySelector('.acard')")
+    check("Stok bekleniyor" in pg.ev("document.body.textContent"), "bildirim isteği hesapta yok")
+    pg.ev("[...document.querySelectorAll('.link-btn')].find(b=>b.textContent==='Vazgeç').click()")
+    pg.wait("document.body.textContent.includes('Takip ettiğiniz tükenmiş ürün yok')")
+
+
+@step("telefon görünümü (390 px): hiçbir sayfada yatay taşma yok")
+def t_mobile_overflow(pg):
+    pg.cdp.send("Emulation.setDeviceMetricsOverride", {"width": 390, "height": 800, "deviceScaleFactor": 1, "mobile": True})
+    try:
+        for path in ("index.html", "magaza.html", f"urun.html?id={IN_STOCK['id']}", "sepet.html", "hesap.html"):
+            pg.goto(path)
+            time.sleep(0.4)
+            sw, iw = pg.ev("[document.documentElement.scrollWidth, innerWidth]")
+            check(sw <= iw, f"{path}: yatay taşma {sw} > {iw}")
+    finally:
+        pg.cdp.send("Emulation.setDeviceMetricsOverride", {"width": 1280, "height": 900, "deviceScaleFactor": 1, "mobile": False})
+
+
+@step("ana sayfa altın fiyatları: Özsafir dosyasından gelir, kaynak yazılır; dosya eskiyse Truncgil'e düşer")
+def t_gold(pg):
+    gold = json.loads((ROOT / "assets" / "data" / "gold.json").read_text(encoding="utf-8"))
+    pg.goto("index.html")
+    pg.wait("document.querySelector('.market__item [data-price]').textContent !== '-'")
+    check(pg.text("[data-market-source]") == "Özsafir Gold", "kaynak Özsafir Gold değil")
+    check(pg.ev("document.querySelectorAll('.market__item:not([hidden])').length") == 6, "6 fiyat görünmüyor")
+    sell = gold["items"]["quarter"]["sell"]
+    shown = pg.text(".market__item[data-key=quarter] [data-price]")
+    check(f"{sell:,}".replace(",", ".") in shown, f"çeyrek fiyatı yanlış: {shown}")
+    check("Alış" in pg.text(".market__item[data-key=quarter] [data-chg]"), "alış fiyatı yok")
+    stub = """(() => { const real = window.fetch.bind(window);
+      window.fetch = (u, o) => {
+        const url = String(u);
+        if (url.includes('gold.json')) return Promise.resolve(new Response(JSON.stringify({source:'Özsafir Gold',fetchedAt:'2020-01-01T00:00:00+00:00',updatedAt:'10:00',items:{}}), {status:200}));
+        if (url.includes('truncgil')) return Promise.resolve(new Response(JSON.stringify({Update_Date:'2026-10-19 12:34:00',CEYREKALTIN:{Selling:11111,Change:0.5},YARIMALTIN:{Selling:22222,Change:-0.2},TAMALTIN:{Selling:44444,Change:0.1},ATAALTIN:{Selling:45555,Change:0.1},YIA:{Selling:6666,Change:0.3}}), {status:200}));
+        return real(u, o); }; })();"""
+    sid = pg.cdp.send("Page.addScriptToEvaluateOnNewDocument", {"source": stub})["identifier"]
+    try:
+        pg.goto("index.html")
+        pg.wait("document.querySelector('[data-market-source]').textContent === 'Truncgil Finans'")
+        check(pg.ev("document.querySelectorAll('.market__item:not([hidden])').length") == 5, "yedek kaynakta eksik reşat gizlenmedi")
+        check("11.111" in pg.text(".market__item[data-key=quarter] [data-price]"), "yedek fiyat görünmüyor")
+    finally:
+        pg.cdp.send("Page.removeScriptToEvaluateOnNewDocument", {"identifier": sid})
+
+
+SCENARIOS = [t_catalog, t_promo, t_theme, t_soldout, t_missing_and_xss, t_cart_coupon, t_order, t_account, t_order_error, t_search_sort, t_similar, t_delivery_account, t_alerts, t_mobile_overflow, t_gold, t_blocked_storage]
 
 
 def main() -> int:

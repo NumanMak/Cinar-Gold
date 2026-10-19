@@ -1,5 +1,5 @@
 import { mountShell } from '../shell.js';
-import { el, formatTL, productImg, stockBadge, addToCart, openNotify } from '../ui.js';
+import { el, formatTL, productImg, stockBadge, addToCart, openNotify, productCard } from '../ui.js';
 
 const ctx = await mountShell({ page: 'product' });
 const root = document.getElementById('urun');
@@ -43,4 +43,13 @@ if (!p) {
         el('div', {}, el('dt', {}, 'Ağırlık'), el('dd', {}, `${String(p.gram).replace('.', ',')} gram`))),
       buy, msg)));
   root.querySelector('img').setAttribute('loading', 'eager');
+
+  // Benzer ürünler: önce aynı model, sonra aynı türün diğer modelleri.
+  const same = ctx.products.filter((x) => x.id !== p.id && x.type === p.type);
+  const similar = [...same.filter((x) => x.model === p.model), ...same.filter((x) => x.model !== p.model)].slice(0, 4);
+  if (similar.length) {
+    root.append(el('section', { class: 'similar', 'aria-labelledby': 'benzer-baslik' },
+      el('h2', { id: 'benzer-baslik', class: 'order-form__title' }, 'Benzer ürünler'),
+      el('ul', { class: 'shop-grid' }, ...similar.map((x) => productCard(x, ctx)))));
+  }
 }

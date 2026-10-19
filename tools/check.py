@@ -58,6 +58,13 @@ cat_ok = (len(products) == 60 and set(per_type.values()) == {15} and len(per_typ
 print("ürün:", len(products), dict(per_type), "model başına:", sorted(set(per_model.values())), "TAMAM" if cat_ok else "SORUN")
 ok &= cat_ok
 
+print("== altın fiyatı")
+gold = json.loads((ROOT / "assets" / "data" / "gold.json").read_text(encoding="utf-8"))
+gold_ok = (set(gold["items"]) == {"gram22", "quarter", "half", "full", "ata", "resat"}
+           and all(0 < v["buy"] <= v["sell"] for v in gold["items"].values()) and bool(gold.get("fetchedAt")))
+print("gold.json:", gold.get("source"), gold.get("updatedAt"), "TAMAM" if gold_ok else "SORUN")
+ok &= gold_ok
+
 print("== metin")
 for path in [*ROOT.glob("assets/js/shop/**/*.js"), ROOT / "assets" / "data" / "products.json"]:
     text = path.read_text(encoding="utf-8")

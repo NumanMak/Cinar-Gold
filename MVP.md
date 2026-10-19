@@ -14,7 +14,11 @@ Detaylı tasarım: `docs/superpowers/specs/2026-10-19-cinar-gold-store-design.md
 7. **Kayan duyuru şeridi:** sayfa üstünde soldan sağa kayan "Açılışa özel %10 indirim: CINAR10".
 8. **Hesap:** kayıt, giriş, çıkış, siparişlerim (demo; veriler yalnızca o tarayıcıda).
 9. **Koyu / açık tema:** sistem tercihiyle başlar, seçim hatırlanır.
-10. **İzin penceresi:** kişisel bilgi alan her akıştan önce (kayıt, giriş, bildirim, sipariş) KVKK aydınlatması ve izinler sorulur; zorunlu izin verilmezse form gönderilmez.
+10. **Hesap detayı:** profil (telefon, adres), siparişlerim (teslimat ve ödeme bilgisiyle), stok bildirimlerim, şifre değiştirme.
+11. **Sepette teslimat:** mağazadan teslim veya adrese teslim (açık adres zorunlu), hesaptan ön doldurma.
+12. **Mağaza araması ve sıralama:** Türkçe karakterden bağımsız arama, fiyat ve ada göre sıralama; ürün sayfasında benzer ürünler.
+13. **Canlı altın fiyatı:** Özsafir Gold sitesinin herkese açık fiyat tablosu (`tools/fetch_gold.py`, `.github/workflows/gold.yml` her 20 dakikada çalıştırır); dosya eskirse Truncgil yedek kaynağı kullanılır.
+14. **İzin penceresi:** kişisel bilgi alan her akıştan önce (kayıt, giriş, bildirim, sipariş) KVKK aydınlatması ve izinler sorulur; zorunlu izin verilmezse form gönderilmez.
 
 ## MVP'de olmayanlar (sonraki sürümler)
 

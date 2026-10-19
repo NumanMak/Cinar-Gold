@@ -227,3 +227,37 @@ html.has-promo .mmenu { padding-top: calc(var(--nav-h) + var(--promo-h) + 24px);
 .sec-more { margin-top: clamp(28px, 4vw, 44px); }
 .storage-warn { margin: 0; padding: 8px var(--pad); font-size: .8125rem; text-align: center; background: #5a2a1b; color: #ffe7de; }
 html.has-promo .storage-warn { margin-top: var(--promo-h); }
+
+/* ===== Telefon düzeni ===== */
+@media (max-width: 560px) {
+  .shop-nav__inner { gap: 8px; min-height: 60px; }
+  .shop-nav .brand__word { display: none; }
+  .shop-nav__links { gap: 10px; font-size: .8125rem; }
+  .shop-nav__links a:first-child { display: none; }
+  .shop-actions { gap: 0; }
+  .shop-act { padding: 0 8px; min-width: 38px; }
+}
+.shop-page { overflow-x: clip; }
+
+/* ===== Arama ve sıralama ===== */
+.shop-search { margin: 22px 0 0; max-width: 32rem; }
+.shop-search input { width: 100%; min-height: 46px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--line); background: var(--graphite); color: var(--pearl); font: inherit; }
+.shop-search input:focus-visible { outline: 2px solid var(--gold-light); outline-offset: 2px; }
+.field textarea, .shop-main textarea {
+  width: 100%; padding: 10px 12px; border-radius: var(--r-media); border: 1px solid var(--line);
+  background: var(--graphite); color: var(--pearl); font: inherit; resize: vertical;
+}
+select#sirala { min-height: 42px; padding: 0 12px; border-radius: var(--r-media); border: 1px solid var(--line); background: var(--graphite); color: var(--pearl); font: inherit; }
+.similar { margin-top: clamp(40px, 6vw, 72px); }
+.similar .order-form__title { margin-bottom: 16px; }
+
+/* ===== Hesap düzeni ===== */
+.account { max-width: 72rem; }
+.account__grid { display: grid; gap: 22px; margin-top: 18px; grid-template-columns: minmax(0, 1fr); align-items: start; }
+@media (min-width: 900px) { .account__grid { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); } }
+.account__col { display: grid; gap: 22px; }
+.acard { padding: 20px; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--graphite); display: grid; gap: 12px; align-content: start; }
+.acard__title { font-size: 1.125rem; }
+.acard .btn { justify-self: start; }
+.order__status { font-size: .75rem; padding: 2px 10px; border-radius: 999px; border: 1px solid var(--gold-light); color: var(--gold-light); }
+.btn[disabled] { opacity: .5; cursor: not-allowed; }

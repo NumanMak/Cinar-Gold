@@ -12,7 +12,7 @@ const ERRORS = {
   SIPARIS_GECERSIZ: 'Sepetinizdeki bazı ürünlerin stoğu değişti. Lütfen sepeti gözden geçirin.',
   STOK_YETERSIZ: 'Stokta bu kadar adet yok.',
   SEPET_BOS: 'Sepetiniz boş.',
-  ZORUNLU_ALAN: 'Ad soyad, telefon ve ödeme yöntemini doldurun.',
+  ZORUNLU_ALAN: 'Ad soyad, telefon, ödeme yöntemi ve (adrese teslimde) en az 10 karakterlik açık adresi doldurun.',
 };
 
 function changed() {
@@ -66,7 +66,10 @@ function couponForm(q) {
 function orderForm(q) {
   const user = auth.current();
   const name = el('input', { type: 'text', name: 'ad', autocomplete: 'name', required: '', value: user ? user.name : '' });
-  const phone = el('input', { type: 'tel', name: 'telefon', autocomplete: 'tel', required: '' });
+  const phone = el('input', { type: 'tel', name: 'telefon', autocomplete: 'tel', required: '', value: user ? user.phone : '' });
+  const address = el('textarea', { name: 'adres', rows: '3', autocomplete: 'street-address', placeholder: 'Mahalle, cadde/sokak, bina ve daire no, ilçe, il' }, user ? user.address : '');
+  const addressField = el('label', { class: 'field', id: 'adres-alani', hidden: '' }, el('span', {}, 'Teslimat adresi'), address);
+  const deliver = (value, text, checked) => el('label', { class: 'check' }, el('input', { type: 'radio', name: 'teslimat', value, ...(checked ? { checked: '' } : {}) }), el('span', {}, text));
   const pay = (value, text, checked) => el('label', { class: 'check' }, el('input', { type: 'radio', name: 'odeme', value, ...(checked ? { checked: '' } : {}) }), el('span', {}, text));
   const msg = el('p', { class: 'form-msg', role: 'alert' }, flash);
   flash = '';
@@ -74,12 +77,23 @@ function orderForm(q) {
   if (q.problems.length) submit.disabled = true;
   const form = el('form', { class: 'order-form' },
     el('h2', { class: 'order-form__title' }, 'Sipariş bilgileri'),
+    ...(user ? [] : [el('p', { class: 'form-msg' }, 'Hesabınız varsa ', el('a', { class: 'link-btn', href: 'hesap.html' }, 'giriş yapın'), ', bilgileriniz otomatik dolsun.')]),
     el('label', { class: 'field' }, el('span', {}, 'Ad soyad'), name),
     el('label', { class: 'field' }, el('span', {}, 'Telefon'), phone),
+    el('fieldset', { class: 'order-form__pay' }, el('legend', {}, 'Teslimat'),
+      deliver('magaza', 'Mağazadan teslim (Atatürk Cd. No:25/A, Fethiye)', true), deliver('adres', 'Adrese teslim', false)),
+    addressField,
     el('fieldset', { class: 'order-form__pay' }, el('legend', {}, 'Ödeme yöntemi'),
       pay('havale', 'Havale / EFT', true), pay('magaza', 'Mağazada ödeme', false)),
     el('p', { class: 'form-msg' }, 'Demo mağaza: sipariş yalnızca bu tarayıcıda kaydedilir, ödeme alınmaz. Onay için mağazamız sizinle WhatsApp üzerinden iletişime geçer.'),
     msg, submit);
+
+  const syncDelivery = () => {
+    const toAddress = form.elements.teslimat.value === 'adres';
+    addressField.hidden = !toAddress;
+    address.required = toAddress;
+  };
+  form.addEventListener('change', (e) => { if (e.target.name === 'teslimat') syncDelivery(); });
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -94,8 +108,9 @@ function orderForm(q) {
       }
       const order = placeOrder({ store, products, inventory, cart }, {
         userId: user ? user.id : null, name: name.value, phone: phone.value,
-        payment: form.elements.odeme.value, code,
+        payment: form.elements.odeme.value, delivery: form.elements.teslimat.value, address: address.value, code,
       });
+      if (user) auth.updateProfile({ phone: phone.value, ...(order.delivery === 'adres' ? { address: order.address } : {}) });
       store.remove('coupon');
       code = '';
       ctx.refresh();
@@ -121,6 +136,7 @@ function showSuccess(order) {
       el('h2', { class: 'done__title' }, 'Siparişiniz alındı'),
       el('p', {}, `Sipariş numaranız: ${order.id}`),
       el('p', {}, `Toplam: ${formatTL(order.total)}`),
+      el('p', {}, order.delivery === 'adres' ? `Teslimat adresi: ${order.address}` : 'Teslimat: Mağazadan teslim (Atatürk Cd. No:25/A, Fethiye)'),
       el('ul', { class: 'done__list' }, ...order.lines.map((l) => el('li', {}, `${l.qty} x ${l.name}`))),
       el('div', { class: 'pdetail__buy' },
         el('a', { class: 'btn btn--gold', href: `https://wa.me/905073517347?text=${encodeURIComponent(text)}`, target: '_blank', rel: 'noopener' }, 'WhatsApp ile onayla'),

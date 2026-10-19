@@ -3,7 +3,7 @@ const ITER = 100000;
 const hex = (buf) => [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
 const unhex = (s) => Uint8Array.from(s.match(/../g) ?? [], (h) => parseInt(h, 16));
 const norm = (email) => String(email ?? '').trim().toLowerCase();
-const pub = ({ id, name, email }) => ({ id, name, email });
+const pub = ({ id, name, email, phone = '', address = '' }) => ({ id, name, email, phone, address });
 
 async function hash(password, saltBytes) {
   const subtle = globalThis.crypto.subtle;
@@ -41,6 +41,31 @@ export function createAuth(store) {
       if (!user || !same(h, user.hash)) throw new Error('GIRIS_HATALI');
       store.set('session', user.id);
       return pub(user);
+    },
+    // Yalnızca ad, telefon ve adres güncellenir; e-posta ve şifre alanlarına dokunulmaz.
+    updateProfile(patch) {
+      const id = store.get('session', null);
+      const user = users().find((u) => u.id === id);
+      if (!user) throw new Error('GIRIS_HATALI');
+      const next = { ...user };
+      if (patch.name !== undefined) {
+        next.name = String(patch.name).trim();
+        if (!next.name) throw new Error('ZORUNLU_ALAN');
+      }
+      if (patch.phone !== undefined) next.phone = String(patch.phone).trim();
+      if (patch.address !== undefined) next.address = String(patch.address).trim();
+      store.set('users', users().map((u) => (u.id === id ? next : u)));
+      return pub(next);
+    },
+    async changePassword(oldPassword, newPassword) {
+      const id = store.get('session', null);
+      const user = users().find((u) => u.id === id);
+      if (!user) throw new Error('GIRIS_HATALI');
+      if (!same(await hash(String(oldPassword ?? ''), unhex(user.salt)), user.hash)) throw new Error('GIRIS_HATALI');
+      if (String(newPassword ?? '').length < 8) throw new Error('SIFRE_KISA');
+      const salt = globalThis.crypto.getRandomValues(new Uint8Array(16));
+      const next = { ...user, salt: hex(salt), hash: await hash(newPassword, salt) };
+      store.set('users', users().map((u) => (u.id === id ? next : u)));
     },
     logout: () => store.remove('session'),
     current() {
