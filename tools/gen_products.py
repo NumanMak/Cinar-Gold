@@ -28,12 +28,12 @@ CATALOG = {
         ("Tektaş", 2.6, 0.20, 0, "Tek bir taşın ışığını öne çıkaran klasik tektaş montür. Günlük kullanıma da özel günlere de uyan zamansız bir yüzük."),
         ("Telkari", 4.2, 0.28, 0, "İnce altın tellerin el işçiliğiyle işlendiği telkari yüzük. Geleneksel işçiliği taşıyan, karakterli bir duruşu var."),
         ("Alyans", 3.8, 0.12, 0, "İç yüzeyi konfor bombeli, parlak yüzeyli klasik alyans. İç yüzeye isim ve tarih yazdırılabilir."),
-        ("Baget", 3.1, 0.22, 650, "Sıralı baget kesim zirkon taşlarla kanal montaj yapılmış, düz çizgili modern yüzük."),
+        ("Taşlı", 3.1, 0.22, 650, "Sıralı taşlarla süslenmiş, ince hatlı şık yüzük. Tek başına ya da diğer yüzüklerle birlikte kullanılabilir."),
         ("Zarif", 1.9, 0.20, 250, "İnce halka üzerinde yaprak motifli minimal tasarım. Katmanlı kullanıma çok uygun."),
     ], [("sari", 14, 1.00, None), ("rose", 14, 1.08, None), ("beyaz", 18, 1.12, None)]),
     "kolye": ("Kolye", [
-        ("Güneş", 3.4, 0.22, 0, "Işın motifli güneş ucu ve ortasında zirkon taşı olan, ışıltılı bir kolye."),
-        ("Nazar", 2.8, 0.20, 300, "Mineli nazar boncuğu ucu olan, hem şık hem koruyucu sembol taşıyan kolye."),
+        ("Madalyon", 3.4, 0.22, 0, "El işçiliği desenli yuvarlak madalyon uçlu altın kolye. Tek başına da katmanlı da şık duran, klasik bir parça."),
+        ("Taşlı", 6.5, 0.20, 450, "Renkli taşlarla süslenmiş altın kolye. Doğal taş görünümüyle dikkat çeken, özel günler için seçilen bir model."),
         ("Zincir", 7.5, 0.10, 0, "Çift sıra zincir kolye. Tek başına ya da uç takarak kullanılabilen, sade ve güçlü bir parça."),
         ("Damla", 2.2, 0.18, 250, "Damla kesim renkli taşlı, ince zincirli sade kolye. Günlük kullanıma ve hediyeye çok uygun."),
         ("Kalp", 2.6, 0.20, 150, "Kalp ucunun ortasında küçük bir taş olan, hediye için en çok seçilenlerden biri."),
@@ -41,16 +41,16 @@ CATALOG = {
     "bilezik": ("Bilezik", [
         ("Burma", 14.0, 0.06, 0, "Burma desenli klasik altın bilezik. Ağırlığı ve parlaklığıyla yatırım ve takı olarak tercih edilir."),
         ("İşlemeli", 18.0, 0.09, 0, "Çiçek motifleri ve noktalı kenar işçiliğiyle süslenmiş, geniş yüzeyli işlemeli bilezik."),
-        ("Hasır", 12.0, 0.08, 0, "Hasır örgü desenli, bileğe oturan şık ve dayanıklı bilezik."),
-        ("Çiçek", 9.0, 0.12, 250, "İnce gövdesi üzerinde taşlı çiçek motifleri taşıyan zarif bilezik."),
+        ("Zincir", 12.0, 0.08, 0, "Sağlam halkalı zincir bilezik. Bileğe oturan, dayanıklı ve her kıyafete uyan klasik bir model."),
+        ("Taşlı", 9.0, 0.12, 250, "Renkli ve pırıltılı taşlarla süslenmiş, ışığı yakalayan bilezik."),
         ("Kelepçe", 11.0, 0.07, 450, "Açık yapılı, üç taş detaylı kelepçe bilezik. Bileğe kolayca takılır."),
     ], [("sari", 14, 1.00, None), ("sari", 18, 1.04, None), ("sari", 22, 1.08, None)]),
     "pirlanta": ("Pırlanta", [
-        ("Tektaş Küpe", 2.2, 0.15, 0, "Tek taş pırlanta küpe çifti. Taş bedeli toplam karata göre hesaplanır."),
-        ("Beştaş Kolye", 3.0, 0.15, 0, "Beş pırlantanın yelpaze gibi dizildiği, boynu saran şık bir kolye."),
-        ("Baget Bileklik", 7.5, 0.12, 0, "Boydan boya sıralı pırlantalarla hazırlanan, ışığı her açıdan yakalayan bileklik."),
+        ("Küpe", 2.2, 0.15, 0, "Pırlanta küpe. Taş bedeli toplam karata göre hesaplanır."),
+        ("Kolye", 3.0, 0.15, 0, "Pırlanta ve değerli taşlarla hazırlanan, zarif kolye ucu. Taş bedeli toplam karata göre hesaplanır."),
+        ("Bileklik", 7.5, 0.12, 0, "Boydan boya sıralı taşlarla hazırlanan, ışığı her açıdan yakalayan bileklik."),
         ("Halo Kolye", 3.2, 0.15, 0, "Ortadaki taşı küçük pırlantalar çevreleyen halo kolye. Parıltıyı katlayan bir tasarım."),
-        ("Tria Yüzük", 3.4, 0.15, 0, "Üç taşlı trilogy yüzük; geçmişi, bugünü ve geleceği simgeler."),
+        ("Yüzük", 3.4, 0.15, 0, "Pırlanta ve değerli taşlarla hazırlanan, gösterişli bir yüzük. Taş bedeli toplam karata göre hesaplanır."),
     ], [("beyaz", 14, 1.00, 0.10), ("rose", 14, 1.08, 0.25), ("sari", 18, 1.14, 0.50)]),
 }
 
@@ -89,7 +89,7 @@ def build() -> list[dict]:
                 gram = round(gram0 * gmul, 2)
                 stone = stone0 + (CARAT_FEE[extra] if extra else 0)
                 if t == "pirlanta":
-                    name = f"{model}, {fmt_ct(extra)} ct, {METAL_LABEL[metal]}"
+                    name = f"Pırlanta {model}, {fmt_ct(extra)} ct, {METAL_LABEL[metal]}"
                 elif t == "bilezik":
                     name = f"{model} Bilezik, {karat} ayar"
                 else:

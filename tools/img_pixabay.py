@@ -27,7 +27,7 @@ QUERIES = {
     ("yuzuk", "baget"): ["eternity ring diamond", "diamond band ring", "gemstone ring"],
     ("yuzuk", "zarif"): ["delicate gold ring", "minimalist gold ring", "thin gold ring"],
     ("kolye", "gunes"): ["sun pendant necklace", "gold coin pendant necklace", "round gold pendant", "gold disc necklace", "gold medallion pendant"],
-    ("kolye", "nazar"): ["evil eye necklace", "evil eye pendant", "blue eye pendant necklace"],
+    ("kolye", "yeni"): ["gold necklace white background", "gold pendant on chain isolated", "rose gold necklace", "gold circle pendant necklace", "gold bar necklace", "dainty gold necklace", "gold chain necklace product", "gold choker necklace", "gold necklace pendant stone", "diamond pendant gold necklace"],
     ("kolye", "zincir"): ["gold chain necklace", "gold necklace jewelry", "layered gold necklace"],
     ("kolye", "harf"): ["initial pendant necklace", "alphabet necklace", "gold initial pendant", "name necklace gold", "letter charm necklace"],
     ("kolye", "kalp"): ["heart pendant necklace gold", "heart necklace", "gold heart necklace"],

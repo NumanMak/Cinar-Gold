@@ -287,9 +287,9 @@ def t_blocked_storage(pg):
 def t_search_sort(pg):
     pg.goto("magaza.html")
     pg.wait("document.querySelectorAll('#urunler .pcard').length === 60")
-    pg.set_value("#ara", "KOLYE nazar")
+    pg.set_value("#ara", "KOLYE madalyon")
     pg.wait("document.querySelectorAll('#urunler .pcard').length === 3")
-    pg.set_value("#ara", "pirlanta tektas")
+    pg.set_value("#ara", "pirlanta kupe")
     pg.wait("document.querySelectorAll('#urunler .pcard').length === 3")
     pg.set_value("#ara", "")
     pg.set_value("#sirala", "fiyat-azalan")

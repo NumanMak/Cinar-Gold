@@ -80,7 +80,7 @@
   "fx": 0.5,
   "fy": 0.5
  },
- "yuzuk-baget-1": {
+ "yuzuk-tasli-1": {
   "pixabayId": 3132921,
   "user": "sarakgraves",
   "page": "https://pixabay.com/photos/ring-rings-wedding-engagement-gold-3132921/",
@@ -89,7 +89,7 @@
   "fx": 0.5,
   "fy": 0.5
  },
- "yuzuk-baget-2": {
+ "yuzuk-tasli-2": {
   "pixabayId": 1175530,
   "user": "MianShahzadRaza",
   "page": "https://pixabay.com/photos/jewellery-ring-woman-jewelry-1175530/",
@@ -98,7 +98,7 @@
   "fx": 0.5,
   "fy": 0.5
  },
- "yuzuk-baget-3": {
+ "yuzuk-tasli-3": {
   "pixabayId": 1175529,
   "user": "MianShahzadRaza",
   "page": "https://pixabay.com/photos/ring-jewellery-sliver-ring-woman-1175529/",
@@ -134,7 +134,7 @@
   "fx": 0.5,
   "fy": 0.5
  },
- "kolye-gunes-1": {
+ "kolye-madalyon-1": {
   "pixabayId": 939194,
   "user": "oddobjective",
   "page": "https://pixabay.com/photos/pendant-gold-medallion-jewelry-939194/",
@@ -143,16 +143,16 @@
   "fx": 0.5,
   "fy": 0.5
  },
- "kolye-gunes-2": {
-  "pixabayId": 216043,
-  "user": "94451",
-  "page": "https://pixabay.com/photos/medallion-silver-aiglon-portrait-216043/",
-  "large": "https://pixabay.com/get/g525104d2ffd8df14ab37a2d96a74dd4bf62d5e662efc643dcba41639fd38ac43904d1b2f8c134ac312b30946a9b4a14ed07b96786358d79d5bdab833a0e1782f_1280.jpg",
-  "metal": "sari",
+ "kolye-madalyon-2": {
+  "pixabayId": 2051558,
+  "user": "laufer6",
+  "page": "https://pixabay.com/photos/jewelry-show-gold-2051558/",
+  "large": "https://pixabay.com/get/g85ceb895b8dd425e68791a6692a2bf094da97a388cc944fcaf2ba21b5f52a1e72d3a4b5c459df89c53a9959cd1f70d6be42d843e156cc67da5fbd5f90e4f7f73_1280.jpg",
+  "metal": "rose",
   "fx": 0.5,
   "fy": 0.5
  },
- "kolye-gunes-3": {
+ "kolye-madalyon-3": {
   "pixabayId": 1317657,
   "user": "chilcutte",
   "page": "https://pixabay.com/photos/jewelry-necklace-locket-gold-1317657/",
@@ -161,29 +161,29 @@
   "fx": 0.5,
   "fy": 0.5
  },
- "kolye-nazar-1": {
-  "pixabayId": 1710285,
-  "user": "ulleo",
-  "page": "https://pixabay.com/photos/eye-lucky-charm-symbol-protection-1710285/",
-  "large": "https://pixabay.com/get/g3eaaafea6e97a7f87290f074f04ac6b20c4c22fb2bb418dd5fc7be256e366a799c0b89b719a41fc4e1569af7338ab225cb3386cec0afe553159cbc0601701e8b_1280.jpg",
+ "kolye-tasli-1": {
+  "pixabayId": 918247,
+  "user": "vedatzorluer",
+  "page": "https://pixabay.com/photos/necklace-earring-jewelry-918247/",
+  "large": "https://pixabay.com/get/g2797ad220f1d7c71442e0b0ccf1ad85f1244904f1038519f375192f3beb394176f8402d2a37b9761ac61614e8d6103da21132d58fed3fc70b77fd2f0c3d21c53_1280.jpg",
   "metal": "sari",
   "fx": 0.5,
   "fy": 0.5
  },
- "kolye-nazar-2": {
-  "pixabayId": 64999,
-  "user": "Hans",
-  "page": "https://pixabay.com/photos/nazar-amulet-amulet-nazar-bad-look-64999/",
-  "large": "https://pixabay.com/get/g2dfc7b27daebe3ce3ec60f55641afae2b34b1dd805e5a34b5daa50ad9bca14c48773045484296886c69704613e5948b1_1280.jpg",
+ "kolye-tasli-2": {
+  "pixabayId": 810162,
+  "user": "KRiemer",
+  "page": "https://pixabay.com/photos/jewellery-trinket-follower-oriental-810162/",
+  "large": "https://pixabay.com/get/g085471f7916af1ad4ecf3e7f4004bf7b583cc28df35de499a12fa67572a5fd63ae374800ec3d8599f5c1432391f07857747d5703d905107670031e170d5eae4e_1280.jpg",
   "metal": "sari",
   "fx": 0.5,
   "fy": 0.5
  },
- "kolye-nazar-3": {
-  "pixabayId": 64702,
-  "user": "LoggaWiggler",
-  "page": "https://pixabay.com/photos/eye-blue-eyes-tree-nazar-turkey-64702/",
-  "large": "https://pixabay.com/get/ge694814a93cfa2779cab4b9949833beebfd0e302ac4378a0da287b7488bfb41e5aa4ce5a619cce3c21400c357e92ca10_1280.jpg",
+ "kolye-tasli-3": {
+  "pixabayId": 2422288,
+  "user": "portmaccer",
+  "page": "https://pixabay.com/photos/jewellery-jewels-saphire-expensive-2422288/",
+  "large": "https://pixabay.com/get/g62b0fafcdcd31673dcda249d835a11cfe8aae34d3b131914c4463fcaee975d1aab5565d7dfbc9e6734cab45757f0a9915c4d77acf043b9bab4def185e238b8f1_1280.jpg",
   "metal": "sari",
   "fx": 0.5,
   "fy": 0.5
@@ -323,7 +323,7 @@
   "fx": 0.5,
   "fy": 0.5
  },
- "bilezik-hasir-1": {
+ "bilezik-zincir-1": {
   "pixabayId": 665722,
   "user": "starbright",
   "page": "https://pixabay.com/photos/gold-chain-bracelet-jewelry-665722/",
@@ -332,7 +332,7 @@
   "fx": 0.5,
   "fy": 0.5
  },
- "bilezik-hasir-2": {
+ "bilezik-zincir-2": {
   "pixabayId": 665721,
   "user": "starbright",
   "page": "https://pixabay.com/photos/gold-chain-bracelet-jewelry-665721/",
@@ -341,7 +341,7 @@
   "fx": 0.5,
   "fy": 0.5
  },
- "bilezik-hasir-3": {
+ "bilezik-zincir-3": {
   "pixabayId": 878314,
   "user": "947051",
   "page": "https://pixabay.com/photos/stainless-background-white-bracelet-878314/",
@@ -350,7 +350,7 @@
   "fx": 0.5,
   "fy": 0.5
  },
- "bilezik-cicek-1": {
+ "bilezik-tasli-1": {
   "pixabayId": 3790542,
   "user": "HiepHoang",
   "page": "https://pixabay.com/photos/gold-jewelry-bracelet-jewelry-3790542/",
@@ -359,7 +359,7 @@
   "fx": 0.5,
   "fy": 0.5
  },
- "bilezik-cicek-2": {
+ "bilezik-tasli-2": {
   "pixabayId": 1175532,
   "user": "MianShahzadRaza",
   "page": "https://pixabay.com/photos/jewellery-fashion-jewelry-1175532/",
@@ -368,7 +368,7 @@
   "fx": 0.5,
   "fy": 0.5
  },
- "bilezik-cicek-3": {
+ "bilezik-tasli-3": {
   "pixabayId": 3968328,
   "user": "veerchudasama007",
   "page": "https://pixabay.com/photos/jewellery-gold-wedding-indian-3968328/",
@@ -387,10 +387,10 @@
   "fy": 0.5
  },
  "bilezik-kelepce-2": {
-  "pixabayId": 1137401,
-  "user": "thefss",
-  "page": "https://pixabay.com/photos/cartier-leopard-head-diamond-1137401/",
-  "large": "https://pixabay.com/get/g6b84029e9d0db4cef93ffd747c43d325eb7928565d29d4eb4ebfe9fb448a96bfbf71192a3e8e5a9f5430cd0e57b67dd70716e8da4fb848c313afb1289d4b7156_1280.jpg",
+  "pixabayId": 665052,
+  "user": "starbright",
+  "page": "https://pixabay.com/photos/sterling-silver-bracelet-silver-665052/",
+  "large": "https://pixabay.com/get/g5f7bd6ca5dc779b5696fb5cd08f909995e3ef7939a4f5939507b4741423870b4bdd4db73ada625548294582ef733d27d702c7fc0614709a6ddcca8ca2f99979a_1280.jpg",
   "metal": "beyaz",
   "fx": 0.5,
   "fy": 0.5
@@ -404,7 +404,7 @@
   "fx": 0.5,
   "fy": 0.5
  },
- "pirlanta-tektas-kupe-1": {
+ "pirlanta-kupe-1": {
   "pixabayId": 2043,
   "user": "PublicDomainPictures",
   "page": "https://pixabay.com/photos/jewellery-earrings-necklace-silver-2043/",
@@ -413,7 +413,7 @@
   "fx": 0.5,
   "fy": 0.5
  },
- "pirlanta-tektas-kupe-2": {
+ "pirlanta-kupe-2": {
   "pixabayId": 6518631,
   "user": "angelicavaihel",
   "page": "https://pixabay.com/photos/earrings-diamond-jewelry-gem-6518631/",
@@ -422,7 +422,7 @@
   "fx": 0.5,
   "fy": 0.5
  },
- "pirlanta-tektas-kupe-3": {
+ "pirlanta-kupe-3": {
   "pixabayId": 3790540,
   "user": "HiepHoang",
   "page": "https://pixabay.com/photos/silver-jewelry-silver-earring-3790540/",
@@ -431,7 +431,7 @@
   "fx": 0.5,
   "fy": 0.5
  },
- "pirlanta-bestas-kolye-1": {
+ "pirlanta-kolye-1": {
   "pixabayId": 3855108,
   "user": "steven_yu",
   "page": "https://pixabay.com/photos/pendant-diamond-jewelry-jewel-3855108/",
@@ -440,7 +440,7 @@
   "fx": 0.5,
   "fy": 0.5
  },
- "pirlanta-bestas-kolye-2": {
+ "pirlanta-kolye-2": {
   "pixabayId": 4704041,
   "user": "steven_yu",
   "page": "https://pixabay.com/photos/pendant-jewellery-jewelry-diamonds-4704041/",
@@ -449,7 +449,7 @@
   "fx": 0.5,
   "fy": 0.5
  },
- "pirlanta-bestas-kolye-3": {
+ "pirlanta-kolye-3": {
   "pixabayId": 625724,
   "user": "Bruceandyqq",
   "page": "https://pixabay.com/photos/jewelry-ruby-pendant-625724/",
@@ -458,7 +458,7 @@
   "fx": 0.5,
   "fy": 0.5
  },
- "pirlanta-baget-bileklik-1": {
+ "pirlanta-bileklik-1": {
   "pixabayId": 1817291,
   "user": "steven_yu",
   "page": "https://pixabay.com/photos/diamond-jewellery-bracelet-1817291/",
@@ -467,7 +467,7 @@
   "fx": 0.5,
   "fy": 0.5
  },
- "pirlanta-baget-bileklik-2": {
+ "pirlanta-bileklik-2": {
   "pixabayId": 2119612,
   "user": "Hans",
   "page": "https://pixabay.com/photos/chain-jewellery-gemstone-precious-2119612/",
@@ -476,7 +476,7 @@
   "fx": 0.5,
   "fy": 0.5
  },
- "pirlanta-baget-bileklik-3": {
+ "pirlanta-bileklik-3": {
   "pixabayId": 3132919,
   "user": "sarakgraves",
   "page": "https://pixabay.com/photos/jewelry-luxury-wealth-gem-precious-3132919/",
@@ -512,7 +512,7 @@
   "fx": 0.5,
   "fy": 0.5
  },
- "pirlanta-tria-yuzuk-1": {
+ "pirlanta-yuzuk-1": {
   "pixabayId": 1137412,
   "user": "thefss",
   "page": "https://pixabay.com/photos/emerald-ring-luxury-accessories-1137412/",
@@ -521,7 +521,7 @@
   "fx": 0.5,
   "fy": 0.5
  },
- "pirlanta-tria-yuzuk-2": {
+ "pirlanta-yuzuk-2": {
   "pixabayId": 5475926,
   "user": "Servetphotograph",
   "page": "https://pixabay.com/photos/ring-diamond-wedding-ring-5475926/",
@@ -530,7 +530,7 @@
   "fx": 0.5,
   "fy": 0.5
  },
- "pirlanta-tria-yuzuk-3": {
+ "pirlanta-yuzuk-3": {
   "pixabayId": 4696382,
   "user": "DominiqueVince",
   "page": "https://pixabay.com/photos/ring-diamond-engagement-jewellery-4696382/",
