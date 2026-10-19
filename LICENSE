@@ -1,0 +1,20 @@
+Çınar Gold Kuyumculuk web sitesi
+Telif hakkı (c) 2026 Çınar Gold Kuyumculuk. Tüm hakları saklıdır.
+
+Bu depodaki kaynak kodu, tasarımlar, metinler, katalog verileri ve diğer tüm içerik (aşağıda belirtilen üçüncü taraf
+öğeler hariç) Çınar Gold Kuyumculuk'a aittir. Yazılı izin olmadan kopyalanamaz, çoğaltılamaz, değiştirilemez,
+dağıtılamaz, yeniden yayımlanamaz, ticari veya ticari olmayan herhangi bir projede kullanılamaz ve bunlardan türev
+eser üretilemez. Deponun herkese açık görüntülenebilir olması, bu hakların verildiği anlamına gelmez.
+
+Üçüncü taraf öğeler kendi lisanslarına tabidir:
+- assets/img/products: Pixabay Lisansı kapsamındaki fotoğraflar (fotoğrafçılar tools/photo_map.json içinde belirtilmiştir).
+- assets/img (diğer), assets/video: Unsplash Lisansı ve Pexels Lisansı kapsamındaki görseller ve video (assets/img/manifest.json).
+- assets/fonts: Inter yazı tipi, SIL Open Font License 1.1.
+- assets/js/vendor: Lenis, MIT Lisansı.
+
+İzin talepleri için: https://github.com/NumanMak/Cinar-Gold/issues üzerinden iletişime geçin.
+
+Copyright (c) 2026 Çınar Gold Kuyumculuk. All rights reserved.
+The source code, designs, texts, catalog data and all other content in this repository (except the third-party items
+listed above) are proprietary. No permission is granted to copy, reproduce, modify, distribute, republish or create
+derivative works without prior written permission. Public visibility of this repository does not grant any rights.
