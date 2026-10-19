@@ -1,7 +1,10 @@
 import { mountShell } from '../shell.js';
 import { placeOrder } from '../orders.js';
 import { el, formatTL, productImg } from '../ui.js';
+import { t, translateDocument } from '../i18n.js';
+import { productName } from '../names.js';
 
+translateDocument();
 const ctx = await mountShell({ page: 'cart' });
 const { cart, store, inventory, products, auth } = ctx;
 const root = document.getElementById('sepet');
@@ -14,6 +17,13 @@ const ERRORS = {
   SEPET_BOS: 'Sepetiniz boş.',
   ZORUNLU_ALAN: 'Ad soyad, telefon, ödeme yöntemi ve (adrese teslimde) en az 10 karakterlik açık adresi doldurun.',
 };
+const errorText = (code) => (ERRORS[code] ? t(ERRORS[code]) : t('Sipariş oluşturulamadı, tekrar deneyin.'));
+
+// Sipariş satırı adı: katalogdaki güncel dilde ad; ürün kalktıysa siparişte kayıtlı ad.
+const lineName = (l) => {
+  const p = products.find((x) => x.id === l.id);
+  return p ? productName(p) : l.name;
+};
 
 function changed() {
   ctx.refresh();
@@ -23,37 +33,37 @@ function changed() {
 function lineRow(l) {
   const { product: p, qty } = l;
   const max = Math.max(1, Math.min(inventory.stockOf(p.id), 10));
-  const sel = el('select', { 'aria-label': `${p.name} adedi` },
+  const sel = el('select', { 'aria-label': t('{name} adedi', { name: productName(p) }) },
     ...Array.from({ length: Math.max(max, qty) }, (_, i) => el('option', { value: String(i + 1) }, String(i + 1))));
   sel.value = String(qty);
   sel.addEventListener('change', () => {
     try { cart.setQty(p.id, Number(sel.value)); } catch (e) { /* stok aşımı: toplam yeniden hesaplanınca uyarı görünür */ }
     changed();
   });
-  const rm = el('button', { class: 'link-btn', type: 'button' }, 'Kaldır');
+  const rm = el('button', { class: 'link-btn', type: 'button' }, t('Kaldır'));
   rm.addEventListener('click', () => { cart.remove(p.id); changed(); });
   return el('li', { class: 'cline' },
     el('a', { class: 'cline__img', href: `urun.html?id=${encodeURIComponent(p.id)}` }, productImg(p, '96px')),
     el('div', { class: 'cline__info' },
-      el('a', { class: 'cline__name', href: `urun.html?id=${encodeURIComponent(p.id)}` }, p.name),
+      el('a', { class: 'cline__name', href: `urun.html?id=${encodeURIComponent(p.id)}` }, productName(p)),
       el('span', { class: 'cline__unit' }, `${formatTL(p.price)} x`),
-      el('label', { class: 'field field--inline' }, el('span', {}, 'Adet'), sel), rm),
+      el('label', { class: 'field field--inline' }, el('span', {}, t('Adet')), sel), rm),
     el('strong', { class: 'cline__total' }, formatTL(l.lineTotal)));
 }
 
 function summary(q) {
   const row = (k, v, cls = '') => el('div', { class: `sum__row ${cls}` }, el('dt', {}, k), el('dd', {}, v));
   return el('dl', { class: 'sum' },
-    row('Ara toplam', formatTL(q.subtotal)),
-    ...(q.couponValid ? [row('İndirim (CINAR10)', `- ${formatTL(q.discount)}`, 'sum__row--disc')] : []),
-    row('Toplam', formatTL(q.total), 'sum__row--total'));
+    row(t('Ara toplam'), formatTL(q.subtotal)),
+    ...(q.couponValid ? [row(t('İndirim (CINAR10)'), `- ${formatTL(q.discount)}`, 'sum__row--disc')] : []),
+    row(t('Toplam'), formatTL(q.total), 'sum__row--total'));
 }
 
 function couponForm(q) {
-  const input = el('input', { type: 'text', name: 'kupon', placeholder: 'İndirim kodu', autocomplete: 'off', value: code });
-  const msg = el('p', { class: 'form-msg', role: 'status' }, code ? (q.couponValid ? '%10 indirim uygulandı.' : 'Kupon kodu geçerli değil.') : '');
-  const form = el('form', { class: 'coupon' }, el('label', { class: 'field' }, el('span', {}, 'İndirim kodu'), input),
-    el('button', { class: 'btn btn--line btn--sm', type: 'submit' }, 'Uygula'), msg);
+  const input = el('input', { type: 'text', name: 'kupon', placeholder: t('İndirim kodu'), autocomplete: 'off', value: code });
+  const msg = el('p', { class: 'form-msg', role: 'status' }, code ? (q.couponValid ? t('%10 indirim uygulandı.') : t('Kupon kodu geçerli değil.')) : '');
+  const form = el('form', { class: 'coupon' }, el('label', { class: 'field' }, el('span', {}, t('İndirim kodu')), input),
+    el('button', { class: 'btn btn--line btn--sm', type: 'submit' }, t('Uygula')), msg);
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     code = input.value.trim();
@@ -67,36 +77,36 @@ function orderForm(q) {
   const user = auth.current();
   const name = el('input', { type: 'text', name: 'ad', autocomplete: 'name', required: '', value: user ? user.name : '' });
   const phone = el('input', { type: 'tel', name: 'telefon', autocomplete: 'tel', required: '', value: user ? user.phone : '' });
-  const address = el('textarea', { name: 'adres', rows: '3', autocomplete: 'street-address', placeholder: 'Mahalle, cadde/sokak, bina ve daire no, ilçe, il' }, user ? user.address : '');
+  const address = el('textarea', { name: 'adres', rows: '3', autocomplete: 'street-address', placeholder: t('Mahalle, cadde/sokak, bina ve daire no, ilçe, il') }, user ? user.address : '');
   // Kayıtlı adresler: seçilince metin alanı dolar; "Yeni adres" metni boşaltır.
-  const saved = el('select', { name: 'kayitli-adres', 'aria-label': 'Kayıtlı adreslerim' },
-    ...(user ? user.addresses.map((a) => el('option', { value: a.id }, `${a.title}${a.isDefault ? ' (varsayılan)' : ''}`)) : []),
-    el('option', { value: '' }, 'Yeni adres gir'));
+  const saved = el('select', { name: 'kayitli-adres', 'aria-label': t('Kayıtlı adreslerim') },
+    ...(user ? user.addresses.map((a) => el('option', { value: a.id }, `${a.title}${a.isDefault ? t(' (varsayılan)') : ''}`)) : []),
+    el('option', { value: '' }, t('Yeni adres gir')));
   if (user && user.addresses.length) saved.value = (user.addresses.find((a) => a.isDefault) ?? user.addresses[0]).id;
   saved.addEventListener('change', () => {
     const a = user.addresses.find((x) => x.id === saved.value);
     address.value = a ? a.text : '';
   });
   const addressField = el('div', { class: 'field', id: 'adres-alani', hidden: '' },
-    ...(user && user.addresses.length ? [el('label', { class: 'field' }, el('span', {}, 'Kayıtlı adreslerim'), saved)] : []),
-    el('label', { class: 'field' }, el('span', {}, 'Teslimat adresi'), address));
+    ...(user && user.addresses.length ? [el('label', { class: 'field' }, el('span', {}, t('Kayıtlı adreslerim')), saved)] : []),
+    el('label', { class: 'field' }, el('span', {}, t('Teslimat adresi')), address));
   const deliver = (value, text, checked) => el('label', { class: 'check' }, el('input', { type: 'radio', name: 'teslimat', value, ...(checked ? { checked: '' } : {}) }), el('span', {}, text));
   const pay = (value, text, checked) => el('label', { class: 'check' }, el('input', { type: 'radio', name: 'odeme', value, ...(checked ? { checked: '' } : {}) }), el('span', {}, text));
   const msg = el('p', { class: 'form-msg', role: 'alert' }, flash);
   flash = '';
-  const submit = el('button', { class: 'btn btn--gold', type: 'submit' }, 'Siparişi tamamla');
+  const submit = el('button', { class: 'btn btn--gold', type: 'submit' }, t('Siparişi tamamla'));
   if (q.problems.length) submit.disabled = true;
   const form = el('form', { class: 'order-form' },
-    el('h2', { class: 'order-form__title' }, 'Sipariş bilgileri'),
-    ...(user ? [] : [el('p', { class: 'form-msg' }, 'Hesabınız varsa ', el('a', { class: 'link-btn', href: 'hesap.html' }, 'giriş yapın'), ', bilgileriniz otomatik dolsun.')]),
-    el('label', { class: 'field' }, el('span', {}, 'Ad soyad'), name),
-    el('label', { class: 'field' }, el('span', {}, 'Telefon'), phone),
-    el('fieldset', { class: 'order-form__pay' }, el('legend', {}, 'Teslimat'),
-      deliver('magaza', 'Mağazadan teslim (Atatürk Cd. No:25/A, Fethiye)', true), deliver('adres', 'Adrese teslim', false)),
+    el('h2', { class: 'order-form__title' }, t('Sipariş bilgileri')),
+    ...(user ? [] : [el('p', { class: 'form-msg' }, t('Hesabınız varsa '), el('a', { class: 'link-btn', href: 'hesap.html' }, t('giriş yapın')), t(', bilgileriniz otomatik dolsun.'))]),
+    el('label', { class: 'field' }, el('span', {}, t('Ad soyad')), name),
+    el('label', { class: 'field' }, el('span', {}, t('Telefon')), phone),
+    el('fieldset', { class: 'order-form__pay' }, el('legend', {}, t('Teslimat')),
+      deliver('magaza', t('Mağazadan teslim (Atatürk Cd. No:25/A, Fethiye)'), true), deliver('adres', t('Adrese teslim'), false)),
     addressField,
-    el('fieldset', { class: 'order-form__pay' }, el('legend', {}, 'Ödeme yöntemi'),
-      pay('havale', 'Havale / EFT', true), pay('magaza', 'Mağazada ödeme', false)),
-    el('p', { class: 'form-msg' }, 'Demo mağaza: sipariş yalnızca bu tarayıcıda kaydedilir, ödeme alınmaz. Onay için mağazamız sizinle WhatsApp üzerinden iletişime geçer.'),
+    el('fieldset', { class: 'order-form__pay' }, el('legend', {}, t('Ödeme yöntemi')),
+      pay('havale', t('Havale / EFT'), true), pay('magaza', t('Mağazada ödeme'), false)),
+    el('p', { class: 'form-msg' }, t('Demo mağaza: sipariş yalnızca bu tarayıcıda kaydedilir, ödeme alınmaz. Onay için mağazamız sizinle WhatsApp üzerinden iletişime geçer.')),
     msg, submit);
 
   const syncDelivery = () => {
@@ -113,7 +123,7 @@ function orderForm(q) {
     msg.textContent = '';
     try {
       if (!(await ctx.requireConsent())) {
-        msg.textContent = 'Siparişi tamamlamak için kişisel veriler konusunda izin vermeniz gerekiyor.';
+        msg.textContent = t('Siparişi tamamlamak için kişisel veriler konusunda izin vermeniz gerekiyor.');
         submit.disabled = false;
         return;
       }
@@ -125,7 +135,7 @@ function orderForm(q) {
         auth.updateProfile({ phone: phone.value });
         // Yeni bir adres girildiyse adres defterine eklenir.
         if (order.delivery === 'adres' && !user.addresses.some((a) => a.text === order.address)) {
-          auth.addAddress({ title: `Adresim ${user.addresses.length + 1}`, text: order.address });
+          auth.addAddress({ title: t('Adresim {n}', { n: user.addresses.length + 1 }), text: order.address });
         }
       }
       store.remove('coupon');
@@ -133,7 +143,7 @@ function orderForm(q) {
       ctx.refresh();
       showSuccess(order);
     } catch (err) {
-      const text = ERRORS[err.message] ?? 'Sipariş oluşturulamadı, tekrar deneyin.';
+      const text = errorText(err.message);
       if (err.message === 'SIPARIS_GECERSIZ' || err.message === 'STOK_YETERSIZ' || err.message === 'SEPET_BOS') {
         flash = text; // sepet değişmiş olabilir: yeniden çiz, mesajı yeni formda göster
         changed();
@@ -147,31 +157,37 @@ function orderForm(q) {
 }
 
 function showSuccess(order) {
-  const text = `Merhaba, ${order.id} numaralı siparişimi onaylamak istiyorum. Toplam: ${formatTL(order.total)}`;
+  const text = t('Merhaba, {id} numaralı siparişimi onaylamak istiyorum. Toplam: {total}', { id: order.id, total: formatTL(order.total) });
   root.replaceChildren(
     el('div', { class: 'done', role: 'status' },
-      el('h2', { class: 'done__title' }, 'Siparişiniz alındı'),
-      el('p', {}, `Sipariş numaranız: ${order.id}`),
-      el('p', {}, `Toplam: ${formatTL(order.total)}`),
-      el('p', {}, order.delivery === 'adres' ? `Teslimat adresi: ${order.address}` : 'Teslimat: Mağazadan teslim (Atatürk Cd. No:25/A, Fethiye)'),
-      el('ul', { class: 'done__list' }, ...order.lines.map((l) => el('li', {}, `${l.qty} x ${l.name}`))),
+      el('h2', { class: 'done__title' }, t('Siparişiniz alındı')),
+      el('p', {}, t('Sipariş numaranız: {id}', { id: order.id })),
+      el('p', {}, t('Toplam: {total}', { total: formatTL(order.total) })),
+      el('p', {}, order.delivery === 'adres' ? t('Teslimat adresi: {adres}', { adres: order.address }) : t('Teslimat: Mağazadan teslim (Atatürk Cd. No:25/A, Fethiye)')),
+      el('ul', { class: 'done__list' }, ...order.lines.map((l) => el('li', {}, `${l.qty} x ${lineName(l)}`))),
       el('div', { class: 'pdetail__buy' },
-        el('a', { class: 'btn btn--gold', href: `https://wa.me/905073517347?text=${encodeURIComponent(text)}`, target: '_blank', rel: 'noopener' }, 'WhatsApp ile onayla'),
-        el('a', { class: 'btn btn--line', href: 'magaza.html' }, 'Alışverişe devam et'),
-        el('a', { class: 'btn btn--line', href: 'hesap.html' }, 'Siparişlerim'))));
+        el('a', { class: 'btn btn--gold', href: `https://wa.me/905073517347?text=${encodeURIComponent(text)}`, target: '_blank', rel: 'noopener' }, t('WhatsApp ile onayla')),
+        el('a', { class: 'btn btn--line', href: 'magaza.html' }, t('Alışverişe devam et')),
+        el('a', { class: 'btn btn--line', href: 'hesap.html' }, t('Siparişlerim')))));
+}
+
+function issueText(i) {
+  if (i.kind === 'gone') return t('{id}: ürün artık yok', { id: i.id });
+  const p = products.find((x) => x.id === i.id);
+  return t('{name}: stokta yalnızca {n} adet var', { name: p ? productName(p) : i.id, n: i.left });
 }
 
 function render() {
   const q = cart.quote(code);
   if (!cart.items().length) {
-    root.replaceChildren(el('p', { class: 'shop-lead' }, 'Sepetiniz boş.'), el('a', { class: 'btn btn--gold', href: 'magaza.html' }, 'Mağazaya git'));
+    root.replaceChildren(el('p', { class: 'shop-lead' }, t('Sepetiniz boş.')), el('a', { class: 'btn btn--gold', href: 'magaza.html' }, t('Mağazaya git')));
     return;
   }
   let problems = null;
   if (q.problems.length) {
-    const clear = el('button', { class: 'link-btn', type: 'button' }, 'Sepeti temizle');
+    const clear = el('button', { class: 'link-btn', type: 'button' }, t('Sepeti temizle'));
     clear.addEventListener('click', () => { cart.clear(); changed(); });
-    problems = el('div', { class: 'problems', role: 'alert' }, el('ul', {}, ...q.problems.map((t) => el('li', {}, t))), clear);
+    problems = el('div', { class: 'problems', role: 'alert' }, el('ul', {}, ...q.issues.map((i) => el('li', {}, issueText(i)))), clear);
   }
   root.replaceChildren(el('div', { class: 'cart-grid' },
     el('div', {}, el('ul', { class: 'clines' }, ...q.lines.map(lineRow)), ...(problems ? [problems] : [])),

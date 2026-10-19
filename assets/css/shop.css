@@ -344,3 +344,6 @@ select#sirala { min-height: 42px; padding: 0 12px; border-radius: var(--r-media)
 .pdetail__media img { width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; }
 .pdetail__credit { padding: 10px 14px; font-size: .75rem; color: var(--muted); background: var(--graphite); border-top: 1px solid var(--line); }
 .pdetail__credit a { text-decoration: underline; text-underline-offset: 2px; }
+
+/* ===== Dil düğmesi ===== */
+.shop-lang { font-size: .75rem; font-weight: 600; letter-spacing: .06em; min-width: 40px; border-color: var(--line); }

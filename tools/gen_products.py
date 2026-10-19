@@ -18,6 +18,31 @@ PHOTOS = ROOT / "tools" / "photo_map.json"
 GRAM22_FALLBACK = 6325
 
 METAL_LABEL = {"sari": "Sarı altın", "rose": "Rose altın", "beyaz": "Beyaz altın"}
+METAL_EN = {"sari": "Yellow gold", "rose": "Rose gold", "beyaz": "White gold"}
+TYPE_EN = {"yuzuk": "Ring", "kolye": "Necklace", "bilezik": "Bracelet", "pirlanta": "Diamond"}
+# (tür, model) -> (İngilizce model adı, İngilizce açıklama)
+MODEL_EN = {
+    ("yuzuk", "Tektaş"): ("Solitaire", "A classic solitaire setting that puts the spotlight on a single stone. A timeless ring for every day and special occasions."),
+    ("yuzuk", "Telkari"): ("Filigree", "A filigree ring worked by hand from fine gold wire. It carries traditional craftsmanship with a distinctive character."),
+    ("yuzuk", "Alyans"): ("Wedding Band", "A classic polished wedding band with a comfort-fit interior. A name and date can be engraved inside."),
+    ("yuzuk", "Taşlı"): ("Gemstone", "A slim, elegant ring set with a row of stones. Wear it alone or stacked with other rings."),
+    ("yuzuk", "Zarif"): ("Dainty", "A minimal design with a leaf motif on a slim band. Perfect for stacking."),
+    ("kolye", "Madalyon"): ("Medallion", "A gold necklace with a hand-patterned round medallion pendant. A classic piece that looks great alone or layered."),
+    ("kolye", "Taşlı"): ("Gemstone", "A gold necklace decorated with colorful stones. A natural-stone look that stands out on special occasions."),
+    ("kolye", "Zincir"): ("Chain", "A double-strand chain necklace. A simple and strong piece you can wear alone or with a pendant."),
+    ("kolye", "Damla"): ("Teardrop", "A simple fine-chain necklace with a teardrop-cut colored stone. Perfect for daily wear and gifting."),
+    ("kolye", "Kalp"): ("Heart", "A heart pendant necklace, one of the most popular choices for gifts."),
+    ("bilezik", "Burma"): ("Rope", "A classic gold bangle with a twisted pattern. Loved both as jewelry and as an investment for its weight and shine."),
+    ("bilezik", "İşlemeli"): ("Ornate", "A wide ornate bangle decorated with floral motifs and dotted edge work."),
+    ("bilezik", "Zincir"): ("Chain", "A sturdy link-chain bracelet. A classic that sits well on the wrist and suits any outfit."),
+    ("bilezik", "Taşlı"): ("Gemstone", "A bracelet decorated with colorful, sparkling stones that catch the light."),
+    ("bilezik", "Kelepçe"): ("Cuff", "An open-design cuff bracelet that slips easily onto the wrist."),
+    ("pirlanta", "Küpe"): ("Earrings", "Diamond earrings. The stone cost is calculated from the total carat weight."),
+    ("pirlanta", "Kolye"): ("Necklace", "An elegant pendant necklace made with diamonds and precious stones. The stone cost is calculated from the total carat weight."),
+    ("pirlanta", "Bileklik"): ("Bracelet", "A bracelet with a continuous row of stones that catches the light from every angle."),
+    ("pirlanta", "Halo Kolye"): ("Halo Necklace", "A halo necklace with a center stone surrounded by small diamonds. A design that multiplies the sparkle."),
+    ("pirlanta", "Yüzük"): ("Ring", "A statement ring made with diamonds and precious stones. The stone cost is calculated from the total carat weight."),
+}
 # Pırlanta taş bedeli (toplam karata göre, TL)
 CARAT_FEE = {0.10: 14000, 0.25: 36000, 0.50: 85000}
 
@@ -88,6 +113,15 @@ def build() -> list[dict]:
                 metal = photo["metal"]
                 gram = round(gram0 * gmul, 2)
                 stone = stone0 + (CARAT_FEE[extra] if extra else 0)
+                model_en, desc_en = MODEL_EN[(t, model)]
+                if t == "pirlanta":
+                    name_en = f"Diamond {model_en}, {fmt_ct(extra).replace(',', '.')} ct, {METAL_EN[metal]}"
+                elif t == "bilezik":
+                    name_en = f"{model_en} Bracelet, {karat}K"
+                elif model_en.endswith("Band"):
+                    name_en = f"{model_en}, {METAL_EN[metal]}"
+                else:
+                    name_en = f"{model_en} {TYPE_EN[t]}, {METAL_EN[metal]}"
                 if t == "pirlanta":
                     name = f"Pırlanta {model}, {fmt_ct(extra)} ct, {METAL_LABEL[metal]}"
                 elif t == "bilezik":
@@ -98,9 +132,13 @@ def build() -> list[dict]:
                     "id": pid,
                     "type": t,
                     "typeLabel": label,
+                    "typeLabelEn": TYPE_EN[t],
                     "model": model,
+                    "modelEn": model_en,
                     "name": name,
+                    "nameEn": name_en,
                     "metal": METAL_LABEL[metal],
+                    "metalEn": METAL_EN[metal],
                     "karat": karat,
                     "gram": gram,
                     "laborRate": labor,
@@ -110,12 +148,17 @@ def build() -> list[dict]:
                     "imageCredit": {"author": photo["user"], "url": photo["page"], "source": "Pixabay"},
                     "stock": 0 if idx in {4, 11} else 1 + (idx * 5 + mi) % 12,
                     "desc": f"{desc} {karat} ayar {METAL_LABEL[metal].lower()}" + (f", toplam {fmt_ct(extra)} ct pırlanta." if extra else "."),
+                    "descEn": f"{desc_en} {karat}K {METAL_EN[metal].lower()}" + (f", {fmt_ct(extra).replace(',', '.')} ct total diamond weight." if extra else "."),
                 })
     # Aynı adı taşıyan ürünler (ör. aynı metalde iki varyant) gramla ayırt edilir.
     names = [i["name"] for i in items]
     for i in items:
         if names.count(i["name"]) > 1:
             i["name"] += f", {str(i['gram']).replace('.', ',')} g"
+    names_en = [i["nameEn"] for i in items]
+    for i in items:
+        if names_en.count(i["nameEn"]) > 1:
+            i["nameEn"] += f", {i['gram']} g"
     return items
 
 

@@ -20,6 +20,12 @@
 
   /* --- Mağaza ayarları ---------------------------------------------------- */
   const PHONE = '905073517347';
+  // Dil desteği: assets/js/shop/i18n.js, window.cgI18n olarak sunar. Yoksa metin olduğu gibi (Türkçe) kullanılır.
+  const T = (key, params) => {
+    if (window.cgI18n) return window.cgI18n.t(key, params);
+    return params ? key.replace(/\{(\w+)\}/g, (m, k) => (k in params ? String(params[k]) : m)) : key;
+  };
+  const LOCALE = window.cgI18n ? window.cgI18n.locale() : 'tr-TR';
   const FOUNDED = 1996;
   const HOURS = {
     tz: 'Europe/Istanbul',
@@ -138,7 +144,7 @@
     menu.classList.add('is-open');
     doc.classList.add('menu-open');
     toggle.setAttribute('aria-expanded', 'true');
-    if (toggleLabel) toggleLabel.textContent = 'Menüyü kapat';
+    if (toggleLabel) toggleLabel.textContent = T('Menüyü kapat');
     setInert(true);
     lockScroll(true);
     const first = $('.mmenu__link', menu);
@@ -150,7 +156,7 @@
     menu.classList.remove('is-open');
     doc.classList.remove('menu-open');
     toggle.setAttribute('aria-expanded', 'false');
-    if (toggleLabel) toggleLabel.textContent = 'Menüyü aç';
+    if (toggleLabel) toggleLabel.textContent = T('Menüyü aç');
     setInert(false);
     lockScroll(false);
     menuTimer = setTimeout(() => { if (!menuOpen) menu.hidden = true; }, 520);
@@ -511,7 +517,7 @@
       }
       const cardImg = $('img', li);
       img.alt = cardImg ? cardImg.alt : name;
-      wa.href = waLink(`Merhaba, web sitenizdeki “${name}” için fiyat ve stok bilgisi almak istiyorum.`);
+      wa.href = waLink(T('Merhaba, web sitenizdeki “{ad}” için fiyat ve stok bilgisi almak istiyorum.', { ad: name }));
       opener = trigger;
       dialog.classList.remove('is-closing');
       dialog.showModal();
@@ -560,14 +566,15 @@
       let msg;
       if (isOpen) {
         const left = HOURS.close - mins;
-        msg = left <= 45 ? `Şu an açık, ${left} dakika sonra kapanıyor` : `Şu an açık, ${HOURS.closeText} kapanıyor`;
+        msg = left <= 45 ? T('Şu an açık, {n} dakika sonra kapanıyor', { n: left }) : T('Şu an açık, {saat} kapanıyor', { saat: HOURS.closeText });
       } else if (openToday && mins < HOURS.open) {
-        msg = `Şu an kapalı, bugün ${HOURS.openText} açılıyor`;
+        msg = T('Şu an kapalı, bugün {saat} açılıyor', { saat: HOURS.openText });
       } else {
         let d = 1;
         while (d < 7 && !HOURS.days.includes((day + d) % 7)) d += 1;
-        const when = d === 1 ? 'yarın' : `${DAYS_TR[(day + d) % 7]} günü`;
-        msg = `Şu an kapalı, ${when} ${HOURS.openText} açılıyor`;
+        msg = d === 1
+          ? T('Şu an kapalı, yarın {saat} açılıyor', { saat: HOURS.openText })
+          : T('Şu an kapalı, {gun} günü {saat} açılıyor', { gun: T(DAYS_TR[(day + d) % 7]), saat: HOURS.openText });
       }
       text.textContent = msg;
       box.classList.toggle('is-open', isOpen);
@@ -585,9 +592,13 @@
     const items = $$('[data-key]', box);
     const time = $('[data-market-time]', box);
     const sourceEl = $('[data-market-source]', box);
-    const money2 = new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    const money0 = new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', maximumFractionDigits: 0 });
-    const pct = new Intl.NumberFormat('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const money2 = LOCALE === 'en-US'
+      ? { format: (v) => `₺${new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(v)}` }
+      : new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const money0 = LOCALE === 'en-US'
+      ? { format: (v) => `₺${new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(v)}` }
+      : new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', maximumFractionDigits: 0 });
+    const pct = new Intl.NumberFormat(LOCALE, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     let loadedOnce = false;
     let retries = 0;
 
@@ -607,7 +618,7 @@
       const m = /(\d{2}):(\d{2})/.exec(String(data.updatedAt || ''));
       return {
         source: data.source || 'Özsafir Gold',
-        time: m ? `Son güncelleme ${m[1]}:${m[2]}` : 'Güncel piyasa verisi',
+        time: m ? T('Son güncelleme {saat}', { saat: `${m[1]}:${m[2]}` }) : T('Güncel piyasa verisi'),
         get: (key) => { const d = data.items && data.items[key]; return d ? { value: Number(d.sell), buy: Number(d.buy) } : null; },
       };
     }
@@ -619,7 +630,7 @@
       const m = /(\d{2}):(\d{2})/.exec(String(data.Update_Date || ''));
       return {
         source: 'Truncgil Finans',
-        time: m ? `Son güncelleme ${m[1]}:${m[2]}` : 'Güncel piyasa verisi',
+        time: m ? T('Son güncelleme {saat}', { saat: `${m[1]}:${m[2]}` }) : T('Güncel piyasa verisi'),
         get: (key) => { const d = data[FALLBACK_KEYS[key]]; return d ? { value: Number(d.Selling), change: Number(d.Change) } : null; },
       };
     }
@@ -648,14 +659,14 @@
           if (!chgEl) return;
           chgEl.classList.remove('is-up', 'is-down');
           if (Number.isFinite(d.buy) && d.buy > 0) {
-            chgEl.textContent = `Alış ${(d.buy >= 10000 ? money0 : money2).format(d.buy)}`;
+            chgEl.textContent = T('Alış {tutar}', { tutar: (d.buy >= 10000 ? money0 : money2).format(d.buy) });
           } else if (Number.isFinite(d.change)) {
             const arrow = document.createElement('span');
             arrow.setAttribute('aria-hidden', 'true');
             arrow.textContent = d.change > 0 ? '▲ ' : d.change < 0 ? '▼ ' : '';
             const sr = document.createElement('span');
             sr.className = 'visually-hidden';
-            sr.textContent = d.change > 0 ? 'artış ' : d.change < 0 ? 'düşüş ' : 'değişim ';
+            sr.textContent = d.change > 0 ? T('artış ') : d.change < 0 ? T('düşüş ') : T('değişim ');
             chgEl.replaceChildren(arrow, sr, document.createTextNode(`%${pct.format(Math.abs(d.change))}`));
             chgEl.classList.toggle('is-up', d.change > 0);
             chgEl.classList.toggle('is-down', d.change < 0);
@@ -671,7 +682,7 @@
       } catch (err) {
         if (!loadedOnce) {
           box.classList.add('is-error');
-          time.textContent = 'Güncel fiyatlar şu an gösterilemiyor. Mağaza fiyatı için bizi arayın: 0507 351 73 47';
+          time.textContent = T('Güncel fiyatlar şu an gösterilemiyor. Mağaza fiyatı için bizi arayın: 0507 351 73 47');
           // Geçici ağ hatalarında kısa aralıklarla iki kez daha dene
           if (retries < 2) { retries += 1; setTimeout(load, 6000 * retries); }
         }

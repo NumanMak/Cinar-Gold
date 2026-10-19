@@ -39,15 +39,16 @@ export function createCart(store, products, inventory) {
     quote(code) {
       const lines = [];
       const problems = [];
+      const issues = []; // arayüzün çevirebilmesi için yapılandırılmış karşılığı: { kind: 'gone' | 'stock', id, name?, left? }
       for (const { id, qty } of read()) {
         const product = byId.get(id);
-        if (!product) { problems.push(`${id}: ürün artık yok`); continue; }
-        if (qty > inventory.stockOf(id)) problems.push(`${product.name}: stokta yalnızca ${inventory.stockOf(id)} adet var`);
+        if (!product) { problems.push(`${id}: ürün artık yok`); issues.push({ kind: 'gone', id }); continue; }
+        if (qty > inventory.stockOf(id)) { problems.push(`${product.name}: stokta yalnızca ${inventory.stockOf(id)} adet var`); issues.push({ kind: 'stock', id, left: inventory.stockOf(id) }); }
         lines.push({ product, qty, lineTotal: product.price * qty });
       }
       const subtotal = lines.reduce((n, l) => n + l.lineTotal, 0);
       const c = applyCoupon(code, subtotal);
-      return { lines, subtotal, discount: c.discount, total: subtotal - c.discount, couponValid: c.valid, problems };
+      return { lines, subtotal, discount: c.discount, total: subtotal - c.discount, couponValid: c.valid, problems, issues };
     },
   };
 }

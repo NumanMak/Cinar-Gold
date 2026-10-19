@@ -135,7 +135,7 @@ def t_theme(pg):
     pg.goto("magaza.html")
     pg.wait("!!document.querySelector('.shop-actions button')")
     first = pg.ev("document.documentElement.dataset.theme")
-    pg.click(".shop-actions button")
+    pg.click(".shop-actions button:not(.shop-lang)")
     second = pg.ev("document.documentElement.dataset.theme")
     check(first != second and second in ("dark", "light"), f"tema değişmedi: {first} -> {second}")
     pg.goto("magaza.html")
@@ -523,7 +523,94 @@ def t_pricing_images(pg):
     check(not res["bad"], f"görseli yüklenemeyen ürünler: {res['bad'][:3]}")
 
 
-SCENARIOS = [t_catalog, t_promo, t_theme, t_soldout, t_missing_and_xss, t_cart_coupon, t_order, t_login_button, t_account, t_user_menu, t_favorites, t_addresses, t_order_error, t_search_sort, t_similar, t_delivery_account, t_cancel_order, t_alerts, t_pricing_images, t_mobile_overflow, t_gold, t_blocked_storage]
+LEAK_ALLOWED = ["Ayşe", "AYŞE", "ÇINAR GOLD", "Çınar Gold", "Çınar", "ÇINAR", "Fethiye", "Muğla", "Atatürk", "Özsafir", "Reşat", "Cumhuriyet", "Çeyrek"]
+LEAK_WORDS = r"\b(Sepet|Giriş|Mağaza|Ürün|Hesap|Hesabım|Sipariş|Toplam|Adet|Kayıt|Şifre|Tükendi|Stokta|Favori|Adres|Telefon|Yüzük|Kolye|Bilezik|Çıkış|Kapat|Vazgeç|Uygula|Sil|Ara toplam|Teslimat|Ödeme|Hakkımızda|Koleksiyonlar|İletişim)\b"
+
+
+def english_text_leaks(pg):
+    """Görünen metinde Türkçe harf veya bilinen Türkçe arayüz sözcüğü kalmış mı?"""
+    txt = pg.ev("document.body.innerText")
+    for a in LEAK_ALLOWED:
+        txt = txt.replace(a, "")
+    import re
+    letters = sorted(set(re.findall(r"[çğıöşüÇĞİÖŞÜ]", txt)))
+    words = sorted(set(re.findall(LEAK_WORDS, txt)))
+    return letters, words, txt
+
+
+@step("dil düğmesi: EN/TR tek tuşla değişir, sayfa ve para biçimi dile uyar, seçim hatırlanır")
+def t_language_toggle(pg):
+    pg.ev("localStorage.removeItem('cg:lang')")
+    pg.goto("magaza.html")
+    pg.wait("document.querySelectorAll('#urunler .pcard').length === 60")
+    check(pg.text(".shop-lang").strip() == "EN", "Türkçe iken düğme EN göstermeli")
+    check(pg.ev("document.documentElement.lang") == "tr", "html lang tr olmalı")
+    pg.click(".shop-lang")
+    pg.wait("document.documentElement.lang === 'en' && document.querySelectorAll('#urunler .pcard').length === 60")
+    check(pg.text(".shop-lang").strip() == "TR", "İngilizce iken düğme TR göstermeli")
+    check(pg.text("h1") == "Shop", f"başlık İngilizce değil: {pg.text('h1')}")
+    check(pg.ev("document.getElementById('ara').placeholder").startswith("Search"), "arama kutusu İngilizce değil")
+    price = pg.text("#urunler .pcard__price")
+    check(price.startswith("₺"), f"İngilizce para biçimi ₺12,560 olmalı: {price}")
+    name = pg.text("#urunler .pcard__name")
+    check(name.isascii(), f"ürün adı İngilizce olmalı: {name}")
+    pg.goto("magaza.html")
+    pg.wait("document.documentElement.lang === 'en'")
+    check(pg.ev("JSON.parse(localStorage.getItem('cg:lang'))") == "en", "seçim saklanmadı")
+    pg.click(".shop-lang")
+    pg.wait("document.documentElement.lang === 'tr' && !!document.querySelector('#urunler .pcard')")
+    check(pg.text("h1") == "Mağaza", "Türkçe'ye dönülemedi")
+    pg.goto("magaza.html?lang=en")
+    pg.wait("document.documentElement.lang === 'en'")
+    pg.ev("localStorage.removeItem('cg:lang')")
+
+
+@step("İngilizce mod: ana sayfa, mağaza, ürün, sepet ve hesap sayfalarında Türkçe metin kalmaz")
+def t_english_no_leaks(pg):
+    pg.ev("localStorage.setItem('cg:lang', '\"en\"')")
+    try:
+        for path in ("index.html", "magaza.html?tur=kolye", f"urun.html?id={IN_STOCK['id']}", "urun.html?id=yok", "sepet.html", "hesap.html#genel"):
+            pg.goto(path)
+            time.sleep(1.2)
+            letters, words, txt = english_text_leaks(pg)
+            check(not letters and not words, f"{path}: Türkçe kalıntı harf={letters} sözcük={words}")
+        # sepette ürün varken
+        pg.goto(f"urun.html?id={IN_STOCK['id']}")
+        pg.wait("!!document.querySelector('.pdetail__buy button')")
+        pg.click(".pdetail__buy button")
+        pg.goto("sepet.html")
+        pg.wait("!!document.querySelector('.order-form')")
+        letters, words, txt = english_text_leaks(pg)
+        check(not letters and not words, f"sepet (dolu): harf={letters} sözcük={words}")
+        check("Place order" in txt and "Subtotal" in txt, "sepet İngilizce başlıkları yok")
+        # giriş yapmış kullanıcı: menü ve hesap bölümleri
+        for section in ("siparisler", "favoriler", "adresler", "bildirimler", "bilgiler", "izinler"):
+            pg.goto(f"hesap.html#{section}")
+            time.sleep(0.5)
+            letters, words, txt = english_text_leaks(pg)
+            check(not letters and not words, f"hesap #{section}: harf={letters} sözcük={words}")
+        pg.click(".usermenu__btn")
+        letters, words, txt = english_text_leaks(pg)
+        check(not letters and not words, f"kullanıcı menüsü: harf={letters} sözcük={words}")
+        check("My orders" in txt and "Sign out" in txt, "menü İngilizce değil")
+        # tükenmiş ürün ve bildirim penceresi
+        pg.goto(f"urun.html?id={SOLD_OUT['id']}")
+        pg.wait("!!document.querySelector('.pdetail__buy button')")
+        check("Notify me" in pg.text(".pdetail__buy"), "Notify me yok")
+    finally:
+        pg.ev("localStorage.removeItem('cg:lang')")
+
+
+@step("İngilizce arama: İngilizce ürün adıyla bulunur")
+def t_english_search(pg):
+    pg.goto("magaza.html")
+    pg.wait("document.querySelectorAll('#urunler .pcard').length === 60")
+    pg.set_value("#ara", "solitaire ring")
+    pg.wait("document.querySelectorAll('#urunler .pcard').length >= 3 && document.querySelectorAll('#urunler .pcard').length < 60")
+    pg.set_value("#ara", "")
+
+
+SCENARIOS = [t_catalog, t_promo, t_theme, t_soldout, t_missing_and_xss, t_cart_coupon, t_order, t_login_button, t_account, t_user_menu, t_favorites, t_addresses, t_order_error, t_search_sort, t_similar, t_delivery_account, t_cancel_order, t_alerts, t_pricing_images, t_mobile_overflow, t_gold, t_language_toggle, t_english_no_leaks, t_english_search, t_blocked_storage]
 
 
 def main() -> int:

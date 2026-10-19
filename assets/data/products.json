@@ -3,9 +3,13 @@
   "id": "yuzuk-tektas-1",
   "type": "yuzuk",
   "typeLabel": "Yüzük",
+  "typeLabelEn": "Ring",
   "model": "Tektaş",
+  "modelEn": "Solitaire",
   "name": "Tektaş Yüzük, Sarı altın, 2,6 g",
+  "nameEn": "Solitaire Ring, Yellow gold, 2.6 g",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 14,
   "gram": 2.6,
   "laborRate": 0.2,
@@ -18,15 +22,20 @@
    "source": "Pixabay"
   },
   "stock": 1,
-  "desc": "Tek bir taşın ışığını öne çıkaran klasik tektaş montür. Günlük kullanıma da özel günlere de uyan zamansız bir yüzük. 14 ayar sarı altın."
+  "desc": "Tek bir taşın ışığını öne çıkaran klasik tektaş montür. Günlük kullanıma da özel günlere de uyan zamansız bir yüzük. 14 ayar sarı altın.",
+  "descEn": "A classic solitaire setting that puts the spotlight on a single stone. A timeless ring for every day and special occasions. 14K yellow gold."
  },
  {
   "id": "yuzuk-tektas-2",
   "type": "yuzuk",
   "typeLabel": "Yüzük",
+  "typeLabelEn": "Ring",
   "model": "Tektaş",
+  "modelEn": "Solitaire",
   "name": "Tektaş Yüzük, Beyaz altın",
+  "nameEn": "Solitaire Ring, White gold",
   "metal": "Beyaz altın",
+  "metalEn": "White gold",
   "karat": 14,
   "gram": 2.81,
   "laborRate": 0.2,
@@ -39,15 +48,20 @@
    "source": "Pixabay"
   },
   "stock": 6,
-  "desc": "Tek bir taşın ışığını öne çıkaran klasik tektaş montür. Günlük kullanıma da özel günlere de uyan zamansız bir yüzük. 14 ayar beyaz altın."
+  "desc": "Tek bir taşın ışığını öne çıkaran klasik tektaş montür. Günlük kullanıma da özel günlere de uyan zamansız bir yüzük. 14 ayar beyaz altın.",
+  "descEn": "A classic solitaire setting that puts the spotlight on a single stone. A timeless ring for every day and special occasions. 14K white gold."
  },
  {
   "id": "yuzuk-tektas-3",
   "type": "yuzuk",
   "typeLabel": "Yüzük",
+  "typeLabelEn": "Ring",
   "model": "Tektaş",
+  "modelEn": "Solitaire",
   "name": "Tektaş Yüzük, Sarı altın, 2,91 g",
+  "nameEn": "Solitaire Ring, Yellow gold, 2.91 g",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 18,
   "gram": 2.91,
   "laborRate": 0.2,
@@ -60,15 +74,20 @@
    "source": "Pixabay"
   },
   "stock": 11,
-  "desc": "Tek bir taşın ışığını öne çıkaran klasik tektaş montür. Günlük kullanıma da özel günlere de uyan zamansız bir yüzük. 18 ayar sarı altın."
+  "desc": "Tek bir taşın ışığını öne çıkaran klasik tektaş montür. Günlük kullanıma da özel günlere de uyan zamansız bir yüzük. 18 ayar sarı altın.",
+  "descEn": "A classic solitaire setting that puts the spotlight on a single stone. A timeless ring for every day and special occasions. 18K yellow gold."
  },
  {
   "id": "yuzuk-telkari-1",
   "type": "yuzuk",
   "typeLabel": "Yüzük",
+  "typeLabelEn": "Ring",
   "model": "Telkari",
+  "modelEn": "Filigree",
   "name": "Telkari Yüzük, Rose altın",
+  "nameEn": "Filigree Ring, Rose gold",
   "metal": "Rose altın",
+  "metalEn": "Rose gold",
   "karat": 14,
   "gram": 4.2,
   "laborRate": 0.28,
@@ -81,15 +100,20 @@
    "source": "Pixabay"
   },
   "stock": 5,
-  "desc": "İnce altın tellerin el işçiliğiyle işlendiği telkari yüzük. Geleneksel işçiliği taşıyan, karakterli bir duruşu var. 14 ayar rose altın."
+  "desc": "İnce altın tellerin el işçiliğiyle işlendiği telkari yüzük. Geleneksel işçiliği taşıyan, karakterli bir duruşu var. 14 ayar rose altın.",
+  "descEn": "A filigree ring worked by hand from fine gold wire. It carries traditional craftsmanship with a distinctive character. 14K rose gold."
  },
  {
   "id": "yuzuk-telkari-2",
   "type": "yuzuk",
   "typeLabel": "Yüzük",
+  "typeLabelEn": "Ring",
   "model": "Telkari",
+  "modelEn": "Filigree",
   "name": "Telkari Yüzük, Sarı altın, 4,54 g",
+  "nameEn": "Filigree Ring, Yellow gold, 4.54 g",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 14,
   "gram": 4.54,
   "laborRate": 0.28,
@@ -102,15 +126,20 @@
    "source": "Pixabay"
   },
   "stock": 0,
-  "desc": "İnce altın tellerin el işçiliğiyle işlendiği telkari yüzük. Geleneksel işçiliği taşıyan, karakterli bir duruşu var. 14 ayar sarı altın."
+  "desc": "İnce altın tellerin el işçiliğiyle işlendiği telkari yüzük. Geleneksel işçiliği taşıyan, karakterli bir duruşu var. 14 ayar sarı altın.",
+  "descEn": "A filigree ring worked by hand from fine gold wire. It carries traditional craftsmanship with a distinctive character. 14K yellow gold."
  },
  {
   "id": "yuzuk-telkari-3",
   "type": "yuzuk",
   "typeLabel": "Yüzük",
+  "typeLabelEn": "Ring",
   "model": "Telkari",
+  "modelEn": "Filigree",
   "name": "Telkari Yüzük, Sarı altın, 4,7 g",
+  "nameEn": "Filigree Ring, Yellow gold, 4.7 g",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 18,
   "gram": 4.7,
   "laborRate": 0.28,
@@ -123,15 +152,20 @@
    "source": "Pixabay"
   },
   "stock": 3,
-  "desc": "İnce altın tellerin el işçiliğiyle işlendiği telkari yüzük. Geleneksel işçiliği taşıyan, karakterli bir duruşu var. 18 ayar sarı altın."
+  "desc": "İnce altın tellerin el işçiliğiyle işlendiği telkari yüzük. Geleneksel işçiliği taşıyan, karakterli bir duruşu var. 18 ayar sarı altın.",
+  "descEn": "A filigree ring worked by hand from fine gold wire. It carries traditional craftsmanship with a distinctive character. 18K yellow gold."
  },
  {
   "id": "yuzuk-alyans-1",
   "type": "yuzuk",
   "typeLabel": "Yüzük",
+  "typeLabelEn": "Ring",
   "model": "Alyans",
+  "modelEn": "Wedding Band",
   "name": "Alyans Yüzük, Sarı altın",
+  "nameEn": "Wedding Band, Yellow gold",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 14,
   "gram": 3.8,
   "laborRate": 0.12,
@@ -144,15 +178,20 @@
    "source": "Pixabay"
   },
   "stock": 9,
-  "desc": "İç yüzeyi konfor bombeli, parlak yüzeyli klasik alyans. İç yüzeye isim ve tarih yazdırılabilir. 14 ayar sarı altın."
+  "desc": "İç yüzeyi konfor bombeli, parlak yüzeyli klasik alyans. İç yüzeye isim ve tarih yazdırılabilir. 14 ayar sarı altın.",
+  "descEn": "A classic polished wedding band with a comfort-fit interior. A name and date can be engraved inside. 14K yellow gold."
  },
  {
   "id": "yuzuk-alyans-2",
   "type": "yuzuk",
   "typeLabel": "Yüzük",
+  "typeLabelEn": "Ring",
   "model": "Alyans",
+  "modelEn": "Wedding Band",
   "name": "Alyans Yüzük, Beyaz altın",
+  "nameEn": "Wedding Band, White gold",
   "metal": "Beyaz altın",
+  "metalEn": "White gold",
   "karat": 14,
   "gram": 4.1,
   "laborRate": 0.12,
@@ -165,15 +204,20 @@
    "source": "Pixabay"
   },
   "stock": 2,
-  "desc": "İç yüzeyi konfor bombeli, parlak yüzeyli klasik alyans. İç yüzeye isim ve tarih yazdırılabilir. 14 ayar beyaz altın."
+  "desc": "İç yüzeyi konfor bombeli, parlak yüzeyli klasik alyans. İç yüzeye isim ve tarih yazdırılabilir. 14 ayar beyaz altın.",
+  "descEn": "A classic polished wedding band with a comfort-fit interior. A name and date can be engraved inside. 14K white gold."
  },
  {
   "id": "yuzuk-alyans-3",
   "type": "yuzuk",
   "typeLabel": "Yüzük",
+  "typeLabelEn": "Ring",
   "model": "Alyans",
+  "modelEn": "Wedding Band",
   "name": "Alyans Yüzük, Rose altın",
+  "nameEn": "Wedding Band, Rose gold",
   "metal": "Rose altın",
+  "metalEn": "Rose gold",
   "karat": 18,
   "gram": 4.26,
   "laborRate": 0.12,
@@ -186,15 +230,20 @@
    "source": "Pixabay"
   },
   "stock": 7,
-  "desc": "İç yüzeyi konfor bombeli, parlak yüzeyli klasik alyans. İç yüzeye isim ve tarih yazdırılabilir. 18 ayar rose altın."
+  "desc": "İç yüzeyi konfor bombeli, parlak yüzeyli klasik alyans. İç yüzeye isim ve tarih yazdırılabilir. 18 ayar rose altın.",
+  "descEn": "A classic polished wedding band with a comfort-fit interior. A name and date can be engraved inside. 18K rose gold."
  },
  {
   "id": "yuzuk-tasli-1",
   "type": "yuzuk",
   "typeLabel": "Yüzük",
+  "typeLabelEn": "Ring",
   "model": "Taşlı",
+  "modelEn": "Gemstone",
   "name": "Taşlı Yüzük, Beyaz altın, 3,1 g",
+  "nameEn": "Gemstone Ring, White gold, 3.1 g",
   "metal": "Beyaz altın",
+  "metalEn": "White gold",
   "karat": 14,
   "gram": 3.1,
   "laborRate": 0.22,
@@ -207,15 +256,20 @@
    "source": "Pixabay"
   },
   "stock": 1,
-  "desc": "Sıralı taşlarla süslenmiş, ince hatlı şık yüzük. Tek başına ya da diğer yüzüklerle birlikte kullanılabilir. 14 ayar beyaz altın."
+  "desc": "Sıralı taşlarla süslenmiş, ince hatlı şık yüzük. Tek başına ya da diğer yüzüklerle birlikte kullanılabilir. 14 ayar beyaz altın.",
+  "descEn": "A slim, elegant ring set with a row of stones. Wear it alone or stacked with other rings. 14K white gold."
  },
  {
   "id": "yuzuk-tasli-2",
   "type": "yuzuk",
   "typeLabel": "Yüzük",
+  "typeLabelEn": "Ring",
   "model": "Taşlı",
+  "modelEn": "Gemstone",
   "name": "Taşlı Yüzük, Sarı altın",
+  "nameEn": "Gemstone Ring, Yellow gold",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 14,
   "gram": 3.35,
   "laborRate": 0.22,
@@ -228,15 +282,20 @@
    "source": "Pixabay"
   },
   "stock": 6,
-  "desc": "Sıralı taşlarla süslenmiş, ince hatlı şık yüzük. Tek başına ya da diğer yüzüklerle birlikte kullanılabilir. 14 ayar sarı altın."
+  "desc": "Sıralı taşlarla süslenmiş, ince hatlı şık yüzük. Tek başına ya da diğer yüzüklerle birlikte kullanılabilir. 14 ayar sarı altın.",
+  "descEn": "A slim, elegant ring set with a row of stones. Wear it alone or stacked with other rings. 14K yellow gold."
  },
  {
   "id": "yuzuk-tasli-3",
   "type": "yuzuk",
   "typeLabel": "Yüzük",
+  "typeLabelEn": "Ring",
   "model": "Taşlı",
+  "modelEn": "Gemstone",
   "name": "Taşlı Yüzük, Beyaz altın, 3,47 g",
+  "nameEn": "Gemstone Ring, White gold, 3.47 g",
   "metal": "Beyaz altın",
+  "metalEn": "White gold",
   "karat": 18,
   "gram": 3.47,
   "laborRate": 0.22,
@@ -249,15 +308,20 @@
    "source": "Pixabay"
   },
   "stock": 0,
-  "desc": "Sıralı taşlarla süslenmiş, ince hatlı şık yüzük. Tek başına ya da diğer yüzüklerle birlikte kullanılabilir. 18 ayar beyaz altın."
+  "desc": "Sıralı taşlarla süslenmiş, ince hatlı şık yüzük. Tek başına ya da diğer yüzüklerle birlikte kullanılabilir. 18 ayar beyaz altın.",
+  "descEn": "A slim, elegant ring set with a row of stones. Wear it alone or stacked with other rings. 18K white gold."
  },
  {
   "id": "yuzuk-zarif-1",
   "type": "yuzuk",
   "typeLabel": "Yüzük",
+  "typeLabelEn": "Ring",
   "model": "Zarif",
+  "modelEn": "Dainty",
   "name": "Zarif Yüzük, Sarı altın, 1,9 g",
+  "nameEn": "Dainty Ring, Yellow gold, 1.9 g",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 14,
   "gram": 1.9,
   "laborRate": 0.2,
@@ -270,15 +334,20 @@
    "source": "Pixabay"
   },
   "stock": 5,
-  "desc": "İnce halka üzerinde yaprak motifli minimal tasarım. Katmanlı kullanıma çok uygun. 14 ayar sarı altın."
+  "desc": "İnce halka üzerinde yaprak motifli minimal tasarım. Katmanlı kullanıma çok uygun. 14 ayar sarı altın.",
+  "descEn": "A minimal design with a leaf motif on a slim band. Perfect for stacking. 14K yellow gold."
  },
  {
   "id": "yuzuk-zarif-2",
   "type": "yuzuk",
   "typeLabel": "Yüzük",
+  "typeLabelEn": "Ring",
   "model": "Zarif",
+  "modelEn": "Dainty",
   "name": "Zarif Yüzük, Rose altın",
+  "nameEn": "Dainty Ring, Rose gold",
   "metal": "Rose altın",
+  "metalEn": "Rose gold",
   "karat": 14,
   "gram": 2.05,
   "laborRate": 0.2,
@@ -291,15 +360,20 @@
    "source": "Pixabay"
   },
   "stock": 10,
-  "desc": "İnce halka üzerinde yaprak motifli minimal tasarım. Katmanlı kullanıma çok uygun. 14 ayar rose altın."
+  "desc": "İnce halka üzerinde yaprak motifli minimal tasarım. Katmanlı kullanıma çok uygun. 14 ayar rose altın.",
+  "descEn": "A minimal design with a leaf motif on a slim band. Perfect for stacking. 14K rose gold."
  },
  {
   "id": "yuzuk-zarif-3",
   "type": "yuzuk",
   "typeLabel": "Yüzük",
+  "typeLabelEn": "Ring",
   "model": "Zarif",
+  "modelEn": "Dainty",
   "name": "Zarif Yüzük, Sarı altın, 2,13 g",
+  "nameEn": "Dainty Ring, Yellow gold, 2.13 g",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 18,
   "gram": 2.13,
   "laborRate": 0.2,
@@ -312,15 +386,20 @@
    "source": "Pixabay"
   },
   "stock": 3,
-  "desc": "İnce halka üzerinde yaprak motifli minimal tasarım. Katmanlı kullanıma çok uygun. 18 ayar sarı altın."
+  "desc": "İnce halka üzerinde yaprak motifli minimal tasarım. Katmanlı kullanıma çok uygun. 18 ayar sarı altın.",
+  "descEn": "A minimal design with a leaf motif on a slim band. Perfect for stacking. 18K yellow gold."
  },
  {
   "id": "kolye-madalyon-1",
   "type": "kolye",
   "typeLabel": "Kolye",
+  "typeLabelEn": "Necklace",
   "model": "Madalyon",
+  "modelEn": "Medallion",
   "name": "Madalyon Kolye, Sarı altın, 3,4 g",
+  "nameEn": "Medallion Necklace, Yellow gold, 3.4 g",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 14,
   "gram": 3.4,
   "laborRate": 0.22,
@@ -333,15 +412,20 @@
    "source": "Pixabay"
   },
   "stock": 1,
-  "desc": "El işçiliği desenli yuvarlak madalyon uçlu altın kolye. Tek başına da katmanlı da şık duran, klasik bir parça. 14 ayar sarı altın."
+  "desc": "El işçiliği desenli yuvarlak madalyon uçlu altın kolye. Tek başına da katmanlı da şık duran, klasik bir parça. 14 ayar sarı altın.",
+  "descEn": "A gold necklace with a hand-patterned round medallion pendant. A classic piece that looks great alone or layered. 14K yellow gold."
  },
  {
   "id": "kolye-madalyon-2",
   "type": "kolye",
   "typeLabel": "Kolye",
+  "typeLabelEn": "Necklace",
   "model": "Madalyon",
+  "modelEn": "Medallion",
   "name": "Madalyon Kolye, Rose altın",
+  "nameEn": "Medallion Necklace, Rose gold",
   "metal": "Rose altın",
+  "metalEn": "Rose gold",
   "karat": 14,
   "gram": 3.67,
   "laborRate": 0.22,
@@ -354,15 +438,20 @@
    "source": "Pixabay"
   },
   "stock": 6,
-  "desc": "El işçiliği desenli yuvarlak madalyon uçlu altın kolye. Tek başına da katmanlı da şık duran, klasik bir parça. 14 ayar rose altın."
+  "desc": "El işçiliği desenli yuvarlak madalyon uçlu altın kolye. Tek başına da katmanlı da şık duran, klasik bir parça. 14 ayar rose altın.",
+  "descEn": "A gold necklace with a hand-patterned round medallion pendant. A classic piece that looks great alone or layered. 14K rose gold."
  },
  {
   "id": "kolye-madalyon-3",
   "type": "kolye",
   "typeLabel": "Kolye",
+  "typeLabelEn": "Necklace",
   "model": "Madalyon",
+  "modelEn": "Medallion",
   "name": "Madalyon Kolye, Sarı altın, 3,81 g",
+  "nameEn": "Medallion Necklace, Yellow gold, 3.81 g",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 18,
   "gram": 3.81,
   "laborRate": 0.22,
@@ -375,15 +464,20 @@
    "source": "Pixabay"
   },
   "stock": 11,
-  "desc": "El işçiliği desenli yuvarlak madalyon uçlu altın kolye. Tek başına da katmanlı da şık duran, klasik bir parça. 18 ayar sarı altın."
+  "desc": "El işçiliği desenli yuvarlak madalyon uçlu altın kolye. Tek başına da katmanlı da şık duran, klasik bir parça. 18 ayar sarı altın.",
+  "descEn": "A gold necklace with a hand-patterned round medallion pendant. A classic piece that looks great alone or layered. 18K yellow gold."
  },
  {
   "id": "kolye-tasli-1",
   "type": "kolye",
   "typeLabel": "Kolye",
+  "typeLabelEn": "Necklace",
   "model": "Taşlı",
+  "modelEn": "Gemstone",
   "name": "Taşlı Kolye, Sarı altın, 6,5 g",
+  "nameEn": "Gemstone Necklace, Yellow gold, 6.5 g",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 14,
   "gram": 6.5,
   "laborRate": 0.2,
@@ -396,15 +490,20 @@
    "source": "Pixabay"
   },
   "stock": 5,
-  "desc": "Renkli taşlarla süslenmiş altın kolye. Doğal taş görünümüyle dikkat çeken, özel günler için seçilen bir model. 14 ayar sarı altın."
+  "desc": "Renkli taşlarla süslenmiş altın kolye. Doğal taş görünümüyle dikkat çeken, özel günler için seçilen bir model. 14 ayar sarı altın.",
+  "descEn": "A gold necklace decorated with colorful stones. A natural-stone look that stands out on special occasions. 14K yellow gold."
  },
  {
   "id": "kolye-tasli-2",
   "type": "kolye",
   "typeLabel": "Kolye",
+  "typeLabelEn": "Necklace",
   "model": "Taşlı",
+  "modelEn": "Gemstone",
   "name": "Taşlı Kolye, Sarı altın, 7,02 g",
+  "nameEn": "Gemstone Necklace, Yellow gold, 7.02 g",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 14,
   "gram": 7.02,
   "laborRate": 0.2,
@@ -417,15 +516,20 @@
    "source": "Pixabay"
   },
   "stock": 0,
-  "desc": "Renkli taşlarla süslenmiş altın kolye. Doğal taş görünümüyle dikkat çeken, özel günler için seçilen bir model. 14 ayar sarı altın."
+  "desc": "Renkli taşlarla süslenmiş altın kolye. Doğal taş görünümüyle dikkat çeken, özel günler için seçilen bir model. 14 ayar sarı altın.",
+  "descEn": "A gold necklace decorated with colorful stones. A natural-stone look that stands out on special occasions. 14K yellow gold."
  },
  {
   "id": "kolye-tasli-3",
   "type": "kolye",
   "typeLabel": "Kolye",
+  "typeLabelEn": "Necklace",
   "model": "Taşlı",
+  "modelEn": "Gemstone",
   "name": "Taşlı Kolye, Sarı altın, 7,28 g",
+  "nameEn": "Gemstone Necklace, Yellow gold, 7.28 g",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 18,
   "gram": 7.28,
   "laborRate": 0.2,
@@ -438,15 +542,20 @@
    "source": "Pixabay"
   },
   "stock": 3,
-  "desc": "Renkli taşlarla süslenmiş altın kolye. Doğal taş görünümüyle dikkat çeken, özel günler için seçilen bir model. 18 ayar sarı altın."
+  "desc": "Renkli taşlarla süslenmiş altın kolye. Doğal taş görünümüyle dikkat çeken, özel günler için seçilen bir model. 18 ayar sarı altın.",
+  "descEn": "A gold necklace decorated with colorful stones. A natural-stone look that stands out on special occasions. 18K yellow gold."
  },
  {
   "id": "kolye-zincir-1",
   "type": "kolye",
   "typeLabel": "Kolye",
+  "typeLabelEn": "Necklace",
   "model": "Zincir",
+  "modelEn": "Chain",
   "name": "Zincir Kolye, Sarı altın, 7,5 g",
+  "nameEn": "Chain Necklace, Yellow gold, 7.5 g",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 14,
   "gram": 7.5,
   "laborRate": 0.1,
@@ -459,15 +568,20 @@
    "source": "Pixabay"
   },
   "stock": 9,
-  "desc": "Çift sıra zincir kolye. Tek başına ya da uç takarak kullanılabilen, sade ve güçlü bir parça. 14 ayar sarı altın."
+  "desc": "Çift sıra zincir kolye. Tek başına ya da uç takarak kullanılabilen, sade ve güçlü bir parça. 14 ayar sarı altın.",
+  "descEn": "A double-strand chain necklace. A simple and strong piece you can wear alone or with a pendant. 14K yellow gold."
  },
  {
   "id": "kolye-zincir-2",
   "type": "kolye",
   "typeLabel": "Kolye",
+  "typeLabelEn": "Necklace",
   "model": "Zincir",
+  "modelEn": "Chain",
   "name": "Zincir Kolye, Sarı altın, 8,1 g",
+  "nameEn": "Chain Necklace, Yellow gold, 8.1 g",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 14,
   "gram": 8.1,
   "laborRate": 0.1,
@@ -480,15 +594,20 @@
    "source": "Pixabay"
   },
   "stock": 2,
-  "desc": "Çift sıra zincir kolye. Tek başına ya da uç takarak kullanılabilen, sade ve güçlü bir parça. 14 ayar sarı altın."
+  "desc": "Çift sıra zincir kolye. Tek başına ya da uç takarak kullanılabilen, sade ve güçlü bir parça. 14 ayar sarı altın.",
+  "descEn": "A double-strand chain necklace. A simple and strong piece you can wear alone or with a pendant. 14K yellow gold."
  },
  {
   "id": "kolye-zincir-3",
   "type": "kolye",
   "typeLabel": "Kolye",
+  "typeLabelEn": "Necklace",
   "model": "Zincir",
+  "modelEn": "Chain",
   "name": "Zincir Kolye, Rose altın",
+  "nameEn": "Chain Necklace, Rose gold",
   "metal": "Rose altın",
+  "metalEn": "Rose gold",
   "karat": 18,
   "gram": 8.4,
   "laborRate": 0.1,
@@ -501,15 +620,20 @@
    "source": "Pixabay"
   },
   "stock": 7,
-  "desc": "Çift sıra zincir kolye. Tek başına ya da uç takarak kullanılabilen, sade ve güçlü bir parça. 18 ayar rose altın."
+  "desc": "Çift sıra zincir kolye. Tek başına ya da uç takarak kullanılabilen, sade ve güçlü bir parça. 18 ayar rose altın.",
+  "descEn": "A double-strand chain necklace. A simple and strong piece you can wear alone or with a pendant. 18K rose gold."
  },
  {
   "id": "kolye-damla-1",
   "type": "kolye",
   "typeLabel": "Kolye",
+  "typeLabelEn": "Necklace",
   "model": "Damla",
+  "modelEn": "Teardrop",
   "name": "Damla Kolye, Sarı altın, 2,2 g",
+  "nameEn": "Teardrop Necklace, Yellow gold, 2.2 g",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 14,
   "gram": 2.2,
   "laborRate": 0.18,
@@ -522,15 +646,20 @@
    "source": "Pixabay"
   },
   "stock": 1,
-  "desc": "Damla kesim renkli taşlı, ince zincirli sade kolye. Günlük kullanıma ve hediyeye çok uygun. 14 ayar sarı altın."
+  "desc": "Damla kesim renkli taşlı, ince zincirli sade kolye. Günlük kullanıma ve hediyeye çok uygun. 14 ayar sarı altın.",
+  "descEn": "A simple fine-chain necklace with a teardrop-cut colored stone. Perfect for daily wear and gifting. 14K yellow gold."
  },
  {
   "id": "kolye-damla-2",
   "type": "kolye",
   "typeLabel": "Kolye",
+  "typeLabelEn": "Necklace",
   "model": "Damla",
+  "modelEn": "Teardrop",
   "name": "Damla Kolye, Sarı altın, 2,38 g",
+  "nameEn": "Teardrop Necklace, Yellow gold, 2.38 g",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 14,
   "gram": 2.38,
   "laborRate": 0.18,
@@ -543,15 +672,20 @@
    "source": "Pixabay"
   },
   "stock": 6,
-  "desc": "Damla kesim renkli taşlı, ince zincirli sade kolye. Günlük kullanıma ve hediyeye çok uygun. 14 ayar sarı altın."
+  "desc": "Damla kesim renkli taşlı, ince zincirli sade kolye. Günlük kullanıma ve hediyeye çok uygun. 14 ayar sarı altın.",
+  "descEn": "A simple fine-chain necklace with a teardrop-cut colored stone. Perfect for daily wear and gifting. 14K yellow gold."
  },
  {
   "id": "kolye-damla-3",
   "type": "kolye",
   "typeLabel": "Kolye",
+  "typeLabelEn": "Necklace",
   "model": "Damla",
+  "modelEn": "Teardrop",
   "name": "Damla Kolye, Sarı altın, 2,46 g",
+  "nameEn": "Teardrop Necklace, Yellow gold, 2.46 g",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 18,
   "gram": 2.46,
   "laborRate": 0.18,
@@ -564,15 +698,20 @@
    "source": "Pixabay"
   },
   "stock": 0,
-  "desc": "Damla kesim renkli taşlı, ince zincirli sade kolye. Günlük kullanıma ve hediyeye çok uygun. 18 ayar sarı altın."
+  "desc": "Damla kesim renkli taşlı, ince zincirli sade kolye. Günlük kullanıma ve hediyeye çok uygun. 18 ayar sarı altın.",
+  "descEn": "A simple fine-chain necklace with a teardrop-cut colored stone. Perfect for daily wear and gifting. 18K yellow gold."
  },
  {
   "id": "kolye-kalp-1",
   "type": "kolye",
   "typeLabel": "Kolye",
+  "typeLabelEn": "Necklace",
   "model": "Kalp",
+  "modelEn": "Heart",
   "name": "Kalp Kolye, Sarı altın, 2,6 g",
+  "nameEn": "Heart Necklace, Yellow gold, 2.6 g",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 14,
   "gram": 2.6,
   "laborRate": 0.2,
@@ -585,15 +724,20 @@
    "source": "Pixabay"
   },
   "stock": 5,
-  "desc": "Kalp ucunun ortasında küçük bir taş olan, hediye için en çok seçilenlerden biri. 14 ayar sarı altın."
+  "desc": "Kalp ucunun ortasında küçük bir taş olan, hediye için en çok seçilenlerden biri. 14 ayar sarı altın.",
+  "descEn": "A heart pendant necklace, one of the most popular choices for gifts. 14K yellow gold."
  },
  {
   "id": "kolye-kalp-2",
   "type": "kolye",
   "typeLabel": "Kolye",
+  "typeLabelEn": "Necklace",
   "model": "Kalp",
+  "modelEn": "Heart",
   "name": "Kalp Kolye, Sarı altın, 2,81 g",
+  "nameEn": "Heart Necklace, Yellow gold, 2.81 g",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 14,
   "gram": 2.81,
   "laborRate": 0.2,
@@ -606,15 +750,20 @@
    "source": "Pixabay"
   },
   "stock": 10,
-  "desc": "Kalp ucunun ortasında küçük bir taş olan, hediye için en çok seçilenlerden biri. 14 ayar sarı altın."
+  "desc": "Kalp ucunun ortasında küçük bir taş olan, hediye için en çok seçilenlerden biri. 14 ayar sarı altın.",
+  "descEn": "A heart pendant necklace, one of the most popular choices for gifts. 14K yellow gold."
  },
  {
   "id": "kolye-kalp-3",
   "type": "kolye",
   "typeLabel": "Kolye",
+  "typeLabelEn": "Necklace",
   "model": "Kalp",
+  "modelEn": "Heart",
   "name": "Kalp Kolye, Sarı altın, 2,91 g",
+  "nameEn": "Heart Necklace, Yellow gold, 2.91 g",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 18,
   "gram": 2.91,
   "laborRate": 0.2,
@@ -627,15 +776,20 @@
    "source": "Pixabay"
   },
   "stock": 3,
-  "desc": "Kalp ucunun ortasında küçük bir taş olan, hediye için en çok seçilenlerden biri. 18 ayar sarı altın."
+  "desc": "Kalp ucunun ortasında küçük bir taş olan, hediye için en çok seçilenlerden biri. 18 ayar sarı altın.",
+  "descEn": "A heart pendant necklace, one of the most popular choices for gifts. 18K yellow gold."
  },
  {
   "id": "bilezik-burma-1",
   "type": "bilezik",
   "typeLabel": "Bilezik",
+  "typeLabelEn": "Bracelet",
   "model": "Burma",
+  "modelEn": "Rope",
   "name": "Burma Bilezik, 14 ayar",
+  "nameEn": "Rope Bracelet, 14K",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 14,
   "gram": 14.0,
   "laborRate": 0.06,
@@ -648,15 +802,20 @@
    "source": "Pixabay"
   },
   "stock": 1,
-  "desc": "Burma desenli klasik altın bilezik. Ağırlığı ve parlaklığıyla yatırım ve takı olarak tercih edilir. 14 ayar sarı altın."
+  "desc": "Burma desenli klasik altın bilezik. Ağırlığı ve parlaklığıyla yatırım ve takı olarak tercih edilir. 14 ayar sarı altın.",
+  "descEn": "A classic gold bangle with a twisted pattern. Loved both as jewelry and as an investment for its weight and shine. 14K yellow gold."
  },
  {
   "id": "bilezik-burma-2",
   "type": "bilezik",
   "typeLabel": "Bilezik",
+  "typeLabelEn": "Bracelet",
   "model": "Burma",
+  "modelEn": "Rope",
   "name": "Burma Bilezik, 18 ayar",
+  "nameEn": "Rope Bracelet, 18K",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 18,
   "gram": 14.56,
   "laborRate": 0.06,
@@ -669,15 +828,20 @@
    "source": "Pixabay"
   },
   "stock": 6,
-  "desc": "Burma desenli klasik altın bilezik. Ağırlığı ve parlaklığıyla yatırım ve takı olarak tercih edilir. 18 ayar sarı altın."
+  "desc": "Burma desenli klasik altın bilezik. Ağırlığı ve parlaklığıyla yatırım ve takı olarak tercih edilir. 18 ayar sarı altın.",
+  "descEn": "A classic gold bangle with a twisted pattern. Loved both as jewelry and as an investment for its weight and shine. 18K yellow gold."
  },
  {
   "id": "bilezik-burma-3",
   "type": "bilezik",
   "typeLabel": "Bilezik",
+  "typeLabelEn": "Bracelet",
   "model": "Burma",
+  "modelEn": "Rope",
   "name": "Burma Bilezik, 22 ayar",
+  "nameEn": "Rope Bracelet, 22K",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 22,
   "gram": 15.12,
   "laborRate": 0.06,
@@ -690,15 +854,20 @@
    "source": "Pixabay"
   },
   "stock": 11,
-  "desc": "Burma desenli klasik altın bilezik. Ağırlığı ve parlaklığıyla yatırım ve takı olarak tercih edilir. 22 ayar sarı altın."
+  "desc": "Burma desenli klasik altın bilezik. Ağırlığı ve parlaklığıyla yatırım ve takı olarak tercih edilir. 22 ayar sarı altın.",
+  "descEn": "A classic gold bangle with a twisted pattern. Loved both as jewelry and as an investment for its weight and shine. 22K yellow gold."
  },
  {
   "id": "bilezik-islemeli-1",
   "type": "bilezik",
   "typeLabel": "Bilezik",
+  "typeLabelEn": "Bracelet",
   "model": "İşlemeli",
+  "modelEn": "Ornate",
   "name": "İşlemeli Bilezik, 14 ayar",
+  "nameEn": "Ornate Bracelet, 14K",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 14,
   "gram": 18.0,
   "laborRate": 0.09,
@@ -711,15 +880,20 @@
    "source": "Pixabay"
   },
   "stock": 5,
-  "desc": "Çiçek motifleri ve noktalı kenar işçiliğiyle süslenmiş, geniş yüzeyli işlemeli bilezik. 14 ayar sarı altın."
+  "desc": "Çiçek motifleri ve noktalı kenar işçiliğiyle süslenmiş, geniş yüzeyli işlemeli bilezik. 14 ayar sarı altın.",
+  "descEn": "A wide ornate bangle decorated with floral motifs and dotted edge work. 14K yellow gold."
  },
  {
   "id": "bilezik-islemeli-2",
   "type": "bilezik",
   "typeLabel": "Bilezik",
+  "typeLabelEn": "Bracelet",
   "model": "İşlemeli",
+  "modelEn": "Ornate",
   "name": "İşlemeli Bilezik, 18 ayar",
+  "nameEn": "Ornate Bracelet, 18K",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 18,
   "gram": 18.72,
   "laborRate": 0.09,
@@ -732,15 +906,20 @@
    "source": "Pixabay"
   },
   "stock": 0,
-  "desc": "Çiçek motifleri ve noktalı kenar işçiliğiyle süslenmiş, geniş yüzeyli işlemeli bilezik. 18 ayar sarı altın."
+  "desc": "Çiçek motifleri ve noktalı kenar işçiliğiyle süslenmiş, geniş yüzeyli işlemeli bilezik. 18 ayar sarı altın.",
+  "descEn": "A wide ornate bangle decorated with floral motifs and dotted edge work. 18K yellow gold."
  },
  {
   "id": "bilezik-islemeli-3",
   "type": "bilezik",
   "typeLabel": "Bilezik",
+  "typeLabelEn": "Bracelet",
   "model": "İşlemeli",
+  "modelEn": "Ornate",
   "name": "İşlemeli Bilezik, 22 ayar",
+  "nameEn": "Ornate Bracelet, 22K",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 22,
   "gram": 19.44,
   "laborRate": 0.09,
@@ -753,15 +932,20 @@
    "source": "Pixabay"
   },
   "stock": 3,
-  "desc": "Çiçek motifleri ve noktalı kenar işçiliğiyle süslenmiş, geniş yüzeyli işlemeli bilezik. 22 ayar sarı altın."
+  "desc": "Çiçek motifleri ve noktalı kenar işçiliğiyle süslenmiş, geniş yüzeyli işlemeli bilezik. 22 ayar sarı altın.",
+  "descEn": "A wide ornate bangle decorated with floral motifs and dotted edge work. 22K yellow gold."
  },
  {
   "id": "bilezik-zincir-1",
   "type": "bilezik",
   "typeLabel": "Bilezik",
+  "typeLabelEn": "Bracelet",
   "model": "Zincir",
+  "modelEn": "Chain",
   "name": "Zincir Bilezik, 14 ayar",
+  "nameEn": "Chain Bracelet, 14K",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 14,
   "gram": 12.0,
   "laborRate": 0.08,
@@ -774,15 +958,20 @@
    "source": "Pixabay"
   },
   "stock": 9,
-  "desc": "Sağlam halkalı zincir bilezik. Bileğe oturan, dayanıklı ve her kıyafete uyan klasik bir model. 14 ayar sarı altın."
+  "desc": "Sağlam halkalı zincir bilezik. Bileğe oturan, dayanıklı ve her kıyafete uyan klasik bir model. 14 ayar sarı altın.",
+  "descEn": "A sturdy link-chain bracelet. A classic that sits well on the wrist and suits any outfit. 14K yellow gold."
  },
  {
   "id": "bilezik-zincir-2",
   "type": "bilezik",
   "typeLabel": "Bilezik",
+  "typeLabelEn": "Bracelet",
   "model": "Zincir",
+  "modelEn": "Chain",
   "name": "Zincir Bilezik, 18 ayar",
+  "nameEn": "Chain Bracelet, 18K",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 18,
   "gram": 12.48,
   "laborRate": 0.08,
@@ -795,15 +984,20 @@
    "source": "Pixabay"
   },
   "stock": 2,
-  "desc": "Sağlam halkalı zincir bilezik. Bileğe oturan, dayanıklı ve her kıyafete uyan klasik bir model. 18 ayar sarı altın."
+  "desc": "Sağlam halkalı zincir bilezik. Bileğe oturan, dayanıklı ve her kıyafete uyan klasik bir model. 18 ayar sarı altın.",
+  "descEn": "A sturdy link-chain bracelet. A classic that sits well on the wrist and suits any outfit. 18K yellow gold."
  },
  {
   "id": "bilezik-zincir-3",
   "type": "bilezik",
   "typeLabel": "Bilezik",
+  "typeLabelEn": "Bracelet",
   "model": "Zincir",
+  "modelEn": "Chain",
   "name": "Zincir Bilezik, 22 ayar",
+  "nameEn": "Chain Bracelet, 22K",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 22,
   "gram": 12.96,
   "laborRate": 0.08,
@@ -816,15 +1010,20 @@
    "source": "Pixabay"
   },
   "stock": 7,
-  "desc": "Sağlam halkalı zincir bilezik. Bileğe oturan, dayanıklı ve her kıyafete uyan klasik bir model. 22 ayar sarı altın."
+  "desc": "Sağlam halkalı zincir bilezik. Bileğe oturan, dayanıklı ve her kıyafete uyan klasik bir model. 22 ayar sarı altın.",
+  "descEn": "A sturdy link-chain bracelet. A classic that sits well on the wrist and suits any outfit. 22K yellow gold."
  },
  {
   "id": "bilezik-tasli-1",
   "type": "bilezik",
   "typeLabel": "Bilezik",
+  "typeLabelEn": "Bracelet",
   "model": "Taşlı",
+  "modelEn": "Gemstone",
   "name": "Taşlı Bilezik, 14 ayar",
+  "nameEn": "Gemstone Bracelet, 14K",
   "metal": "Rose altın",
+  "metalEn": "Rose gold",
   "karat": 14,
   "gram": 9.0,
   "laborRate": 0.12,
@@ -837,15 +1036,20 @@
    "source": "Pixabay"
   },
   "stock": 1,
-  "desc": "Renkli ve pırıltılı taşlarla süslenmiş, ışığı yakalayan bilezik. 14 ayar rose altın."
+  "desc": "Renkli ve pırıltılı taşlarla süslenmiş, ışığı yakalayan bilezik. 14 ayar rose altın.",
+  "descEn": "A bracelet decorated with colorful, sparkling stones that catch the light. 14K rose gold."
  },
  {
   "id": "bilezik-tasli-2",
   "type": "bilezik",
   "typeLabel": "Bilezik",
+  "typeLabelEn": "Bracelet",
   "model": "Taşlı",
+  "modelEn": "Gemstone",
   "name": "Taşlı Bilezik, 18 ayar",
+  "nameEn": "Gemstone Bracelet, 18K",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 18,
   "gram": 9.36,
   "laborRate": 0.12,
@@ -858,15 +1062,20 @@
    "source": "Pixabay"
   },
   "stock": 6,
-  "desc": "Renkli ve pırıltılı taşlarla süslenmiş, ışığı yakalayan bilezik. 18 ayar sarı altın."
+  "desc": "Renkli ve pırıltılı taşlarla süslenmiş, ışığı yakalayan bilezik. 18 ayar sarı altın.",
+  "descEn": "A bracelet decorated with colorful, sparkling stones that catch the light. 18K yellow gold."
  },
  {
   "id": "bilezik-tasli-3",
   "type": "bilezik",
   "typeLabel": "Bilezik",
+  "typeLabelEn": "Bracelet",
   "model": "Taşlı",
+  "modelEn": "Gemstone",
   "name": "Taşlı Bilezik, 22 ayar",
+  "nameEn": "Gemstone Bracelet, 22K",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 22,
   "gram": 9.72,
   "laborRate": 0.12,
@@ -879,15 +1088,20 @@
    "source": "Pixabay"
   },
   "stock": 0,
-  "desc": "Renkli ve pırıltılı taşlarla süslenmiş, ışığı yakalayan bilezik. 22 ayar sarı altın."
+  "desc": "Renkli ve pırıltılı taşlarla süslenmiş, ışığı yakalayan bilezik. 22 ayar sarı altın.",
+  "descEn": "A bracelet decorated with colorful, sparkling stones that catch the light. 22K yellow gold."
  },
  {
   "id": "bilezik-kelepce-1",
   "type": "bilezik",
   "typeLabel": "Bilezik",
+  "typeLabelEn": "Bracelet",
   "model": "Kelepçe",
+  "modelEn": "Cuff",
   "name": "Kelepçe Bilezik, 14 ayar",
+  "nameEn": "Cuff Bracelet, 14K",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 14,
   "gram": 11.0,
   "laborRate": 0.07,
@@ -900,15 +1114,20 @@
    "source": "Pixabay"
   },
   "stock": 5,
-  "desc": "Açık yapılı, üç taş detaylı kelepçe bilezik. Bileğe kolayca takılır. 14 ayar sarı altın."
+  "desc": "Açık yapılı, üç taş detaylı kelepçe bilezik. Bileğe kolayca takılır. 14 ayar sarı altın.",
+  "descEn": "An open-design cuff bracelet that slips easily onto the wrist. 14K yellow gold."
  },
  {
   "id": "bilezik-kelepce-2",
   "type": "bilezik",
   "typeLabel": "Bilezik",
+  "typeLabelEn": "Bracelet",
   "model": "Kelepçe",
+  "modelEn": "Cuff",
   "name": "Kelepçe Bilezik, 18 ayar",
+  "nameEn": "Cuff Bracelet, 18K",
   "metal": "Beyaz altın",
+  "metalEn": "White gold",
   "karat": 18,
   "gram": 11.44,
   "laborRate": 0.07,
@@ -921,15 +1140,20 @@
    "source": "Pixabay"
   },
   "stock": 10,
-  "desc": "Açık yapılı, üç taş detaylı kelepçe bilezik. Bileğe kolayca takılır. 18 ayar beyaz altın."
+  "desc": "Açık yapılı, üç taş detaylı kelepçe bilezik. Bileğe kolayca takılır. 18 ayar beyaz altın.",
+  "descEn": "An open-design cuff bracelet that slips easily onto the wrist. 18K white gold."
  },
  {
   "id": "bilezik-kelepce-3",
   "type": "bilezik",
   "typeLabel": "Bilezik",
+  "typeLabelEn": "Bracelet",
   "model": "Kelepçe",
+  "modelEn": "Cuff",
   "name": "Kelepçe Bilezik, 22 ayar",
+  "nameEn": "Cuff Bracelet, 22K",
   "metal": "Beyaz altın",
+  "metalEn": "White gold",
   "karat": 22,
   "gram": 11.88,
   "laborRate": 0.07,
@@ -942,15 +1166,20 @@
    "source": "Pixabay"
   },
   "stock": 3,
-  "desc": "Açık yapılı, üç taş detaylı kelepçe bilezik. Bileğe kolayca takılır. 22 ayar beyaz altın."
+  "desc": "Açık yapılı, üç taş detaylı kelepçe bilezik. Bileğe kolayca takılır. 22 ayar beyaz altın.",
+  "descEn": "An open-design cuff bracelet that slips easily onto the wrist. 22K white gold."
  },
  {
   "id": "pirlanta-kupe-1",
   "type": "pirlanta",
   "typeLabel": "Pırlanta",
+  "typeLabelEn": "Diamond",
   "model": "Küpe",
+  "modelEn": "Earrings",
   "name": "Pırlanta Küpe, 0,10 ct, Beyaz altın",
+  "nameEn": "Diamond Earrings, 0.10 ct, White gold",
   "metal": "Beyaz altın",
+  "metalEn": "White gold",
   "karat": 14,
   "gram": 2.2,
   "laborRate": 0.15,
@@ -963,15 +1192,20 @@
    "source": "Pixabay"
   },
   "stock": 1,
-  "desc": "Pırlanta küpe. Taş bedeli toplam karata göre hesaplanır. 14 ayar beyaz altın, toplam 0,10 ct pırlanta."
+  "desc": "Pırlanta küpe. Taş bedeli toplam karata göre hesaplanır. 14 ayar beyaz altın, toplam 0,10 ct pırlanta.",
+  "descEn": "Diamond earrings. The stone cost is calculated from the total carat weight. 14K white gold, 0.10 ct total diamond weight."
  },
  {
   "id": "pirlanta-kupe-2",
   "type": "pirlanta",
   "typeLabel": "Pırlanta",
+  "typeLabelEn": "Diamond",
   "model": "Küpe",
+  "modelEn": "Earrings",
   "name": "Pırlanta Küpe, 0,25 ct, Beyaz altın",
+  "nameEn": "Diamond Earrings, 0.25 ct, White gold",
   "metal": "Beyaz altın",
+  "metalEn": "White gold",
   "karat": 14,
   "gram": 2.38,
   "laborRate": 0.15,
@@ -984,15 +1218,20 @@
    "source": "Pixabay"
   },
   "stock": 6,
-  "desc": "Pırlanta küpe. Taş bedeli toplam karata göre hesaplanır. 14 ayar beyaz altın, toplam 0,25 ct pırlanta."
+  "desc": "Pırlanta küpe. Taş bedeli toplam karata göre hesaplanır. 14 ayar beyaz altın, toplam 0,25 ct pırlanta.",
+  "descEn": "Diamond earrings. The stone cost is calculated from the total carat weight. 14K white gold, 0.25 ct total diamond weight."
  },
  {
   "id": "pirlanta-kupe-3",
   "type": "pirlanta",
   "typeLabel": "Pırlanta",
+  "typeLabelEn": "Diamond",
   "model": "Küpe",
+  "modelEn": "Earrings",
   "name": "Pırlanta Küpe, 0,50 ct, Beyaz altın",
+  "nameEn": "Diamond Earrings, 0.50 ct, White gold",
   "metal": "Beyaz altın",
+  "metalEn": "White gold",
   "karat": 18,
   "gram": 2.51,
   "laborRate": 0.15,
@@ -1005,15 +1244,20 @@
    "source": "Pixabay"
   },
   "stock": 11,
-  "desc": "Pırlanta küpe. Taş bedeli toplam karata göre hesaplanır. 18 ayar beyaz altın, toplam 0,50 ct pırlanta."
+  "desc": "Pırlanta küpe. Taş bedeli toplam karata göre hesaplanır. 18 ayar beyaz altın, toplam 0,50 ct pırlanta.",
+  "descEn": "Diamond earrings. The stone cost is calculated from the total carat weight. 18K white gold, 0.50 ct total diamond weight."
  },
  {
   "id": "pirlanta-kolye-1",
   "type": "pirlanta",
   "typeLabel": "Pırlanta",
+  "typeLabelEn": "Diamond",
   "model": "Kolye",
+  "modelEn": "Necklace",
   "name": "Pırlanta Kolye, 0,10 ct, Beyaz altın",
+  "nameEn": "Diamond Necklace, 0.10 ct, White gold",
   "metal": "Beyaz altın",
+  "metalEn": "White gold",
   "karat": 14,
   "gram": 3.0,
   "laborRate": 0.15,
@@ -1026,15 +1270,20 @@
    "source": "Pixabay"
   },
   "stock": 5,
-  "desc": "Pırlanta ve değerli taşlarla hazırlanan, zarif kolye ucu. Taş bedeli toplam karata göre hesaplanır. 14 ayar beyaz altın, toplam 0,10 ct pırlanta."
+  "desc": "Pırlanta ve değerli taşlarla hazırlanan, zarif kolye ucu. Taş bedeli toplam karata göre hesaplanır. 14 ayar beyaz altın, toplam 0,10 ct pırlanta.",
+  "descEn": "An elegant pendant necklace made with diamonds and precious stones. The stone cost is calculated from the total carat weight. 14K white gold, 0.10 ct total diamond weight."
  },
  {
   "id": "pirlanta-kolye-2",
   "type": "pirlanta",
   "typeLabel": "Pırlanta",
+  "typeLabelEn": "Diamond",
   "model": "Kolye",
+  "modelEn": "Necklace",
   "name": "Pırlanta Kolye, 0,25 ct, Beyaz altın",
+  "nameEn": "Diamond Necklace, 0.25 ct, White gold",
   "metal": "Beyaz altın",
+  "metalEn": "White gold",
   "karat": 14,
   "gram": 3.24,
   "laborRate": 0.15,
@@ -1047,15 +1296,20 @@
    "source": "Pixabay"
   },
   "stock": 0,
-  "desc": "Pırlanta ve değerli taşlarla hazırlanan, zarif kolye ucu. Taş bedeli toplam karata göre hesaplanır. 14 ayar beyaz altın, toplam 0,25 ct pırlanta."
+  "desc": "Pırlanta ve değerli taşlarla hazırlanan, zarif kolye ucu. Taş bedeli toplam karata göre hesaplanır. 14 ayar beyaz altın, toplam 0,25 ct pırlanta.",
+  "descEn": "An elegant pendant necklace made with diamonds and precious stones. The stone cost is calculated from the total carat weight. 14K white gold, 0.25 ct total diamond weight."
  },
  {
   "id": "pirlanta-kolye-3",
   "type": "pirlanta",
   "typeLabel": "Pırlanta",
+  "typeLabelEn": "Diamond",
   "model": "Kolye",
+  "modelEn": "Necklace",
   "name": "Pırlanta Kolye, 0,50 ct, Sarı altın",
+  "nameEn": "Diamond Necklace, 0.50 ct, Yellow gold",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 18,
   "gram": 3.42,
   "laborRate": 0.15,
@@ -1068,15 +1322,20 @@
    "source": "Pixabay"
   },
   "stock": 3,
-  "desc": "Pırlanta ve değerli taşlarla hazırlanan, zarif kolye ucu. Taş bedeli toplam karata göre hesaplanır. 18 ayar sarı altın, toplam 0,50 ct pırlanta."
+  "desc": "Pırlanta ve değerli taşlarla hazırlanan, zarif kolye ucu. Taş bedeli toplam karata göre hesaplanır. 18 ayar sarı altın, toplam 0,50 ct pırlanta.",
+  "descEn": "An elegant pendant necklace made with diamonds and precious stones. The stone cost is calculated from the total carat weight. 18K yellow gold, 0.50 ct total diamond weight."
  },
  {
   "id": "pirlanta-bileklik-1",
   "type": "pirlanta",
   "typeLabel": "Pırlanta",
+  "typeLabelEn": "Diamond",
   "model": "Bileklik",
+  "modelEn": "Bracelet",
   "name": "Pırlanta Bileklik, 0,10 ct, Beyaz altın",
+  "nameEn": "Diamond Bracelet, 0.10 ct, White gold",
   "metal": "Beyaz altın",
+  "metalEn": "White gold",
   "karat": 14,
   "gram": 7.5,
   "laborRate": 0.12,
@@ -1089,15 +1348,20 @@
    "source": "Pixabay"
   },
   "stock": 9,
-  "desc": "Boydan boya sıralı taşlarla hazırlanan, ışığı her açıdan yakalayan bileklik. 14 ayar beyaz altın, toplam 0,10 ct pırlanta."
+  "desc": "Boydan boya sıralı taşlarla hazırlanan, ışığı her açıdan yakalayan bileklik. 14 ayar beyaz altın, toplam 0,10 ct pırlanta.",
+  "descEn": "A bracelet with a continuous row of stones that catches the light from every angle. 14K white gold, 0.10 ct total diamond weight."
  },
  {
   "id": "pirlanta-bileklik-2",
   "type": "pirlanta",
   "typeLabel": "Pırlanta",
+  "typeLabelEn": "Diamond",
   "model": "Bileklik",
+  "modelEn": "Bracelet",
   "name": "Pırlanta Bileklik, 0,25 ct, Sarı altın",
+  "nameEn": "Diamond Bracelet, 0.25 ct, Yellow gold",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 14,
   "gram": 8.1,
   "laborRate": 0.12,
@@ -1110,15 +1374,20 @@
    "source": "Pixabay"
   },
   "stock": 2,
-  "desc": "Boydan boya sıralı taşlarla hazırlanan, ışığı her açıdan yakalayan bileklik. 14 ayar sarı altın, toplam 0,25 ct pırlanta."
+  "desc": "Boydan boya sıralı taşlarla hazırlanan, ışığı her açıdan yakalayan bileklik. 14 ayar sarı altın, toplam 0,25 ct pırlanta.",
+  "descEn": "A bracelet with a continuous row of stones that catches the light from every angle. 14K yellow gold, 0.25 ct total diamond weight."
  },
  {
   "id": "pirlanta-bileklik-3",
   "type": "pirlanta",
   "typeLabel": "Pırlanta",
+  "typeLabelEn": "Diamond",
   "model": "Bileklik",
+  "modelEn": "Bracelet",
   "name": "Pırlanta Bileklik, 0,50 ct, Beyaz altın",
+  "nameEn": "Diamond Bracelet, 0.50 ct, White gold",
   "metal": "Beyaz altın",
+  "metalEn": "White gold",
   "karat": 18,
   "gram": 8.55,
   "laborRate": 0.12,
@@ -1131,15 +1400,20 @@
    "source": "Pixabay"
   },
   "stock": 7,
-  "desc": "Boydan boya sıralı taşlarla hazırlanan, ışığı her açıdan yakalayan bileklik. 18 ayar beyaz altın, toplam 0,50 ct pırlanta."
+  "desc": "Boydan boya sıralı taşlarla hazırlanan, ışığı her açıdan yakalayan bileklik. 18 ayar beyaz altın, toplam 0,50 ct pırlanta.",
+  "descEn": "A bracelet with a continuous row of stones that catches the light from every angle. 18K white gold, 0.50 ct total diamond weight."
  },
  {
   "id": "pirlanta-halo-kolye-1",
   "type": "pirlanta",
   "typeLabel": "Pırlanta",
+  "typeLabelEn": "Diamond",
   "model": "Halo Kolye",
+  "modelEn": "Halo Necklace",
   "name": "Pırlanta Halo Kolye, 0,10 ct, Beyaz altın",
+  "nameEn": "Diamond Halo Necklace, 0.10 ct, White gold",
   "metal": "Beyaz altın",
+  "metalEn": "White gold",
   "karat": 14,
   "gram": 3.2,
   "laborRate": 0.15,
@@ -1152,15 +1426,20 @@
    "source": "Pixabay"
   },
   "stock": 1,
-  "desc": "Ortadaki taşı küçük pırlantalar çevreleyen halo kolye. Parıltıyı katlayan bir tasarım. 14 ayar beyaz altın, toplam 0,10 ct pırlanta."
+  "desc": "Ortadaki taşı küçük pırlantalar çevreleyen halo kolye. Parıltıyı katlayan bir tasarım. 14 ayar beyaz altın, toplam 0,10 ct pırlanta.",
+  "descEn": "A halo necklace with a center stone surrounded by small diamonds. A design that multiplies the sparkle. 14K white gold, 0.10 ct total diamond weight."
  },
  {
   "id": "pirlanta-halo-kolye-2",
   "type": "pirlanta",
   "typeLabel": "Pırlanta",
+  "typeLabelEn": "Diamond",
   "model": "Halo Kolye",
+  "modelEn": "Halo Necklace",
   "name": "Pırlanta Halo Kolye, 0,25 ct, Rose altın",
+  "nameEn": "Diamond Halo Necklace, 0.25 ct, Rose gold",
   "metal": "Rose altın",
+  "metalEn": "Rose gold",
   "karat": 14,
   "gram": 3.46,
   "laborRate": 0.15,
@@ -1173,15 +1452,20 @@
    "source": "Pixabay"
   },
   "stock": 6,
-  "desc": "Ortadaki taşı küçük pırlantalar çevreleyen halo kolye. Parıltıyı katlayan bir tasarım. 14 ayar rose altın, toplam 0,25 ct pırlanta."
+  "desc": "Ortadaki taşı küçük pırlantalar çevreleyen halo kolye. Parıltıyı katlayan bir tasarım. 14 ayar rose altın, toplam 0,25 ct pırlanta.",
+  "descEn": "A halo necklace with a center stone surrounded by small diamonds. A design that multiplies the sparkle. 14K rose gold, 0.25 ct total diamond weight."
  },
  {
   "id": "pirlanta-halo-kolye-3",
   "type": "pirlanta",
   "typeLabel": "Pırlanta",
+  "typeLabelEn": "Diamond",
   "model": "Halo Kolye",
+  "modelEn": "Halo Necklace",
   "name": "Pırlanta Halo Kolye, 0,50 ct, Sarı altın",
+  "nameEn": "Diamond Halo Necklace, 0.50 ct, Yellow gold",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 18,
   "gram": 3.65,
   "laborRate": 0.15,
@@ -1194,15 +1478,20 @@
    "source": "Pixabay"
   },
   "stock": 0,
-  "desc": "Ortadaki taşı küçük pırlantalar çevreleyen halo kolye. Parıltıyı katlayan bir tasarım. 18 ayar sarı altın, toplam 0,50 ct pırlanta."
+  "desc": "Ortadaki taşı küçük pırlantalar çevreleyen halo kolye. Parıltıyı katlayan bir tasarım. 18 ayar sarı altın, toplam 0,50 ct pırlanta.",
+  "descEn": "A halo necklace with a center stone surrounded by small diamonds. A design that multiplies the sparkle. 18K yellow gold, 0.50 ct total diamond weight."
  },
  {
   "id": "pirlanta-yuzuk-1",
   "type": "pirlanta",
   "typeLabel": "Pırlanta",
+  "typeLabelEn": "Diamond",
   "model": "Yüzük",
+  "modelEn": "Ring",
   "name": "Pırlanta Yüzük, 0,10 ct, Beyaz altın",
+  "nameEn": "Diamond Ring, 0.10 ct, White gold",
   "metal": "Beyaz altın",
+  "metalEn": "White gold",
   "karat": 14,
   "gram": 3.4,
   "laborRate": 0.15,
@@ -1215,15 +1504,20 @@
    "source": "Pixabay"
   },
   "stock": 5,
-  "desc": "Pırlanta ve değerli taşlarla hazırlanan, gösterişli bir yüzük. Taş bedeli toplam karata göre hesaplanır. 14 ayar beyaz altın, toplam 0,10 ct pırlanta."
+  "desc": "Pırlanta ve değerli taşlarla hazırlanan, gösterişli bir yüzük. Taş bedeli toplam karata göre hesaplanır. 14 ayar beyaz altın, toplam 0,10 ct pırlanta.",
+  "descEn": "A statement ring made with diamonds and precious stones. The stone cost is calculated from the total carat weight. 14K white gold, 0.10 ct total diamond weight."
  },
  {
   "id": "pirlanta-yuzuk-2",
   "type": "pirlanta",
   "typeLabel": "Pırlanta",
+  "typeLabelEn": "Diamond",
   "model": "Yüzük",
+  "modelEn": "Ring",
   "name": "Pırlanta Yüzük, 0,25 ct, Sarı altın",
+  "nameEn": "Diamond Ring, 0.25 ct, Yellow gold",
   "metal": "Sarı altın",
+  "metalEn": "Yellow gold",
   "karat": 14,
   "gram": 3.67,
   "laborRate": 0.15,
@@ -1236,15 +1530,20 @@
    "source": "Pixabay"
   },
   "stock": 10,
-  "desc": "Pırlanta ve değerli taşlarla hazırlanan, gösterişli bir yüzük. Taş bedeli toplam karata göre hesaplanır. 14 ayar sarı altın, toplam 0,25 ct pırlanta."
+  "desc": "Pırlanta ve değerli taşlarla hazırlanan, gösterişli bir yüzük. Taş bedeli toplam karata göre hesaplanır. 14 ayar sarı altın, toplam 0,25 ct pırlanta.",
+  "descEn": "A statement ring made with diamonds and precious stones. The stone cost is calculated from the total carat weight. 14K yellow gold, 0.25 ct total diamond weight."
  },
  {
   "id": "pirlanta-yuzuk-3",
   "type": "pirlanta",
   "typeLabel": "Pırlanta",
+  "typeLabelEn": "Diamond",
   "model": "Yüzük",
+  "modelEn": "Ring",
   "name": "Pırlanta Yüzük, 0,50 ct, Beyaz altın",
+  "nameEn": "Diamond Ring, 0.50 ct, White gold",
   "metal": "Beyaz altın",
+  "metalEn": "White gold",
   "karat": 18,
   "gram": 3.88,
   "laborRate": 0.15,
@@ -1257,6 +1556,7 @@
    "source": "Pixabay"
   },
   "stock": 3,
-  "desc": "Pırlanta ve değerli taşlarla hazırlanan, gösterişli bir yüzük. Taş bedeli toplam karata göre hesaplanır. 18 ayar beyaz altın, toplam 0,50 ct pırlanta."
+  "desc": "Pırlanta ve değerli taşlarla hazırlanan, gösterişli bir yüzük. Taş bedeli toplam karata göre hesaplanır. 18 ayar beyaz altın, toplam 0,50 ct pırlanta.",
+  "descEn": "A statement ring made with diamonds and precious stones. The stone cost is calculated from the total carat weight. 18K white gold, 0.50 ct total diamond weight."
  }
 ]
