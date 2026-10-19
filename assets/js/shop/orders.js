@@ -1,4 +1,6 @@
 const PAYMENTS = ['havale', 'magaza'];
+const DELIVERIES = ['magaza', 'adres'];
+const MIN_ADDRESS = 10;
 
 export function listOrders(store, userId) {
   return store.get('orders', []).filter((o) => o.userId === userId).reverse();
@@ -7,7 +9,10 @@ export function listOrders(store, userId) {
 export function placeOrder({ store, inventory, cart }, input) {
   const name = String(input.name ?? '').trim();
   const phone = String(input.phone ?? '').trim();
-  if (!name || !phone || !PAYMENTS.includes(input.payment)) throw new Error('ZORUNLU_ALAN');
+  const delivery = input.delivery ?? 'magaza';
+  const address = delivery === 'adres' ? String(input.address ?? '').trim() : '';
+  if (!name || !phone || !PAYMENTS.includes(input.payment) || !DELIVERIES.includes(delivery)) throw new Error('ZORUNLU_ALAN');
+  if (delivery === 'adres' && address.length < MIN_ADDRESS) throw new Error('ZORUNLU_ALAN');
   if (cart.count() === 0) throw new Error('SEPET_BOS');
 
   const quote = cart.quote(input.code);
@@ -24,6 +29,8 @@ export function placeOrder({ store, inventory, cart }, input) {
     name,
     phone,
     payment: input.payment,
+    delivery,
+    address,
     lines: quote.lines.map((l) => ({ id: l.product.id, name: l.product.name, qty: l.qty, unitPrice: l.product.price })),
     subtotal: quote.subtotal,
     discount: quote.discount,

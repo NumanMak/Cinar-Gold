@@ -33,3 +33,21 @@ test('list productId ile filtreler', () => {
   assert.equal(n.list('p2').length, 1);
   assert.equal(n.list().length, 2);
 });
+
+test('kayitlarin id si vardir ve remove ile silinir', () => {
+  const n = mk();
+  const r = n.add({ productId: 'p1', email: 'a@b.com' });
+  assert.ok(r.id);
+  n.remove(r.id);
+  assert.equal(n.list().length, 0);
+});
+
+test('forContact e-posta veya telefona gore filtreler (buyuk kucuk harf duyarsiz)', () => {
+  const n = mk();
+  n.add({ productId: 'p1', email: 'a@b.com' });
+  n.add({ productId: 'p2', email: 'baska@b.com' });
+  n.add({ productId: 'p3', phone: '0555' });
+  assert.deepEqual(n.forContact({ email: ' A@B.com' }).map((r) => r.productId), ['p1']);
+  assert.deepEqual(n.forContact({ email: 'a@b.com', phone: '0555' }).map((r) => r.productId), ['p1', 'p3']);
+  assert.deepEqual(n.forContact({}), []);
+});

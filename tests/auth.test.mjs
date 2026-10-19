@@ -64,3 +64,45 @@ test('oturumda yalnizca kullanici id saklanir', async () => {
   const u = await createAuth(store).register(ayse);
   assert.equal(store.get('session', null), u.id);
 });
+
+test('yeni kullanicinin telefon ve adresi bos metindir', async () => {
+  const u = await createAuth(createStore(memoryBackend())).register(ayse);
+  assert.equal(u.phone, '');
+  assert.equal(u.address, '');
+});
+
+test('updateProfile ad, telefon ve adresi gunceller ve current() yansitir', async () => {
+  const store = createStore(memoryBackend());
+  const auth = createAuth(store);
+  await auth.register(ayse);
+  const u = auth.updateProfile({ name: ' Ayşe Y. ', phone: '0555 111 22 33', address: 'Atatürk Cd. No:5 Fethiye' });
+  assert.deepEqual([u.name, u.phone, u.address], ['Ayşe Y.', '0555 111 22 33', 'Atatürk Cd. No:5 Fethiye']);
+  assert.equal(createAuth(store).current().phone, '0555 111 22 33');
+});
+
+test('updateProfile oturum yokken GIRIS_HATALI, bos ad ZORUNLU_ALAN firlatir', async () => {
+  const auth = createAuth(createStore(memoryBackend()));
+  assert.throws(() => auth.updateProfile({ phone: '1' }), /GIRIS_HATALI/);
+  await auth.register(ayse);
+  assert.throws(() => auth.updateProfile({ name: '  ' }), /ZORUNLU_ALAN/);
+});
+
+test('updateProfile e-posta ve sifre alanlarini degistirmez', async () => {
+  const auth = createAuth(createStore(memoryBackend()));
+  await auth.register(ayse);
+  auth.updateProfile({ email: 'baska@ornek.com', hash: 'x', phone: '1' });
+  assert.equal(auth.current().email, 'ayse@ornek.com');
+  auth.logout();
+  await auth.login('ayse@ornek.com', 'gizli-sifre-1');
+});
+
+test('changePassword eski sifre yanlissa GIRIS_HATALI, kisaysa SIFRE_KISA, basarida yeni sifreyle giris', async () => {
+  const auth = createAuth(createStore(memoryBackend()));
+  await auth.register(ayse);
+  await assert.rejects(auth.changePassword('yanlis-sifre', 'yeni-sifre-22'), /GIRIS_HATALI/);
+  await assert.rejects(auth.changePassword('gizli-sifre-1', 'kisa'), /SIFRE_KISA/);
+  await auth.changePassword('gizli-sifre-1', 'yeni-sifre-22');
+  auth.logout();
+  await assert.rejects(auth.login('ayse@ornek.com', 'gizli-sifre-1'), /GIRIS_HATALI/);
+  await auth.login('ayse@ornek.com', 'yeni-sifre-22');
+});

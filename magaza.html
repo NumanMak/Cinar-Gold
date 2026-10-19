@@ -26,10 +26,22 @@
 <main id="icerik" class="container shop-main">
   <h1 class="shop-title">Mağaza</h1>
   <p class="shop-lead">Açılışa özel %10 indirim için sepette <strong>CINAR10</strong> kodunu kullanın.</p>
+  <form class="shop-search" role="search" id="arama-formu">
+    <label class="visually-hidden" for="ara">Ürün ara</label>
+    <input type="search" id="ara" placeholder="Ürün ara: yüzük, tektaş, nazar...">
+  </form>
   <div class="shop-filters" id="filtreler">
     <div class="shop-filters__types" role="group" aria-label="Ürün türü" id="turler"></div>
     <label class="field field--inline"><span>Model</span><select id="model"></select></label>
     <label class="check"><input type="checkbox" id="stok"><span>Yalnızca stokta olanlar</span></label>
+    <label class="field field--inline"><span>Sırala</span>
+      <select id="sirala">
+        <option value="onerilen">Önerilen</option>
+        <option value="fiyat-artan">Fiyat: düşükten yükseğe</option>
+        <option value="fiyat-azalan">Fiyat: yüksekten düşüğe</option>
+        <option value="ad">Ada göre (A-Z)</option>
+      </select>
+    </label>
   </div>
   <p class="shop-count" id="sayac" role="status"></p>
   <ul class="shop-grid" id="urunler"></ul>
