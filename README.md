@@ -52,15 +52,21 @@ Yerelde denemek için: `python tools/fetch_gold.py`. Testler: `python -m unittes
 
 - **Dil:** Üst çubuktaki EN / TR düğmesi dili değiştirir, seçim hatırlanır (`?lang=en` ile de açılabilir). Yeni metin eklerken
   Türkçe metni `t('...')` ile sarın ve İngilizcesini `assets/js/shop/i18n-en.js` dosyasına ekleyin; `node --test tests/` eksiği bulur.
-- **Yönetici:** `admin.html` sayfasında bu tarayıcının ilk yöneticisi oluşturulur. Panel sipariş onayı, stok ve bildirim isteklerini yönetir.
-  Veriler tarayıcıda durduğu için yönetici yalnızca aynı tarayıcıda (aynı adreste) verilen siparişleri görür. Yönetici rolü tarayıcıda
-  saklandığı için güvenlik sınırı değildir; gerçek kullanım için arka uç gerekir.
+- **Yönetici:** `admin.html` sayfası sipariş onayı, stok ve bildirim isteklerini yönetir. Canlı (Supabase) modda yönetici rolü yalnızca
+  veritabanında SQL ile verilir (`supabase/README.md`); tarayıcıdan yönetici oluşturulamaz.
 
-## Mağaza (demo)
+## Mağaza ve arka uç
 
-Online alışveriş akışı sunucusuz çalışır: hesaplar, sepet, stok düşümü, "Bana bildir" kayıtları ve siparişler
-yalnızca ziyaretçinin tarayıcısında (`localStorage`) tutulur. Ödeme alınmaz; sipariş WhatsApp ile onaylanır.
-Gerçek hesap/stok/ödeme için bir arka uç gerekir. Temel sürüm kapsamı için `MVP.md` dosyasına bakın.
+Hesaplar, stok, siparişler, favoriler, "Bana bildir" kayıtları ve KVKK izinleri **Supabase** (Postgres + satır düzeyi güvenlik)
+üzerinde merkezi olarak tutulur. Fiyat, kupon (CINAR10) ve stok düşümü sunucuda hesaplanır; tarayıcıdan gelen fiyat dikkate alınmaz.
+Ödeme alınmaz; sipariş havale/WhatsApp ile onaylanır. Kurulum ve yönetici yetkilendirme: `supabase/README.md`.
+Temel sürüm kapsamı için `MVP.md`, güvenlik modeli için `SECURITY.md` dosyasına bakın.
+
+`assets/js/shop/config.js` içinde yalnızca herkese açık değerler (proje adresi ve publishable anahtar) bulunur. Geliştirirken
+`localhost` üzerinde `localStorage.setItem('cg:dev-mode', 'local')` ile sunucusuz yerel moda geçilir (`python tools/e2e_shop.py` bunu kullanır).
+
+Testler: `node --test tests/` (birim + sözleşme), `python tools/e2e_shop.py` (yerel mod, tarayıcı),
+`python tools/e2e_supabase.py` ve `node tests/supabase.integration.mjs` (gerçek proje; `TEST_ADMIN_*` ve `SUPABASE_*` ortam değişkenleri gerekir).
 
 - Katalog: 4 tür × 5 model × 3 ürün (60 ürün), tür/model/stok filtresi
 - Stok bitince "Sepete ekle" yerine "Bana bildir"

@@ -57,6 +57,11 @@ export function cancelOrder({ store, inventory }, orderId, userId) {
 
 export const listAllOrders = (store) => [...store.get('orders', [])].reverse();
 
+// Hesap silinince siparişler muhasebe için kalır, kişisel bilgiler silinir.
+export function anonymizeOrders(store, userId) {
+  store.set('orders', store.get('orders', []).map((o) => (o.userId === userId ? { ...o, userId: null, name: 'silindi', phone: 'silindi', address: '' } : o)));
+}
+
 // Yönetici durum geçişleri. Geriye dönüş yoktur; iptal stoğu geri verir ve son durumdur.
 const NEXT = { beklemede: ['onaylandi', 'tamamlandi', 'iptal'], onaylandi: ['tamamlandi', 'iptal'], tamamlandi: [], iptal: [] };
 

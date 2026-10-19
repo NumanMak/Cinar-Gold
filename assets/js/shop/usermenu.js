@@ -1,8 +1,6 @@
 // Üst bilgideki hesap alanı: misafirde "Giriş yap" düğmesi, girişte kullanıcı menüsü.
 // Menü Baymard'ın hesap menüsü bulgularına göre ikiye ayrılır: sık kullanılan birincil bağlantılar ve daha sönük ikincil bağlantılar.
 import { el } from './ui.js';
-import { listOrders, listAllOrders } from './orders.js';
-import { createWishlist } from './wishlist.js';
 import { t } from './i18n.js';
 
 const ICON_USER = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5 20c.6-3.6 3.4-5.5 7-5.5s6.4 1.9 7 5.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
@@ -10,7 +8,7 @@ const ICON_CHEVRON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10
 
 const initials = (name) => name.trim().split(/\s+/).slice(0, 2).map((w) => w[0]?.toLocaleUpperCase('tr') ?? '').join('') || '?';
 
-export function createAccountControl({ auth, store, notify }) {
+export function createAccountControl() {
   const root = el('div', { class: 'shop-account' });
   let cleanup = null;
 
@@ -18,11 +16,8 @@ export function createAccountControl({ auth, store, notify }) {
     root.replaceChildren(el('a', { class: 'shop-login', href: 'hesap.html', html: ICON_USER }, el('span', {}, t('Giriş yap'))));
   }
 
-  function renderUser(user) {
-    const orders = listOrders(store, user.id).length;
-    const favorites = createWishlist(store, user.id).count();
-    const pendingCount = user.role === 'admin' ? listAllOrders(store).filter((o) => o.status === 'beklemede').length : 0;
-    const alerts = notify.forContact({ email: user.email, phone: user.phone }).length;
+  function renderUser(user, counts, api) {
+    const { orders, favorites, alerts, pending: pendingCount } = counts;
 
     const link = (href, text, count, cls = '') => {
       const a = el('a', { class: `usermenu__item ${cls}`.trim(), href, role: 'menuitem', tabindex: '-1' }, text);
@@ -76,7 +71,7 @@ export function createAccountControl({ auth, store, notify }) {
       else if (e.key === 'Tab') setOpen(false);
     });
     panel.addEventListener('click', (e) => { if (e.target.closest('a')) setOpen(false); });
-    logout.addEventListener('click', () => { auth.logout(); location.assign('hesap.html'); });
+    logout.addEventListener('click', async () => { try { await api.auth.signOut(); } finally { location.assign('hesap.html'); } });
 
     const onDocClick = (e) => { if (!root.contains(e.target)) setOpen(false); };
     document.addEventListener('click', onDocClick);
@@ -87,10 +82,9 @@ export function createAccountControl({ auth, store, notify }) {
 
   return {
     node: root,
-    update() {
+    update(user, counts, api) {
       if (cleanup) { cleanup(); cleanup = null; }
-      const user = auth.current();
-      if (user) renderUser(user);
+      if (user) renderUser(user, counts, api);
       else renderGuest();
     },
   };

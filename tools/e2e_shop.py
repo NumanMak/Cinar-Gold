@@ -19,12 +19,15 @@ SOLD_OUT = next(p for p in PRODUCTS if p["stock"] == 0)
 
 
 class Page:
-    def __init__(self, cdp, base):
+    def __init__(self, cdp, base, local=True):
         self.cdp, self.base = cdp, base
         self.errors: list[str] = []
         cdp.on(self._on_event)
         for m in ("Page.enable", "Runtime.enable", "Log.enable"):
             cdp.send(m)
+        # Bu senaryo yerel (tarayıcı içi) modu sınar; gerçek arka uç için tools/e2e_supabase.py vardır.
+        if local:
+            cdp.send("Page.addScriptToEvaluateOnNewDocument", {"source": "try{localStorage.setItem('cg:dev-mode','local')}catch(e){}"})
 
     def _on_event(self, method, p):
         self._collect(method, p)
@@ -170,7 +173,7 @@ def t_missing_and_xss(pg):
     pg.ev("""(async()=>{const m=await import('/assets/js/shop/ui.js');
       const ul=document.createElement('ul');ul.id='xss';document.body.append(ul);
       const inv={stockOf:()=>5};
-      ul.append(m.productCard({id:'x',name:'<img src=x onerror=window.__pwn=1>',karat:14,gram:1,price:1,image:'assets/img/products/x.svg'},{inventory:inv,refresh(){},wishlist:()=>({has:()=>false,toggle:()=>false})}));})()""")
+      ul.append(m.productCard({id:'x',name:'<img src=x onerror=window.__pwn=1>',karat:14,gram:1,price:1,image:'assets/img/products/x.svg'},{inventory:inv,refresh(){},me:()=>null,wishlist:{has:()=>false,toggle:async()=>false}}));})()""")
     time.sleep(0.4)
     check(pg.ev("window.__pwn") is None, "XSS: onerror çalıştı")
     check("<img" in pg.text("#xss .pcard__name"), "ürün adı düz metin olarak görünmüyor")
@@ -751,7 +754,64 @@ def t_csp(pg):
     pg.errors[:] = [e for e in pg.errors if "Content Security Policy" not in e and "Refused to" not in e]
 
 
-SCENARIOS = [t_catalog, t_promo, t_theme, t_soldout, t_missing_and_xss, t_cart_coupon, t_order, t_login_button, t_account, t_user_menu, t_favorites, t_addresses, t_order_error, t_search_sort, t_similar, t_delivery_account, t_cancel_order, t_alerts, t_pricing_images, t_mobile_overflow, t_gold, t_language_toggle, t_english_no_leaks, t_english_search, t_admin, t_admin_english, t_csp, t_blocked_storage]
+@step("gizlilik: verilerimi indir (şifre içermez) ve iki adımlı hesap silme; silinen hesapla giriş yapılamaz")
+def t_privacy(pg):
+    pg.ev("['users','session','orders','orderSeq','stock','cart','notify','consent'].forEach(k=>localStorage.removeItem('cg:'+k))")
+    pg.goto("hesap.html")
+    pg.wait("!!document.querySelector('.auth')")
+    pg.ev("[...document.querySelectorAll('.auth .chip')].find(b=>b.textContent==='Kayıt ol').click()")
+    pg.set_value("#form-kayit input[name=ad]", "Silinecek Kisi")
+    pg.set_value("#form-kayit input[name=email]", "silinecek@ornek.com")
+    pg.set_value("#form-kayit input[name=sifre]", "silinecek-sifre-1")
+    pg.click("#form-kayit button[type=submit]")
+    pg.accept_consent()
+    pg.wait("!!document.querySelector('.account-layout')")
+    pg.goto(f"urun.html?id={IN_STOCK['id']}")
+    pg.wait("!!document.querySelector('.pdetail__buy button')")
+    pg.click(".pdetail__buy button")
+    pg.wait("document.querySelector('.form-msg[role=status]').textContent.includes('Sepete eklendi')")
+    pg.goto("sepet.html")
+    pg.wait("!!document.querySelector('.order-form')")
+    pg.set_value("input[name=telefon]", "05551112233")
+    pg.click(".order-form button[type=submit]")
+    pg.wait("!!document.querySelector('.done')")
+    pg.goto("hesap.html#izinler")
+    pg.wait("!!document.querySelector('#veri-indir')")
+    # indirmeyi yakala (blob içeriği okunur; gerçek dosya indirilmez)
+    pg.ev("""(() => { window.__blob = null; const orig = URL.createObjectURL.bind(URL);
+      URL.createObjectURL = (b) => { window.__blob = b; return orig(b); };
+      HTMLAnchorElement.prototype.click = function () { window.__dlName = this.download; }; })()""")
+    pg.click("#veri-indir")
+    pg.wait("window.__blob !== null")
+    check(pg.ev("window.__dlName") == "cinar-gold-verilerim.json", "indirilen dosya adı yanlış")
+    data = json.loads(pg.ev("window.__blob.text()"))
+    check(data["email"] == "silinecek@ornek.com" and data["profile"]["name"] == "Silinecek Kisi", "dışa aktarılan veri yanlış")
+    check(len(data["orders"]) == 1, "sipariş dışa aktarımda yok")
+    blob_text = json.dumps(data).lower()
+    check("hash" not in blob_text and "salt" not in blob_text and "password" not in blob_text, "dışa aktarımda şifre bilgisi var")
+    # iki adımlı silme: vazgeç
+    pg.click("#hesap-sil")
+    pg.wait("!!document.querySelector('#hesap-sil-onay')")
+    pg.ev("[...document.querySelectorAll('.danger-zone .link-btn')].find(b=>b.textContent==='Vazgeç').click()")
+    pg.wait("!!document.querySelector('#hesap-sil') && !document.querySelector('#hesap-sil-onay')")
+    check(pg.ev("JSON.parse(localStorage.getItem('cg:users')).length") == 1, "vazgeçince hesap silindi")
+    # onayla
+    pg.click("#hesap-sil")
+    pg.wait("!!document.querySelector('#hesap-sil-onay')")
+    pg.click("#hesap-sil-onay")
+    pg.wait("!!document.querySelector('#hesap-bilgi')")
+    check("silindi" in pg.text("#hesap-bilgi"), "silme bilgisi yok")
+    check(pg.ev("JSON.parse(localStorage.getItem('cg:users')||'[]').length") == 0, "kullanıcı silinmedi")
+    order = pg.ev("JSON.parse(localStorage.getItem('cg:orders'))[0]")
+    check(order["name"] == "silindi" and order["phone"] == "silindi" and order["userId"] is None, f"sipariş anonimleşmedi: {order}")
+    pg.set_value("#form-giris input[name=email]", "silinecek@ornek.com")
+    pg.set_value("#form-giris input[name=sifre]", "silinecek-sifre-1")
+    pg.click("#form-giris button[type=submit]")
+    pg.wait("document.querySelector('#form-giris .form-msg[role=alert]').textContent.includes('hatalı')")
+    pg.ev("localStorage.removeItem('cg:users'); localStorage.removeItem('cg:orders')")
+
+
+SCENARIOS = [t_catalog, t_promo, t_theme, t_soldout, t_missing_and_xss, t_cart_coupon, t_order, t_login_button, t_account, t_user_menu, t_favorites, t_addresses, t_order_error, t_search_sort, t_similar, t_delivery_account, t_cancel_order, t_alerts, t_pricing_images, t_mobile_overflow, t_gold, t_language_toggle, t_english_no_leaks, t_english_search, t_admin, t_admin_english, t_csp, t_privacy, t_blocked_storage]
 
 
 def main() -> int:

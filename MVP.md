@@ -12,7 +12,7 @@ Detaylı tasarım: `docs/superpowers/specs/2026-10-19-cinar-gold-store-design.md
 5. **Sepet ve online sipariş:** adet değiştirme, kupon, sipariş oluşturma (havale/EFT veya mağazada ödeme), WhatsApp ile onay bağlantısı.
 6. **Kupon:** `CINAR10`, %10 açılış indirimi.
 7. **Kayan duyuru şeridi:** sayfa üstünde soldan sağa kayan "Açılışa özel %10 indirim: CINAR10".
-8. **Hesap:** kayıt, giriş, çıkış, siparişlerim (demo; veriler yalnızca o tarayıcıda).
+8. **Hesap:** kayıt, giriş, çıkış, siparişlerim (Supabase üzerinde merkezi; verilerimi indir ve hesabımı sil dahil).
 9. **Koyu / açık tema:** sistem tercihiyle başlar, seçim hatırlanır.
 10. **Hesap detayı:** profil (telefon, adres), siparişlerim (teslimat ve ödeme bilgisiyle), stok bildirimlerim, şifre değiştirme.
 11. **Sepette teslimat:** mağazadan teslim veya adrese teslim (açık adres zorunlu), hesaptan ön doldurma.
@@ -28,9 +28,9 @@ Detaylı tasarım: `docs/superpowers/specs/2026-10-19-cinar-gold-store-design.md
 ## MVP'de olmayanlar (sonraki sürümler)
 
 - Gerçek kart ödemesi.
-- Sunucu tarafı hesap, stok ve sipariş kaydı (şu an yalnızca tarayıcı localStorage).
 - "Bana bildir" kayıtları için gerçek e-posta / SMS gönderimi.
-- Gerçek (sunucu destekli) yönetici paneli: şu anki panel yalnızca aynı tarayıcıdaki siparişleri ve stoğu yönetir; farklı müşterilerin siparişlerini tek yerde toplamak için arka uç gerekir. Fiyat düzenleme de yok (`tools/gen_products.py`).
+- Yönetici panelinde fiyat düzenleme yok (`tools/gen_products.py` ile katalog güncellenir).
+- E-posta doğrulama ve e-posta bildirimleri: gerçek müşteri için bir SMTP servisi (Resend, Brevo vb.) bağlanmalı.
 - Mağazanın kendi ürün fotoğrafları: şu an görseller temsilî Pixabay fotoğraflarıdır (`assets/img/products/<ürün-id>.webp`). Kendi fotoğraflarınızı aynı dosya adıyla (kare, 900x900 önerilir) değiştirebilirsiniz.
 
 ## Yayın sonrası görev

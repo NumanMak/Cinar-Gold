@@ -36,7 +36,7 @@ export function stockBadge(stock) {
 export async function openNotify(product, ctx) {
   if (!(await ctx.requireConsent())) return;
   const opener = document.activeElement;
-  const email = el('input', { type: 'email', name: 'email', autocomplete: 'email', placeholder: t('E-posta') });
+  const email = el('input', { type: 'email', name: 'email', autocomplete: 'email', placeholder: t('E-posta'), value: ctx.me()?.email ?? '' });
   const phone = el('input', { type: 'tel', name: 'phone', autocomplete: 'tel', placeholder: t('Telefon (isteğe bağlı)') });
   const msg = el('p', { class: 'form-msg', role: 'status' });
   const send = el('button', { class: 'btn btn--gold', type: 'submit' }, t('Haber ver'));
@@ -50,13 +50,14 @@ export async function openNotify(product, ctx) {
     el('div', { class: 'consent__actions' }, close, send));
   const dialog = el('dialog', { class: 'consent', 'aria-labelledby': 'bildir-baslik' }, form);
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    send.disabled = true;
     try {
-      ctx.notify.add({ productId: product.id, email: email.value, phone: phone.value });
+      await ctx.api.alerts.add({ productId: product.id, email: email.value, phone: phone.value });
       msg.textContent = t('Stok gelince size haber vereceğiz.');
-      send.disabled = true;
     } catch (err) {
+      send.disabled = false;
       msg.textContent = err.message === 'ZORUNLU_ALAN' ? t('E-posta ya da telefon girin.') : t('Kaydedilemedi, tekrar deneyin.');
     }
   });
@@ -87,16 +88,25 @@ export function favoriteButton(p, ctx, onChange) {
   const label = el('span', { class: 'visually-hidden' });
   btn.append(label);
   const sync = () => {
-    const on = ctx.wishlist().has(p.id);
+    const on = ctx.wishlist.has(p.id);
     btn.setAttribute('aria-pressed', String(on));
     label.textContent = on ? t('{name} favorilerden çıkar', { name: productName(p) }) : t('{name} favorilere ekle', { name: productName(p) });
   };
-  btn.addEventListener('click', (e) => {
+  btn.addEventListener('click', async (e) => {
     e.preventDefault();
-    const on = ctx.wishlist().toggle(p.id);
-    sync();
-    ctx.refresh();
-    if (onChange) onChange(on);
+    btn.disabled = true;
+    const pending = ctx.wishlist.toggle(p.id);
+    sync(); // iyimser: ekran hemen güncellenir
+    try {
+      const on = await pending;
+      sync();
+      ctx.refresh();
+      if (onChange) onChange(on);
+    } catch (err) {
+      sync(); // sunucu reddetti: önbellek geri alındı
+    } finally {
+      btn.disabled = false;
+    }
   });
   sync();
   return btn;

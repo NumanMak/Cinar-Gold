@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+CONFIG = ROOT / "assets" / "js" / "shop" / "config.js"
 PAGES = ["index.html", "magaza.html", "urun.html", "sepet.html", "hesap.html", "admin.html", "404.html"]
 INLINE = re.compile(r"<script(?![^>]*\bsrc=)(?P<attrs>[^>]*)>(?P<body>.*?)</script>", re.S)
 META_CSP = re.compile(r'[ \t]*<meta http-equiv="Content-Security-Policy"[^>]*>\n?')
@@ -27,8 +28,15 @@ def inline_hashes(html: str) -> list[str]:
     return sorted(set(out))
 
 
+def backend_origin() -> str:
+    """config.js içindeki Supabase proje adresi (yalnızca https kökü); yoksa boş."""
+    m = re.search(r"url:\s*'(https://[a-z0-9-]+\.supabase\.co)/?'", CONFIG.read_text(encoding="utf-8"))
+    return m.group(1) if m else ""
+
+
 def policy(hashes: list[str]) -> str:
     scripts = " ".join(["'self'", *hashes])
+    connect = " ".join(["'self'", "https://finans.truncgil.com", *([backend_origin()] if backend_origin() else [])])
     return "; ".join([
         "default-src 'none'",
         f"script-src {scripts}",
@@ -36,7 +44,7 @@ def policy(hashes: list[str]) -> str:
         "img-src 'self' data:",
         "font-src 'self'",
         "media-src 'self'",
-        "connect-src 'self' https://finans.truncgil.com",
+        f"connect-src {connect}",
         "frame-src https://www.google.com",
         "manifest-src 'self'",
         "base-uri 'none'",
