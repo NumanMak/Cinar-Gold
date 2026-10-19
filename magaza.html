@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mağaza | Çınar Gold Kuyumculuk</title>
+<meta name="description" content="Çınar Gold mağazasında yüzük, kolye, bilezik ve pırlanta modellerini inceleyin, stok durumunu görün ve online sipariş verin.">
+<meta name="theme-color" content="#000000">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="site.webmanifest">
+<link rel="stylesheet" href="assets/css/fonts.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/shop.css">
+<script>
+  (function (d) {
+    try {
+      var t = JSON.parse(localStorage.getItem('cg:theme'));
+      if (t !== 'dark' && t !== 'light') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      d.dataset.theme = t;
+    } catch (e) {}
+  })(document.documentElement);
+</script>
+</head>
+<body class="shop-page">
+<main id="icerik" class="container shop-main">
+  <h1 class="shop-title">Mağaza</h1>
+  <p class="shop-lead">Açılışa özel %10 indirim için sepette <strong>CINAR10</strong> kodunu kullanın.</p>
+  <div class="shop-filters" id="filtreler">
+    <div class="shop-filters__types" role="group" aria-label="Ürün türü" id="turler"></div>
+    <label class="field field--inline"><span>Model</span><select id="model"></select></label>
+    <label class="check"><input type="checkbox" id="stok"><span>Yalnızca stokta olanlar</span></label>
+  </div>
+  <p class="shop-count" id="sayac" role="status"></p>
+  <ul class="shop-grid" id="urunler"></ul>
+  <p class="shop-empty" id="bos" hidden>Bu filtreye uygun ürün bulunamadı.</p>
+</main>
+<script type="module" src="assets/js/shop/pages/magaza.js"></script>
+</body>
+</html>

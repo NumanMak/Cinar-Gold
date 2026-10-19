@@ -7,6 +7,7 @@ import { createCart } from './cart.js';
 import { createAuth } from './auth.js';
 import { createConsent } from './consent.js';
 import { createNotify } from './notify.js';
+import { el } from './ui.js';
 
 export const PROMO_TEXT = 'Açılışa özel %10 indirim: CINAR10';
 
@@ -15,17 +16,6 @@ const SVG = {
   cart: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 11H6.2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>',
   user: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5 20c.6-3.6 3.4-5.5 7-5.5s6.4 1.9 7 5.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
 };
-
-function el(tag, props = {}, ...kids) {
-  const node = document.createElement(tag);
-  for (const [k, v] of Object.entries(props)) {
-    if (k === 'class') node.className = v;
-    else if (k === 'html') node.innerHTML = v; // yalnızca bu dosyadaki sabit SVG metinleri için
-    else node.setAttribute(k, v);
-  }
-  node.append(...kids);
-  return node;
-}
 
 function buildPromo() {
   const group = () => {

@@ -124,3 +124,58 @@ html.has-promo .mmenu { padding-top: calc(var(--nav-h) + var(--promo-h) + 24px);
 .nav .shop-act__label { display: none; }
 .nav .shop-act__badge { position: absolute; top: 0; right: 0; }
 .nav__link { white-space: nowrap; }
+
+/* ===== Katalog ===== */
+.shop-main { padding-block: clamp(28px, 5vw, 56px); }
+.shop-title { font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -.01em; line-height: 1.1; }
+.shop-lead { margin-top: 10px; color: var(--text-2); max-width: 40rem; }
+.shop-lead strong { color: var(--gold-light); letter-spacing: .06em; }
+.shop-back { margin-bottom: 18px; font-size: .875rem; color: var(--text-2); }
+.shop-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; margin: 26px 0 10px; }
+.shop-filters__types { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { min-height: 40px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--line); color: var(--text-2); font-size: .875rem; }
+.chip:hover { border-color: var(--gold-light); color: var(--pearl); }
+.chip[aria-pressed="true"] { border-color: var(--gold-light); background: color-mix(in srgb, var(--gold) 18%, transparent); color: var(--pearl); }
+.field { display: grid; gap: 6px; font-size: .8125rem; color: var(--text-2); margin-bottom: 12px; }
+.field--inline { display: inline-flex; align-items: center; gap: 10px; margin: 0; }
+.field input, .field select, select#model, select#adet {
+  min-height: 42px; padding: 0 12px; border-radius: var(--r-media); border: 1px solid var(--line);
+  background: var(--graphite); color: var(--pearl); font: inherit;
+}
+.check { display: inline-flex; align-items: center; gap: 10px; font-size: .875rem; color: var(--text-2); cursor: pointer; }
+.check input { width: 18px; height: 18px; accent-color: var(--gold); }
+.shop-count { font-size: .8125rem; color: var(--muted); margin-bottom: 18px; }
+.shop-empty { padding: 40px 0; color: var(--text-2); }
+.shop-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(14px, 2vw, 26px); grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); }
+.pcard { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--graphite); overflow: hidden; }
+.pcard__media { display: block; aspect-ratio: 4 / 5; overflow: hidden; background: var(--graphite-2); }
+.pcard__media img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s var(--ease-out); }
+.pcard:hover .pcard__media img { transform: scale(1.04); }
+.pcard__body { display: grid; gap: 6px; padding: 14px 16px 16px; flex: 1; align-content: start; }
+.pcard__name { font-size: 1rem; line-height: 1.3; }
+.pcard__meta { font-size: .8125rem; color: var(--muted); }
+.pcard__row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 4px; }
+.pcard__price { font-weight: 500; font-variant-numeric: tabular-nums; }
+.pcard__actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+.stock { font-size: .75rem; padding: 3px 10px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
+.stock--ok { color: #3f8f55; }
+.stock--low { color: #b8791f; }
+.stock--out { color: #b0432d; }
+:root:not([data-theme="light"]) .stock--ok { color: #8fc89b; }
+:root:not([data-theme="light"]) .stock--low { color: #e3b668; }
+:root:not([data-theme="light"]) .stock--out { color: #dc9583; }
+.form-msg { font-size: .8125rem; color: var(--text-2); min-height: 1.2em; }
+
+/* ===== Ürün detayı ===== */
+.pdetail { display: grid; gap: clamp(24px, 4vw, 56px); grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 900px) { .pdetail { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); align-items: start; } }
+.pdetail__media { border-radius: var(--r-card); overflow: hidden; border: 1px solid var(--line); }
+.pdetail__media img { width: 100%; height: auto; }
+.pdetail__info { display: grid; gap: 14px; align-content: start; }
+.pdetail__eyebrow { font-size: .8125rem; letter-spacing: .08em; text-transform: uppercase; color: var(--gold-light); }
+.pdetail__price { font-size: 1.75rem; font-variant-numeric: tabular-nums; }
+.pdetail__desc { color: var(--text-2); line-height: 1.65; max-width: 36rem; }
+.pdetail__specs { display: flex; gap: 32px; margin: 4px 0; }
+.pdetail__specs dt { font-size: .75rem; color: var(--muted); }
+.pdetail__specs dd { margin: 2px 0 0; }
+.pdetail__buy { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 8px; }
