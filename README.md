@@ -23,8 +23,8 @@ Ardından tarayıcıda `http://localhost:8000` adresini açın.
 | Adres ve harita | `index.html` iletişim bölümü, harita `iframe` adresi ve JSON-LD `address` |
 | Alan adı | `index.html` (canonical, og:url, og:image, JSON-LD), `robots.txt`, `sitemap.xml`. Şu an `https://www.cinargold.com.tr/` yazılı |
 | Ana sayfadaki vitrin ürünleri | `index.html` içindeki `data-product` öğeleri: ad, açıklama, özellikler (`data-specs`, `|` ile ayrılır) ve görsel (`data-img`) |
-| Mağaza kataloğu (60 ürün: gram, ayar, işçilik, stok, model) | `tools/gen_products.py` dosyasını düzenleyip `python tools/gen_products.py` çalıştırın; çıktı `assets/data/products.json` ve `assets/img/products/*.svg`. Fiyat `gram x ayar fiyatı x (1 + işçilik) + taş bedeli`, ayar fiyatı Özsafir 22 ayar fiyatından tarayıcıda canlı hesaplanır |
-| Ürün fotoğrafı | Görseller illüstrasyondur. Gerçek fotoğraf için `products.json` içindeki ilgili ürünün `image` yolunu değiştirin (jpg/webp/svg) |
+| Mağaza kataloğu (60 ürün: gram, ayar, işçilik, stok, model) | `tools/gen_products.py` dosyasını düzenleyip `python tools/gen_products.py` çalıştırın; çıktı `assets/data/products.json`. Fiyat `gram x ayar fiyatı x (1 + işçilik) + taş bedeli`, ayar fiyatı Özsafir 22 ayar fiyatından tarayıcıda canlı hesaplanır |
+| Ürün fotoğrafı | Görseller Pixabay'dan seçilmiş temsilî fotoğraflardır (`tools/photo_map.json`, ücretsiz ticari lisans). Kendi fotoğrafınız için `assets/img/products/<ürün-id>.webp` dosyasını değiştirin (kare, 900x900 önerilir). Yeniden üretmek: `python tools/build_photos.py` ve `python tools/gen_products.py`; yeni aday aramak için `$env:PIXABAY_KEY` ile `tools/img_pixabay.py` |
 | Kupon kodu ve oranı | `assets/js/shop/coupon.js` |
 | Kayan duyuru metni | `assets/js/shop/shell.js` içinde `PROMO_TEXT` |
 

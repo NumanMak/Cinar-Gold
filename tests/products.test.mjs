@@ -46,6 +46,17 @@ test('fiyat alanlari: iscilik 0-1 arasi, tas bedeli ve gram pozitif, metal etike
   }
 });
 
+test('her urunun fotograf kredisi (yazar, sayfa, kaynak) vardir ve gorseller webp', () => {
+  for (const p of products) {
+    assert.match(p.image, /\.webp$/, p.id);
+    assert.ok(p.imageCredit.author && /^https:\/\/pixabay\.com\//.test(p.imageCredit.url) && p.imageCredit.source === 'Pixabay', p.id);
+  }
+});
+
+test('urun adlari benzersizdir', () => {
+  assert.equal(new Set(products.map((p) => p.name)).size, products.length);
+});
+
 test('pirlanta urunlerinin tas bedeli vardir, diger turlerde 0 veya kucuktur', () => {
   for (const p of products.filter((x) => x.type === 'pirlanta')) assert.ok(p.stoneFee >= 14000, p.id);
   for (const p of products.filter((x) => x.type !== 'pirlanta')) assert.ok(p.stoneFee <= 700, p.id);
