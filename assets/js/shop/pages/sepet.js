@@ -1,12 +1,11 @@
 import { mountShell } from '../shell.js';
-import { placeOrder } from '../orders.js';
 import { el, formatTL, productImg } from '../ui.js';
 import { t, translateDocument } from '../i18n.js';
 import { productName } from '../names.js';
 
 translateDocument();
 const ctx = await mountShell({ page: 'cart' });
-const { cart, store, inventory, products, auth } = ctx;
+const { cart, store, inventory, products, api } = ctx;
 const root = document.getElementById('sepet');
 let code = store.get('coupon', '');
 let flash = ''; // sepet yeniden çizildikten sonra formda gösterilecek hata metni
@@ -16,8 +15,12 @@ const ERRORS = {
   STOK_YETERSIZ: 'Stokta bu kadar adet yok.',
   SEPET_BOS: 'Sepetiniz boş.',
   ZORUNLU_ALAN: 'Ad soyad, telefon, ödeme yöntemi ve (adrese teslimde) en az 10 karakterlik açık adresi doldurun.',
+  SUNUCU_YOK: 'Sunucuya ulaşılamadı, tekrar deneyin.',
 };
-const errorText = (code) => (ERRORS[code] ? t(ERRORS[code]) : t('Sipariş oluşturulamadı, tekrar deneyin.'));
+// Sepeti değiştirmiş olabilecek hatalar: sepet yeniden çizilir ve mesaj yeni formda gösterilir.
+const STALE = ['SIPARIS_GECERSIZ', 'STOK_YETERSIZ', 'SEPET_BOS', 'URUN_YOK'];
+const ERROR_ALIAS = { URUN_YOK: 'SIPARIS_GECERSIZ' };
+const errorText = (code) => { const k = ERROR_ALIAS[code] ?? code; return ERRORS[k] ? t(ERRORS[k]) : t('Sipariş oluşturulamadı, tekrar deneyin.'); };
 
 // Sipariş satırı adı: katalogdaki güncel dilde ad; ürün kalktıysa siparişte kayıtlı ad.
 const lineName = (l) => {
@@ -74,7 +77,7 @@ function couponForm(q) {
 }
 
 function orderForm(q) {
-  const user = auth.current();
+  const user = ctx.me();
   const name = el('input', { type: 'text', name: 'ad', autocomplete: 'name', required: '', value: user ? user.name : '' });
   const phone = el('input', { type: 'tel', name: 'telefon', autocomplete: 'tel', required: '', value: user ? user.phone : '' });
   const address = el('textarea', { name: 'adres', rows: '3', autocomplete: 'street-address', placeholder: t('Mahalle, cadde/sokak, bina ve daire no, ilçe, il') }, user ? user.address : '');
@@ -127,25 +130,32 @@ function orderForm(q) {
         submit.disabled = false;
         return;
       }
-      const order = placeOrder({ store, products, inventory, cart }, {
-        userId: user ? user.id : null, name: name.value, phone: phone.value,
-        payment: form.elements.odeme.value, delivery: form.elements.teslimat.value, address: address.value, code,
-      });
-      if (user) {
-        auth.updateProfile({ phone: phone.value });
-        // Yeni bir adres girildiyse adres defterine eklenir.
-        if (order.delivery === 'adres' && !user.addresses.some((a) => a.text === order.address)) {
-          auth.addAddress({ title: t('Adresim {n}', { n: user.addresses.length + 1 }), text: order.address });
-        }
-      }
+      // Fiyat ve kupon sunucuda hesaplanır; yalnızca ürün kimliği ve adet gönderilir.
+      const order = await api.orders.place(cart.items(), {
+        name: name.value, phone: phone.value,
+        payment: form.elements.odeme.value, delivery: form.elements.teslimat.value, address: address.value,
+      }, code);
+      cart.clear();
       store.remove('coupon');
       code = '';
+      if (user) {
+        // Hesap bilgilerinin güncellenmesi sipariş için zorunlu değildir; başarısız olursa sipariş yine geçerlidir.
+        try {
+          await api.auth.updateProfile({ phone: phone.value });
+          if (order.delivery === 'adres' && !user.addresses.some((a) => a.text === order.address)) {
+            await api.auth.addresses.add({ title: t('Adresim {n}', { n: user.addresses.length + 1 }), text: order.address });
+          }
+          await ctx.reloadMe();
+        } catch (e) { console.error(e); }
+      }
+      await ctx.reloadStock();
       ctx.refresh();
       showSuccess(order);
     } catch (err) {
       const text = errorText(err.message);
-      if (err.message === 'SIPARIS_GECERSIZ' || err.message === 'STOK_YETERSIZ' || err.message === 'SEPET_BOS') {
-        flash = text; // sepet değişmiş olabilir: yeniden çiz, mesajı yeni formda göster
+      if (STALE.includes(err.message)) {
+        flash = text; // sepet değişmiş olabilir: stok yenilenir, yeniden çizilir, mesaj yeni formda gösterilir
+        await ctx.reloadStock();
         changed();
       } else {
         msg.textContent = text; // form olduğu gibi kalır, yazılanlar silinmez

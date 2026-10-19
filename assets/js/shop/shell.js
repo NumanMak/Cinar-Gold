@@ -2,15 +2,13 @@
 import { createStore } from './storage.js';
 import { initTheme } from './theme.js';
 import { loadProducts } from './catalog.js';
-import { createInventory } from './inventory.js';
 import { createCart } from './cart.js';
-import { createAuth } from './auth.js';
 import { createConsent } from './consent.js';
-import { createNotify } from './notify.js';
 import { el } from './ui.js';
 import { createAccountControl } from './usermenu.js';
 import { loadGold, repriceProducts } from './pricing.js';
-import { createWishlist } from './wishlist.js';
+import { createApi } from './api/index.js';
+import { CONFIG } from './config.js';
 import { t, getLang, setLang } from './i18n.js';
 
 export const PROMO_TEXT = t('Açılışa özel %10 indirim: CINAR10');
@@ -72,9 +70,7 @@ export async function mountShell({ page }) {
   const actions = buildActions();
   const homeActions = document.querySelector('.nav__actions');
   // Hesap alanı (Giriş yap / kullanıcı menüsü) her zaman sağ üstte, en sonda durur.
-  const auth = createAuth(store);
-  const notify = createNotify(store);
-  const account = createAccountControl({ auth, store, notify });
+  const account = createAccountControl();
   if (page === 'home' && homeActions) {
     homeActions.prepend(actions.wrap);
     homeActions.querySelector('.nav__toggle').before(account.node);
@@ -100,14 +96,61 @@ export async function mountShell({ page }) {
 
   // Fiyatlar canlı altın fiyatından hesaplanır; veri yoksa veya eskiyse products.json'daki fiyat kalır.
   repriceProducts(products, await loadGold());
-  const inventory = createInventory(store, products);
+
+  // Arka uç (yerel veya Supabase). Ulaşılamazsa sayfa çökmez: katalogdaki başlangıç stoğu ve misafir görünümü kullanılır.
+  const api = await createApi(CONFIG, { store, products });
+  const banner = (text) => document.querySelector('.promo').after(el('p', { class: 'shop-error', role: 'alert' }, text));
+  let stock = Object.fromEntries(products.map((p) => [p.id, p.stock]));
+  let me = null;
+  let favs = [];
+  const loadStock = async () => {
+    try { stock = await api.stock.load(); } catch (e) { console.error(e); }
+  };
+  const loadMe = async () => {
+    try { me = await api.auth.user(); } catch (e) { console.error(e); me = null; }
+    try { favs = await api.wishlist.list(); } catch (e) { favs = []; }
+  };
+  let backendDown = false;
+  try { await Promise.all([loadStock(), loadMe()]); } catch (e) { backendDown = true; }
+  if (api.mode === 'supabase' && api.ok === false) backendDown = true;
+  if (backendDown) banner(t('Sunucuya ulaşılamadı, tekrar deneyin.'));
+
+  // Sayfaların senkron okuduğu önbellekli görünümler.
+  const inventory = {
+    stockOf: (id) => stock[id] ?? 0,
+    isSoldOut: (id) => (stock[id] ?? 0) <= 0,
+  };
   const cart = createCart(store, products, inventory);
   const consent = createConsent(store);
+  const wishlist = {
+    has: (id) => favs.includes(id),
+    count: () => favs.length,
+    list: () => [...favs],
+    // Önce ekranı günceller, sonra sunucuya yazar; hata olursa geri alır.
+    async toggle(id) {
+      const before = favs;
+      favs = before.includes(id) ? before.filter((x) => x !== id) : [...before, id];
+      try { return await api.wishlist.toggle(id); } catch (e) { favs = before; throw e; }
+    },
+  };
+
+  // Hesap menüsü sayaçları (sipariş, favori, bildirim, bekleyen sipariş) oturum varken sunucudan okunur.
+  const refreshAccount = async () => {
+    const counts = { orders: 0, favorites: favs.length, alerts: 0, pending: 0 };
+    if (me) {
+      try {
+        if (me.role === 'admin') counts.pending = (await api.orders.adminList()).filter((o) => o.status === 'beklemede').length;
+        else counts.orders = (await api.orders.mine()).length;
+        counts.alerts = (await api.alerts.mine()).length;
+      } catch (e) { console.error(e); }
+    }
+    account.update(me, counts, api);
+  };
 
   const refresh = () => {
     document.getElementById('sepet-sayac').textContent = String(cart.count());
-    account.update();
     actions.themeBtn.setAttribute('aria-pressed', String(theme.current() === 'dark'));
+    refreshAccount();
   };
   actions.themeBtn.addEventListener('click', () => { theme.toggle(); refresh(); });
   refresh();
@@ -121,10 +164,12 @@ export async function mountShell({ page }) {
     return !!choices;
   }
 
-  // Favoriler oturumdaki kullanıcıya (yoksa misafire) aittir; her çağrıda güncel sahip alınır.
-  const wishlist = () => createWishlist(store, auth.current()?.id ?? null);
-
-  return { store, products, inventory, cart, auth, consent, notify, wishlist, requireConsent, refresh };
+  return {
+    store, products, api, inventory, cart, consent, wishlist, requireConsent, refresh,
+    me: () => me,
+    reloadMe: async () => { await loadMe(); refresh(); return me; },
+    reloadStock: loadStock,
+  };
 }
 
 // İzin penceresi: kabulde seçimleri, vazgeçişte null döner.

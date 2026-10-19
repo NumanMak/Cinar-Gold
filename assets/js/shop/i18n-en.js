@@ -225,6 +225,8 @@ export const EN = {
 
   /* ---------- Yönetim paneli ---------- */
   'Tüm alanları doldurun.': 'Fill in all fields.',
+  'Sunucuya ulaşılamadı, tekrar deneyin.': 'The server could not be reached, please try again.',
+  'Bu işlem için yönetici yetkisi gerekir.': 'Admin permission is required for this action.',
   'Yönetici hesabını oluştur': 'Create the admin account',
   'Bu tarayıcıda henüz yönetici hesabı yok. İlk yönetici hesabını oluşturun.': 'There is no admin account in this browser yet. Create the first admin account.',
   'Bu hesabın yönetim paneline erişim yetkisi yok. Yönetici hesabıyla giriş yapın.': 'This account has no access to the admin panel. Sign in with the admin account.',

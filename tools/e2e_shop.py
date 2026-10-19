@@ -170,7 +170,7 @@ def t_missing_and_xss(pg):
     pg.ev("""(async()=>{const m=await import('/assets/js/shop/ui.js');
       const ul=document.createElement('ul');ul.id='xss';document.body.append(ul);
       const inv={stockOf:()=>5};
-      ul.append(m.productCard({id:'x',name:'<img src=x onerror=window.__pwn=1>',karat:14,gram:1,price:1,image:'assets/img/products/x.svg'},{inventory:inv,refresh(){},wishlist:()=>({has:()=>false,toggle:()=>false})}));})()""")
+      ul.append(m.productCard({id:'x',name:'<img src=x onerror=window.__pwn=1>',karat:14,gram:1,price:1,image:'assets/img/products/x.svg'},{inventory:inv,refresh(){},me:()=>null,wishlist:{has:()=>false,toggle:async()=>false}}));})()""")
     time.sleep(0.4)
     check(pg.ev("window.__pwn") is None, "XSS: onerror çalıştı")
     check("<img" in pg.text("#xss .pcard__name"), "ürün adı düz metin olarak görünmüyor")

@@ -1,13 +1,11 @@
 import { mountShell } from '../shell.js';
-import { listOrders, cancelOrder } from '../orders.js';
-import { mergeGuestWishlist } from '../wishlist.js';
 import { el, formatTL, productCard } from '../ui.js';
 import { t, locale, translateDocument } from '../i18n.js';
 import { productName } from '../names.js';
 
 translateDocument();
 const ctx = await mountShell({ page: 'account' });
-const { auth, consent, store, notify, products, inventory } = ctx;
+const { consent, products, api } = ctx;
 const root = document.getElementById('hesap');
 let tab = 'giris';
 
@@ -17,11 +15,14 @@ const ERRORS = {
   GIRIS_HATALI: 'E-posta veya şifre hatalı.',
   ZORUNLU_ALAN: 'Tüm alanları doldurun (adres en az 10 karakter olmalı).',
   IPTAL_EDILEMEZ: 'Bu sipariş artık iptal edilemez.',
+  SUNUCU_YOK: 'Sunucuya ulaşılamadı, tekrar deneyin.',
   SIPARIS_YOK: 'Sipariş bulunamadı.',
 };
 
 const errorText = (code, fallback) => t(ERRORS[code] ?? fallback);
 const DEMO_NOTE = 'Bu bir demo hesaptır; verileriniz yalnızca bu tarayıcıda saklanır.';
+// Yerel (demo) modda bilgi notu gösterilir; gerçek arka uçta gösterilmez.
+const demoNote = () => (api.mode === 'local' ? [el('p', { class: 'form-msg' }, t(DEMO_NOTE))] : []);
 const STATUS = { beklemede: 'Onay bekliyor', onaylandi: 'Onaylandı', tamamlandi: 'Tamamlandı', iptal: 'İptal edildi' }; // t() ile gösterilir
 const PAYMENT = { havale: 'Havale / EFT', magaza: 'Mağazada ödeme' };
 const SECTIONS = [
@@ -61,12 +62,10 @@ function authForm(kind) {
         return;
       }
       const f = form.elements;
-      const user = register
-        ? await auth.register({ name: f.ad.value, email: f.email.value, password: f.sifre.value })
-        : await auth.login(f.email.value, f.sifre.value);
-      mergeGuestWishlist(store, user.id);
-      ctx.refresh();
-      render();
+      if (register) await api.auth.signUp({ name: f.ad.value, email: f.email.value, password: f.sifre.value });
+      else await api.auth.signIn(f.email.value, f.sifre.value);
+      await ctx.reloadMe();
+      await render();
     } catch (err) {
       msg.textContent = errorText(err.message, 'İşlem tamamlanamadı, tekrar deneyin.');
     } finally {
@@ -85,7 +84,7 @@ function renderGuest() {
   root.replaceChildren(el('div', { class: 'auth' },
     el('p', { class: 'shop-lead' }, t('Giriş yaparak siparişlerinizi görün, favorilerinizi ve adreslerinizi kaydedin.')),
     el('div', { class: 'shop-filters__types', role: 'group', 'aria-label': t('Hesap işlemi') }, tabBtn('giris', t('Giriş')), tabBtn('kayit', t('Kayıt ol'))),
-    authForm(tab), el('p', { class: 'form-msg' }, t(DEMO_NOTE))));
+    authForm(tab), ...demoNote()));
 }
 
 /* ---------- Giriş yapmış kullanıcı bölümleri ---------- */
@@ -110,9 +109,10 @@ function orderItem(o, user) {
       const no = el('button', { class: 'link-btn', type: 'button' }, t('Vazgeç'));
       actions.replaceChildren(el('span', { class: 'form-msg' }, t('Sipariş iptal edilsin mi? Stok geri verilir.')), yes, no);
       no.addEventListener('click', () => actions.replaceChildren(ask));
-      yes.addEventListener('click', () => {
-        try { cancelOrder({ store, inventory }, o.id, user.id); ctx.refresh(); render(); }
-        catch (err) { msg.textContent = errorText(err.message, 'İptal edilemedi.'); }
+      yes.addEventListener('click', async () => {
+        yes.disabled = true;
+        try { await api.orders.cancelMine(o.id); await ctx.reloadStock(); ctx.refresh(); await render(); }
+        catch (err) { yes.disabled = false; msg.textContent = errorText(err.message, 'İptal edilemedi.'); }
       });
     });
     actions.append(ask);
@@ -128,10 +128,10 @@ function orderItem(o, user) {
     actions, msg);
 }
 
-function sectionGenel(user) {
-  const orders = listOrders(store, user.id);
-  const favorites = ctx.wishlist().count();
-  const alerts = notify.forContact({ email: user.email, phone: user.phone }).length;
+function sectionGenel(user, data) {
+  const orders = data.orders;
+  const favorites = ctx.wishlist.count();
+  const alerts = data.alerts.length;
   const tile = (href, n, label) => el('a', { class: 'tile', href }, el('strong', {}, String(n)), el('span', {}, label));
   const last = orders[0];
   return [
@@ -144,15 +144,15 @@ function sectionGenel(user) {
   ];
 }
 
-function sectionSiparisler(user) {
-  const orders = listOrders(store, user.id);
+function sectionSiparisler(user, data) {
+  const orders = data.orders;
   return [heading(t('Siparişlerim')), orders.length
     ? el('ul', { class: 'orders' }, ...orders.map((o) => orderItem(o, user)))
     : empty(t('Henüz siparişiniz yok.'), t('Alışverişe başla'), 'magaza.html')];
 }
 
 function sectionFavoriler() {
-  const ids = ctx.wishlist().list();
+  const ids = ctx.wishlist.list();
   const byId = new Map(products.map((p) => [p.id, p]));
   const list = ids.map((id) => byId.get(id)).filter(Boolean);
   return [heading(t('Favorilerim')), list.length
@@ -168,16 +168,16 @@ function sectionAdresler(user) {
     el('label', { class: 'field' }, el('span', {}, t('Adres başlığı')), title),
     el('label', { class: 'field' }, el('span', {}, t('Açık adres')), text),
     msg, el('button', { class: 'btn btn--gold', type: 'submit' }, t('Adres ekle')));
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    try { auth.addAddress({ title: title.value, text: text.value }); ctx.refresh(); render(); }
+    try { await api.auth.addresses.add({ title: title.value, text: text.value }); await ctx.reloadMe(); await render(); }
     catch (err) { msg.textContent = errorText(err.message, 'Adres eklenemedi.'); }
   });
   const cards = user.addresses.map((a) => {
     const def = el('button', { class: 'link-btn', type: 'button' }, t('Varsayılan yap'));
-    def.addEventListener('click', () => { auth.setDefaultAddress(a.id); render(); });
+    def.addEventListener('click', async () => { await api.auth.addresses.setDefault(a.id); await ctx.reloadMe(); await render(); });
     const del = el('button', { class: 'link-btn', type: 'button' }, t('Sil'));
-    del.addEventListener('click', () => { auth.removeAddress(a.id); ctx.refresh(); render(); });
+    del.addEventListener('click', async () => { await api.auth.addresses.remove(a.id); await ctx.reloadMe(); await render(); });
     return el('li', { class: 'order' },
       el('div', { class: 'order__head' }, el('strong', {}, a.title), ...(a.isDefault ? [el('span', { class: 'order__status' }, t('Varsayılan'))] : [])),
       el('p', {}, a.text),
@@ -188,14 +188,14 @@ function sectionAdresler(user) {
     el('h3', { class: 'acard__sub' }, t('Yeni adres')), form];
 }
 
-function sectionBildirimler(user) {
-  const reqs = notify.forContact({ email: user.email, phone: user.phone });
+function sectionBildirimler(user, data) {
+  const reqs = data.alerts;
   const byId = new Map(products.map((p) => [p.id, p]));
   const rows = reqs.map((r) => {
     const p = byId.get(r.productId);
     const rm = el('button', { class: 'link-btn', type: 'button' }, t('Vazgeç'));
-    rm.addEventListener('click', () => { notify.remove(r.id); ctx.refresh(); render(); });
-    const inStock = p && inventory.stockOf(p.id) > 0;
+    rm.addEventListener('click', async () => { await api.alerts.remove(r.id); ctx.refresh(); await render(); });
+    const inStock = p && ctx.inventory.stockOf(p.id) > 0;
     return el('li', { class: 'order' },
       el('div', { class: 'order__head' },
         p ? el('a', { href: `urun.html?id=${encodeURIComponent(p.id)}` }, productName(p)) : el('span', {}, r.productId),
@@ -213,9 +213,9 @@ function sectionBilgiler(user) {
     el('label', { class: 'field' }, el('span', {}, t('Ad soyad')), name),
     el('label', { class: 'field' }, el('span', {}, t('Telefon')), phone),
     pmsg, el('button', { class: 'btn btn--gold', type: 'submit' }, t('Bilgileri kaydet')));
-  profile.addEventListener('submit', (e) => {
+  profile.addEventListener('submit', async (e) => {
     e.preventDefault();
-    try { auth.updateProfile({ name: name.value, phone: phone.value }); ctx.refresh(); pmsg.textContent = t('Bilgileriniz kaydedildi.'); }
+    try { await api.auth.updateProfile({ name: name.value, phone: phone.value }); await ctx.reloadMe(); pmsg.textContent = t('Bilgileriniz kaydedildi.'); }
     catch (err) { pmsg.textContent = errorText(err.message, 'Kaydedilemedi, tekrar deneyin.'); }
   });
   const smsg = el('p', { class: 'form-msg', role: 'alert' });
@@ -225,7 +225,7 @@ function sectionBilgiler(user) {
     smsg, el('button', { class: 'btn btn--line', type: 'submit' }, t('Şifreyi değiştir')));
   pass.addEventListener('submit', async (e) => {
     e.preventDefault();
-    try { await auth.changePassword(pass.elements.eski.value, pass.elements.yeni.value); pass.reset(); smsg.textContent = t('Şifreniz değiştirildi.'); }
+    try { await api.auth.changePassword(pass.elements.eski.value, pass.elements.yeni.value); pass.reset(); smsg.textContent = t('Şifreniz değiştirildi.'); }
     catch (err) { smsg.textContent = errorText(err.message, 'Şifre değiştirilemedi.'); }
   });
   return [heading(t('Hesap bilgilerim')), profile, el('h3', { class: 'acard__sub' }, t('Şifre')), pass];
@@ -239,7 +239,7 @@ function sectionIzinler() {
     el('p', { class: 'form-msg', id: 'izin-durum' }, status.granted
       ? t('İzin verildi ({tarih}).', { tarih: date(status.at) }) : t('İzin verilmedi. Bir sonraki işleminizde yeniden sorulur.')),
     ...(status.granted ? [revoke] : []),
-    el('p', { class: 'form-msg' }, t(DEMO_NOTE))];
+    ...demoNote()];
 }
 
 const BUILDERS = {
@@ -247,24 +247,33 @@ const BUILDERS = {
   bildirimler: sectionBildirimler, bilgiler: sectionBilgiler, izinler: sectionIzinler,
 };
 
-function renderUser(user) {
+function renderUser(user, data) {
   const active = currentSection();
   const nav = el('nav', { class: 'account__nav', 'aria-label': t('Hesap bölümleri') },
     ...SECTIONS.map(([id, label]) => el('a', { href: `#${id}`, ...(id === active ? { 'aria-current': 'page' } : {}) }, t(label))));
   const logout = el('button', { class: 'btn btn--line btn--sm', type: 'button' }, t('Çıkış yap'));
-  logout.addEventListener('click', () => { auth.logout(); tab = 'giris'; ctx.refresh(); location.hash = ''; render(); });
+  logout.addEventListener('click', async () => { await api.auth.signOut(); tab = 'giris'; await ctx.reloadMe(); location.hash = ''; await render(); });
   root.replaceChildren(el('div', { class: 'account-layout' },
     el('div', { class: 'account__side' }, nav, logout),
-    el('section', { class: 'acard account__main', id: `bolum-${active}`, 'aria-live': 'polite' }, ...BUILDERS[active](user))));
+    el('section', { class: 'acard account__main', id: `bolum-${active}`, 'aria-live': 'polite' }, ...BUILDERS[active](user, data))));
   // Telefonda sekme şeridi yatay kayar; etkin sekme görünür kalsın.
   root.querySelector('.account__nav [aria-current]')?.scrollIntoView({ inline: 'center', block: 'nearest' });
 }
 
-function render() {
-  const user = auth.current();
-  if (user) renderUser(user);
-  else renderGuest();
+async function render() {
+  const user = ctx.me();
+  if (!user) { renderGuest(); return; }
+  const active = currentSection();
+  const data = { orders: [], alerts: [] };
+  try {
+    if (active === 'genel' || active === 'siparisler') data.orders = await api.orders.mine();
+    if (active === 'genel' || active === 'bildirimler') data.alerts = await api.alerts.mine();
+  } catch (err) {
+    root.replaceChildren(el('p', { class: 'form-msg', role: 'alert' }, errorText(err.message, 'Sunucuya ulaşılamadı, tekrar deneyin.')));
+    return;
+  }
+  renderUser(user, data);
 }
 
 window.addEventListener('hashchange', render);
-render();
+await render();
