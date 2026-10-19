@@ -11,3 +11,8 @@ __pycache__/
 *.tmp
 Thumbs.db
 desktop.ini
+
+# Yerel keşif dosyaları (yayınlanmaz)
+tools/ozsafir/
+tools/ozsafir_*.py
+*.mp4
