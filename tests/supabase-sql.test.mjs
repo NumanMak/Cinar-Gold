@@ -91,7 +91,7 @@ test('place_order fiyati ve kuponu sunucuda hesaplar, stok satirlarini kilitler'
 });
 
 test('hata kodlari tanimli', () => {
-  for (const code of ['STOK_YETERSIZ', 'URUN_YOK', 'SEPET_BOS', 'ZORUNLU_ALAN', 'SIPARIS_YOK', 'IPTAL_EDILEMEZ', 'DURUM_GECERSIZ', 'YETKI_YOK']) {
+  for (const code of ['STOK_YETERSIZ', 'URUN_YOK', 'SEPET_BOS', 'ZORUNLU_ALAN', 'SIPARIS_YOK', 'IPTAL_EDILEMEZ', 'DURUM_GECERSIZ', 'YETKI_YOK', 'STOK_GECERSIZ']) {
     assert.ok(sql.includes(code), `${code} yok`);
   }
 });

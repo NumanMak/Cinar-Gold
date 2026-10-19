@@ -420,7 +420,7 @@ begin
     raise exception 'YETKI_YOK';
   end if;
   if p_qty is null or p_qty < 0 then
-    raise exception 'ZORUNLU_ALAN';
+    raise exception 'STOK_GECERSIZ';
   end if;
   update public.products_stock set stock = p_qty where product_id = p_product_id;
   if not found then
