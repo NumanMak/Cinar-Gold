@@ -218,3 +218,10 @@ html.has-promo .mmenu { padding-top: calc(var(--nav-h) + var(--promo-h) + 24px);
 .orders { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
 .order { padding: 14px 16px; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--graphite); }
 .order__head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; margin-bottom: 6px; }
+
+/* ===== Altın çember bölümleri ===== */
+.kicker { font-size: .75rem; letter-spacing: .22em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 14px; }
+.chapter { padding-top: clamp(56px, 8vw, 104px); margin-bottom: -16px; }
+.why-lead .h-section { max-width: 16em; }
+.why-lead .lead { margin-top: clamp(18px, 2vw, 28px); }
+.sec-more { margin-top: clamp(28px, 4vw, 44px); }

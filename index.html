@@ -180,9 +180,9 @@
       <ul class="nav__links" role="list">
         <li><a class="nav__link" href="magaza.html">Mağaza</a></li>
         <li><a class="nav__link" href="#hakkimizda">Hakkımızda</a></li>
+        <li><a class="nav__link" href="#neden-biz">Neden Biz</a></li>
         <li><a class="nav__link" href="#koleksiyonlar">Koleksiyonlar</a></li>
         <li><a class="nav__link" href="#one-cikanlar">Öne Çıkanlar</a></li>
-        <li><a class="nav__link" href="#neden-biz">Neden Biz</a></li>
         <li><a class="nav__link" href="#iletisim">İletişim</a></li>
       </ul>
     </nav>
@@ -203,9 +203,9 @@
     <ul class="mmenu__links" role="list">
       <li><a class="mmenu__link" href="magaza.html">Mağaza</a></li>
       <li><a class="mmenu__link" href="#hakkimizda">Hakkımızda</a></li>
+      <li><a class="mmenu__link" href="#neden-biz">Neden Biz</a></li>
       <li><a class="mmenu__link" href="#koleksiyonlar">Koleksiyonlar</a></li>
       <li><a class="mmenu__link" href="#one-cikanlar">Öne Çıkanlar</a></li>
-      <li><a class="mmenu__link" href="#neden-biz">Neden Biz</a></li>
       <li><a class="mmenu__link" href="#iletisim">İletişim</a></li>
     </ul>
   </nav>
@@ -221,7 +221,6 @@
 </div>
 
 <main id="icerik">
-
   <!-- 1. HERO -->
   <section class="hero" id="anasayfa" aria-labelledby="hero-baslik">
     <div class="hero__media" aria-hidden="true">
@@ -253,6 +252,14 @@
     <a class="hero__cue" href="#altin-fiyatlari"><span class="visually-hidden">Aşağı kaydır</span><span class="hero__cue-line" aria-hidden="true"></span></a>
   </section>
 
+  <!-- Altın çember: NEDEN -->
+  <section class="why-lead section" id="neden" aria-labelledby="neden-baslik">
+    <div class="container">
+      <p class="kicker">Neden</p>
+      <h2 class="h-section" id="neden-baslik" data-split>Her takı bir hikâyeyi taşır.</h2>
+      <p class="lead" data-reveal>1996’dan beri o hikâyeleri güvenle emanet alıyoruz. Bir alyans, bir doğum günü hediyesi ya da ömürlük bir yatırım: hepsi bizim için aynı sorumluluk.</p>
+    </div>
+  </section>
   <!-- Güncel altın fiyatları -->
   <section class="market" id="altin-fiyatlari" aria-labelledby="piyasa-baslik" data-market>
     <div class="container market__inner">
@@ -272,6 +279,8 @@
     </div>
   </section>
 
+  <!-- Altın çember: NASIL -->
+  <div class="chapter container"><p class="kicker">Nasıl çalışıyoruz</p></div>
   <!-- 2. HAKKIMIZDA -->
   <section class="about section" id="hakkimizda" aria-labelledby="hakkimizda-baslik">
     <div class="container about__grid">
@@ -296,73 +305,141 @@
       </div>
     </div>
   </section>
+  <!-- Özel tasarım bandı (parallax) -->
+  <section class="craft" id="ozel-tasarim" aria-labelledby="ozel-tasarim-baslik">
+    <div class="craft__bg" aria-hidden="true">
+      <img src="assets/img/craft-1920.webp" srcset="assets/img/craft-1280.webp 1280w, assets/img/craft-1920.webp 1920w"
+           sizes="100vw" width="1920" height="1080" loading="lazy" decoding="async" alt="" data-parallax="0.14">
+    </div>
+    <div class="container craft__inner">
+      <div class="craft__content">
+        <h2 class="h-section" id="ozel-tasarim-baslik" data-split>Hayalinizdeki takıyı birlikte tasarlayalım</h2>
+        <p class="lead" data-reveal>Bir aile yadigârını yeniden yorumlamak ya da yalnızca size ait bir yüzük yaptırmak için fikrinizi dinliyor, çizimden son cilaya kadar her adımı sizinle paylaşıyoruz.</p>
+      </div>
+      <ol class="steps" role="list" data-stagger>
+        <li class="step" data-reveal><h3 class="step__title">Tanışalım</h3><p>İsteğinizi, bütçenizi ve tarzınızı konuşuruz.</p></li>
+        <li class="step" data-reveal><h3 class="step__title">Çizim ve onay</h3><p>Modeli çizer, taş ve maden seçimini birlikte yaparız.</p></li>
+        <li class="step" data-reveal><h3 class="step__title">Üretim</h3><p>Onayınızın ardından parçanız özenle üretilir.</p></li>
+        <li class="step" data-reveal><h3 class="step__title">Teslim</h3><p>Son kontrolü yapar, takınızı size teslim ederiz.</p></li>
+      </ol>
+      <div data-reveal>
+        <a class="btn btn--gold" href="https://wa.me/905073517347" data-wa="Merhaba, özel tasarım bir takı yaptırmak istiyorum." target="_blank" rel="noopener" data-magnetic>
+          <svg class="btn__icon" aria-hidden="true"><use href="#i-wa"/></svg><span>Tasarımınızı konuşalım</span>
+        </a>
+      </div>
+    </div>
+  </section>
+  <!-- 5. NEDEN BİZ? -->
+  <section class="why section" id="neden-biz" aria-labelledby="neden-biz-baslik">
+    <div class="container">
+      <header class="sec-head">
+        <h2 class="h-section" id="neden-biz-baslik" data-split>Neden Biz?</h2>
+        <p class="sec-head__text" data-reveal>Bir takı yıllarca taşınır. Bu yüzden satıştan sonra da yanınızda olan, açık ve dürüst bir kuyumcu olmayı seçiyoruz.</p>
+      </header>
+      <ul class="why__grid" role="list" data-stagger>
+        <li class="why__item" data-reveal>
+          <svg class="why__icon" viewBox="0 0 48 48" aria-hidden="true">
+            <path pathLength="1" d="M24 5.5 39 11v11.2c0 9.6-6.3 17.1-15 20.3C15.3 39.3 9 31.8 9 22.2V11z"/>
+            <path pathLength="1" d="m17.5 24 4.6 4.6 8.7-9.2"/>
+          </svg>
+          <h3 class="why__title">Güvenilirlik</h3>
+          <p class="why__text">1996’dan beri süren tecrübe. Her satışımız faturalı, her ürünün ayarı ve gramı açıkça belirtilir.</p>
+        </li>
+        <li class="why__item" data-reveal>
+          <svg class="why__icon" viewBox="0 0 48 48" aria-hidden="true">
+            <path pathLength="1" d="M13 9h22l7 9.5L24 41 6 18.5z"/>
+            <path pathLength="1" d="M6 18.5h36M19 9l-3.5 9.5L24 41l8.5-22.5L29 9"/>
+          </svg>
+          <h3 class="why__title">Kalite</h3>
+          <p class="why__text">Ayar damgalı altın ve özenle seçilmiş taşlarla çalışıyor, her parçayı teslimden önce tek tek kontrol ediyoruz.</p>
+        </li>
+        <li class="why__item" data-reveal>
+          <svg class="why__icon" viewBox="0 0 48 48" aria-hidden="true">
+            <path pathLength="1" d="M24 7v34M15 41h18M10 13.5h28"/>
+            <path pathLength="1" d="M10 13.5 4.5 26a5.5 5.5 0 0 0 11 0zM38 13.5 32.5 26a5.5 5.5 0 0 0 11 0z"/>
+          </svg>
+          <h3 class="why__title">Uygun Fiyat</h3>
+          <p class="why__text">Fiyatlarımızı güncel piyasaya göre şeffaf belirliyor, işçilikte adil fiyat sunuyoruz.</p>
+        </li>
+        <li class="why__item" data-reveal>
+          <svg class="why__icon" viewBox="0 0 48 48" aria-hidden="true">
+            <path pathLength="1" d="M24 6v5M24 11 13 41M24 11l11 30M17.2 29.5h13.6"/>
+            <path pathLength="1" d="M24 6.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 1 1 0-5z"/>
+          </svg>
+          <h3 class="why__title">Özel Tasarım</h3>
+          <p class="why__text">Aklınızdaki modeli birlikte çiziyor, ölçünüze ve zevkinize göre üretiyoruz.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
 
+  <!-- Altın çember: NE -->
+  <div class="chapter container"><p class="kicker">Ne sunuyoruz</p></div>
   <!-- 3. KOLEKSİYONLAR -->
   <section class="cats section" id="koleksiyonlar" aria-labelledby="koleksiyonlar-baslik">
     <div class="container">
       <header class="sec-head">
         <h2 class="h-section" id="koleksiyonlar-baslik" data-split>Koleksiyonlar</h2>
-        <p class="sec-head__text" data-reveal>Her gün takmak ya da bir ömür saklamak için. Bir koleksiyon seçin, modellerin fotoğraflarını WhatsApp’tan hemen gönderelim.</p>
+        <p class="sec-head__text" data-reveal>Her gün takmak ya da bir ömür saklamak için. Bir koleksiyon seçin, tüm modelleri ve güncel stok durumunu mağazamızda görün, online sipariş verin.</p>
       </header>
       <ul class="cats__grid" role="list" data-stagger>
         <li class="cat" data-reveal="mask">
-          <a class="cat__link" href="https://wa.me/905073517347" data-wa="Merhaba, yüzük modellerinizi görmek istiyorum." target="_blank" rel="noopener">
+          <a class="cat__link" href="magaza.html?tur=yuzuk">
             <img src="assets/img/cat-ring-800.webp" srcset="assets/img/cat-ring-480.webp 480w, assets/img/cat-ring-800.webp 800w"
                  sizes="(min-width: 1000px) 23vw, 46vw" width="800" height="1067" loading="lazy" decoding="async" alt="Koyu zemin üzerinde işlemeli altın yüzük koleksiyonu">
             <span class="cat__shine" aria-hidden="true"></span>
             <div class="cat__body">
               <h3 class="cat__title">Yüzükler</h3>
               <span class="cat__desc">Alyans, tektaş ve günlük yüzükler</span>
-              <span class="cat__cta">Modelleri isteyin <svg aria-hidden="true"><use href="#i-wa"/></svg></span>
+              <span class="cat__cta">Modelleri gör <svg aria-hidden="true"><use href="#i-chev"/></svg></span>
             </div>
           </a>
         </li>
         <li class="cat" data-reveal="mask">
-          <a class="cat__link" href="https://wa.me/905073517347" data-wa="Merhaba, kolye modellerinizi görmek istiyorum." target="_blank" rel="noopener">
+          <a class="cat__link" href="magaza.html?tur=kolye">
             <img src="assets/img/cat-necklace-800.webp" srcset="assets/img/cat-necklace-480.webp 480w, assets/img/cat-necklace-800.webp 800w"
                  sizes="(min-width: 1000px) 23vw, 46vw" width="800" height="1067" loading="lazy" decoding="async" alt="Siyah zemin üzerinde işlemeli altın kolye">
             <span class="cat__shine" aria-hidden="true"></span>
             <div class="cat__body">
               <h3 class="cat__title">Kolyeler</h3>
               <span class="cat__desc">Zincir, kolye ucu ve setler</span>
-              <span class="cat__cta">Modelleri isteyin <svg aria-hidden="true"><use href="#i-wa"/></svg></span>
+              <span class="cat__cta">Modelleri gör <svg aria-hidden="true"><use href="#i-chev"/></svg></span>
             </div>
           </a>
         </li>
         <li class="cat" data-reveal="mask">
-          <a class="cat__link" href="https://wa.me/905073517347" data-wa="Merhaba, bilezik modellerinizi görmek istiyorum." target="_blank" rel="noopener">
+          <a class="cat__link" href="magaza.html?tur=bilezik">
             <img src="assets/img/cat-bracelet-800.webp" srcset="assets/img/cat-bracelet-480.webp 480w, assets/img/cat-bracelet-800.webp 800w"
                  sizes="(min-width: 1000px) 23vw, 46vw" width="800" height="1067" loading="lazy" decoding="async" alt="Koyu zeminde dokulu iki altın bilezik">
             <span class="cat__shine" aria-hidden="true"></span>
             <div class="cat__body">
               <h3 class="cat__title">Bilezikler</h3>
               <span class="cat__desc">Burma, kelepçe ve tuğra modelleri</span>
-              <span class="cat__cta">Modelleri isteyin <svg aria-hidden="true"><use href="#i-wa"/></svg></span>
+              <span class="cat__cta">Modelleri gör <svg aria-hidden="true"><use href="#i-chev"/></svg></span>
             </div>
           </a>
         </li>
         <li class="cat" data-reveal="mask">
-          <a class="cat__link" href="https://wa.me/905073517347" data-wa="Merhaba, pırlanta koleksiyonunuzu görmek istiyorum." target="_blank" rel="noopener">
+          <a class="cat__link" href="magaza.html?tur=pirlanta">
             <img src="assets/img/cat-diamond-800.webp" srcset="assets/img/cat-diamond-480.webp 480w, assets/img/cat-diamond-800.webp 800w"
                  sizes="(min-width: 1000px) 23vw, 46vw" width="800" height="1067" loading="lazy" decoding="async" alt="Siyah zemin üzerinde ışığı kıran pırlanta taş">
             <span class="cat__shine" aria-hidden="true"></span>
             <div class="cat__body">
               <h3 class="cat__title">Pırlanta Koleksiyonu</h3>
               <span class="cat__desc">Tektaş, beştaş ve pırlanta küpeler</span>
-              <span class="cat__cta">Modelleri isteyin <svg aria-hidden="true"><use href="#i-wa"/></svg></span>
+              <span class="cat__cta">Modelleri gör <svg aria-hidden="true"><use href="#i-chev"/></svg></span>
             </div>
           </a>
         </li>
       </ul>
     </div>
   </section>
-
   <!-- 4. ÖNE ÇIKAN ÜRÜNLER -->
   <section class="featured section" id="one-cikanlar" aria-labelledby="one-cikanlar-baslik">
     <div class="container">
       <header class="sec-head">
         <h2 class="h-section" id="one-cikanlar-baslik" data-split>Öne Çıkan Ürünler</h2>
-        <p class="sec-head__text" data-reveal>Bu sezon en çok ilgi gören parçalar. Detayları görmek için bir ürüne dokunun, fiyat ve stok bilgisini WhatsApp’tan sorun.</p>
+        <p class="sec-head__text" data-reveal>Bu sezon en çok ilgi gören parçalar. Detayları görmek için bir ürüne dokunun. Tüm modeller ve güncel stok durumu mağaza sayfamızda.</p>
       </header>
     </div>
 
@@ -511,78 +588,9 @@
         <button class="rail__btn rail__btn--prev" type="button" data-rail-prev aria-label="Önceki ürünler"><svg aria-hidden="true"><use href="#i-chev"/></svg></button>
         <button class="rail__btn" type="button" data-rail-next aria-label="Sonraki ürünler"><svg aria-hidden="true"><use href="#i-chev"/></svg></button>
       </div>
+      <p class="sec-more"><a class="btn btn--gold" href="magaza.html">Tüm ürünleri gör</a></p>
     </div>
   </section>
-
-  <!-- Özel tasarım bandı (parallax) -->
-  <section class="craft" id="ozel-tasarim" aria-labelledby="ozel-tasarim-baslik">
-    <div class="craft__bg" aria-hidden="true">
-      <img src="assets/img/craft-1920.webp" srcset="assets/img/craft-1280.webp 1280w, assets/img/craft-1920.webp 1920w"
-           sizes="100vw" width="1920" height="1080" loading="lazy" decoding="async" alt="" data-parallax="0.14">
-    </div>
-    <div class="container craft__inner">
-      <div class="craft__content">
-        <h2 class="h-section" id="ozel-tasarim-baslik" data-split>Hayalinizdeki takıyı birlikte tasarlayalım</h2>
-        <p class="lead" data-reveal>Bir aile yadigârını yeniden yorumlamak ya da yalnızca size ait bir yüzük yaptırmak için fikrinizi dinliyor, çizimden son cilaya kadar her adımı sizinle paylaşıyoruz.</p>
-      </div>
-      <ol class="steps" role="list" data-stagger>
-        <li class="step" data-reveal><h3 class="step__title">Tanışalım</h3><p>İsteğinizi, bütçenizi ve tarzınızı konuşuruz.</p></li>
-        <li class="step" data-reveal><h3 class="step__title">Çizim ve onay</h3><p>Modeli çizer, taş ve maden seçimini birlikte yaparız.</p></li>
-        <li class="step" data-reveal><h3 class="step__title">Üretim</h3><p>Onayınızın ardından parçanız özenle üretilir.</p></li>
-        <li class="step" data-reveal><h3 class="step__title">Teslim</h3><p>Son kontrolü yapar, takınızı size teslim ederiz.</p></li>
-      </ol>
-      <div data-reveal>
-        <a class="btn btn--gold" href="https://wa.me/905073517347" data-wa="Merhaba, özel tasarım bir takı yaptırmak istiyorum." target="_blank" rel="noopener" data-magnetic>
-          <svg class="btn__icon" aria-hidden="true"><use href="#i-wa"/></svg><span>Tasarımınızı konuşalım</span>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- 5. NEDEN BİZ? -->
-  <section class="why section" id="neden-biz" aria-labelledby="neden-biz-baslik">
-    <div class="container">
-      <header class="sec-head">
-        <h2 class="h-section" id="neden-biz-baslik" data-split>Neden Biz?</h2>
-        <p class="sec-head__text" data-reveal>Bir takı yıllarca taşınır. Bu yüzden satıştan sonra da yanınızda olan, açık ve dürüst bir kuyumcu olmayı seçiyoruz.</p>
-      </header>
-      <ul class="why__grid" role="list" data-stagger>
-        <li class="why__item" data-reveal>
-          <svg class="why__icon" viewBox="0 0 48 48" aria-hidden="true">
-            <path pathLength="1" d="M24 5.5 39 11v11.2c0 9.6-6.3 17.1-15 20.3C15.3 39.3 9 31.8 9 22.2V11z"/>
-            <path pathLength="1" d="m17.5 24 4.6 4.6 8.7-9.2"/>
-          </svg>
-          <h3 class="why__title">Güvenilirlik</h3>
-          <p class="why__text">1996’dan beri süren tecrübe. Her satışımız faturalı, her ürünün ayarı ve gramı açıkça belirtilir.</p>
-        </li>
-        <li class="why__item" data-reveal>
-          <svg class="why__icon" viewBox="0 0 48 48" aria-hidden="true">
-            <path pathLength="1" d="M13 9h22l7 9.5L24 41 6 18.5z"/>
-            <path pathLength="1" d="M6 18.5h36M19 9l-3.5 9.5L24 41l8.5-22.5L29 9"/>
-          </svg>
-          <h3 class="why__title">Kalite</h3>
-          <p class="why__text">Ayar damgalı altın ve özenle seçilmiş taşlarla çalışıyor, her parçayı teslimden önce tek tek kontrol ediyoruz.</p>
-        </li>
-        <li class="why__item" data-reveal>
-          <svg class="why__icon" viewBox="0 0 48 48" aria-hidden="true">
-            <path pathLength="1" d="M24 7v34M15 41h18M10 13.5h28"/>
-            <path pathLength="1" d="M10 13.5 4.5 26a5.5 5.5 0 0 0 11 0zM38 13.5 32.5 26a5.5 5.5 0 0 0 11 0z"/>
-          </svg>
-          <h3 class="why__title">Uygun Fiyat</h3>
-          <p class="why__text">Fiyatlarımızı güncel piyasaya göre şeffaf belirliyor, işçilikte adil fiyat sunuyoruz.</p>
-        </li>
-        <li class="why__item" data-reveal>
-          <svg class="why__icon" viewBox="0 0 48 48" aria-hidden="true">
-            <path pathLength="1" d="M24 6v5M24 11 13 41M24 11l11 30M17.2 29.5h13.6"/>
-            <path pathLength="1" d="M24 6.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 1 1 0-5z"/>
-          </svg>
-          <h3 class="why__title">Özel Tasarım</h3>
-          <p class="why__text">Aklınızdaki modeli birlikte çiziyor, ölçünüze ve zevkinize göre üretiyoruz.</p>
-        </li>
-      </ul>
-    </div>
-  </section>
-
   <!-- 6. İLETİŞİM -->
   <section class="contact section" id="iletisim" aria-labelledby="iletisim-baslik">
     <div class="container contact__grid">
