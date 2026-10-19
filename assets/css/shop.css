@@ -337,3 +337,10 @@ select#sirala { min-height: 42px; padding: 0 12px; border-radius: var(--r-media)
 @media (max-width: 1279px) { .nav__call { display: none; } }
 .nav .usermenu__name { display: none; }
 .nav .usermenu__btn { padding: 0 8px 0 4px; }
+
+/* ===== Fotoğraf düzeni (kare) ===== */
+.pcard__media { aspect-ratio: 1 / 1; }
+.pdetail__media { aspect-ratio: auto; }
+.pdetail__media img { width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; }
+.pdetail__credit { padding: 10px 14px; font-size: .75rem; color: var(--muted); background: var(--graphite); border-top: 1px solid var(--line); }
+.pdetail__credit a { text-decoration: underline; text-underline-offset: 2px; }

@@ -1,4 +1,5 @@
-"""Katalog üretici: assets/data/products.json dosyasını ve ürün görsellerini (assets/img/products/*.svg) deterministik olarak yazar.
+"""Katalog üretici: assets/data/products.json dosyasını deterministik olarak yazar.
+Ürün fotoğrafları tools/photo_map.json ile eşlenir (indirme ve kırpma: python tools/build_photos.py).
 Kullanım: python tools/gen_products.py
 Ürün, gram, ayar, işçilik ve stokları düzenlemek için bu dosyayı değiştirip yeniden çalıştırın.
 
@@ -8,16 +9,12 @@ products.json içindeki "price", assets/data/gold.json'daki o günkü fiyattan h
 site canlı altın fiyatı geldikçe fiyatları tarayıcıda yeniden hesaplar.
 """
 import json
-import sys
 from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-import gen_product_art as art  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "assets" / "data" / "products.json"
 GOLD = ROOT / "assets" / "data" / "gold.json"
-IMG_DIR = ROOT / "assets" / "img" / "products"
+PHOTOS = ROOT / "tools" / "photo_map.json"
 GRAM22_FALLBACK = 6325
 
 METAL_LABEL = {"sari": "Sarı altın", "rose": "Rose altın", "beyaz": "Beyaz altın"}
@@ -38,7 +35,7 @@ CATALOG = {
         ("Güneş", 3.4, 0.22, 0, "Işın motifli güneş ucu ve ortasında zirkon taşı olan, ışıltılı bir kolye."),
         ("Nazar", 2.8, 0.20, 300, "Mineli nazar boncuğu ucu olan, hem şık hem koruyucu sembol taşıyan kolye."),
         ("Zincir", 7.5, 0.10, 0, "Çift sıra zincir kolye. Tek başına ya da uç takarak kullanılabilen, sade ve güçlü bir parça."),
-        ("Harf", 2.4, 0.18, 150, "Baş harf plakalı kişiye özel kolye. Harf seçimi sipariş sonrası mağazayla netleştirilir."),
+        ("Damla", 2.2, 0.18, 250, "Damla kesim renkli taşlı, ince zincirli sade kolye. Günlük kullanıma ve hediyeye çok uygun."),
         ("Kalp", 2.6, 0.20, 150, "Kalp ucunun ortasında küçük bir taş olan, hediye için en çok seçilenlerden biri."),
     ], [("sari", 14, 1.00, None), ("rose", 14, 1.08, None), ("beyaz", 18, 1.12, None)]),
     "bilezik": ("Bilezik", [
@@ -59,7 +56,7 @@ CATALOG = {
 
 
 def slug(s: str) -> str:
-    return art.slug(s)
+    return s.translate(str.maketrans("çğıöşüÇĞİÖŞÜ", "cgiosuCGIOSU")).lower().replace(" ", "-")
 
 
 def gram22_price() -> int:
@@ -80,12 +77,15 @@ def fmt_ct(ct):
 
 def build() -> list[dict]:
     gram22 = gram22_price()
+    photos = json.loads(PHOTOS.read_text(encoding="utf-8"))
     items = []
-    letters = ["A", "E", "M"]
     for t, (label, models, variants) in CATALOG.items():
         for mi, (model, gram0, labor, stone0, desc) in enumerate(models):
-            for vi, (metal, karat, gmul, extra) in enumerate(variants):
+            for vi, (_, karat, gmul, extra) in enumerate(variants):
                 idx = mi * 3 + vi
+                pid = f"{t}-{slug(model)}-{vi + 1}"
+                photo = photos[pid]
+                metal = photo["metal"]
                 gram = round(gram0 * gmul, 2)
                 stone = stone0 + (CARAT_FEE[extra] if extra else 0)
                 if t == "pirlanta":
@@ -94,7 +94,6 @@ def build() -> list[dict]:
                     name = f"{model} Bilezik, {karat} ayar"
                 else:
                     name = f"{model} {label}, {METAL_LABEL[metal]}"
-                pid = f"{t}-{slug(model)}-{vi + 1}"
                 items.append({
                     "id": pid,
                     "type": t,
@@ -107,25 +106,24 @@ def build() -> list[dict]:
                     "laborRate": labor,
                     "stoneFee": stone,
                     "price": price_of(gram, karat, labor, stone, gram22),
-                    "image": f"assets/img/products/{pid}.svg",
+                    "image": f"assets/img/products/{pid}.webp",
+                    "imageCredit": {"author": photo["user"], "url": photo["page"], "source": "Pixabay"},
                     "stock": 0 if idx in {4, 11} else 1 + (idx * 5 + mi) % 12,
                     "desc": f"{desc} {karat} ayar {METAL_LABEL[metal].lower()}" + (f", toplam {fmt_ct(extra)} ct pırlanta." if extra else "."),
-                    "_art": (t, model, metal, vi * 5, letters[vi]),
                 })
+    # Aynı adı taşıyan ürünler (ör. aynı metalde iki varyant) gramla ayırt edilir.
+    names = [i["name"] for i in items]
+    for i in items:
+        if names.count(i["name"]) > 1:
+            i["name"] += f", {str(i['gram']).replace('.', ',')} g"
     return items
 
 
 def main() -> None:
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    IMG_DIR.mkdir(parents=True, exist_ok=True)
-    for old in IMG_DIR.glob("*.svg"):
-        old.unlink()
     items = build()
-    for p in items:
-        kind, model, metal, g, letter = p.pop("_art")
-        (ROOT / p["image"]).write_text(art.render(kind, model, metal, g, letter), encoding="utf-8")
     OUT.write_text(json.dumps(items, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
-    print(f"{OUT} yazıldı: {len(items)} ürün, {len(list(IMG_DIR.glob('*.svg')))} görsel (22 ayar gram: {gram22_price()} TL)")
+    print(f"{OUT} yazıldı: {len(items)} ürün (22 ayar gram: {gram22_price()} TL)")
 
 
 if __name__ == "__main__":

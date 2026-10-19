@@ -20,7 +20,7 @@ Detaylı tasarım: `docs/superpowers/specs/2026-10-19-cinar-gold-store-design.md
 13. **Canlı altın fiyatı:** Özsafir Gold sitesinin herkese açık fiyat tablosu (`tools/fetch_gold.py`, `.github/workflows/gold.yml` her 20 dakikada çalıştırır); dosya eskirse Truncgil yedek kaynağı kullanılır.
 14. **Giriş yap ve kullanıcı menüsü:** sağ üstte misafire "Giriş yap" düğmesi; girişten sonra avatar ve açılır menü (Siparişlerim, Favorilerim, Adreslerim, Hesap bilgilerim; ikincil: stok bildirimlerim, izinler, destek, çıkış). Menü klavye ile kullanılır (ok tuşları, Esc).
 15. **Hesap bölümleri:** genel bakış, siparişler (iptal ve stok iadesi), favoriler, adres defteri, stok bildirimleri, bilgiler ve şifre, izinler.
-16. **Katalog ve fiyat:** 60 ürün için kuyumculuk fiyatı `gram x ayar fiyatı x (1 + işçilik) + taş bedeli` ile Özsafir 22 ayar fiyatından canlı hesaplanır; ürünlerin görselleri `tools/gen_product_art.py` ile üretilen illüstrasyonlardır.
+16. **Katalog ve fiyat:** 60 ürün için kuyumculuk fiyatı `gram x ayar fiyatı x (1 + işçilik) + taş bedeli` ile Özsafir 22 ayar fiyatından canlı hesaplanır; ürün fotoğrafları Pixabay'dan (ücretsiz ticari lisans) seçilmiş temsilî fotoğraflardır; fotoğrafçı adı ürün sayfasında gösterilir.
 17. **İzin penceresi:** kişisel bilgi alan her akıştan önce (kayıt, giriş, bildirim, sipariş) KVKK aydınlatması ve izinler sorulur; zorunlu izin verilmezse form gönderilmez.
 
 ## MVP'de olmayanlar (sonraki sürümler)
@@ -29,7 +29,7 @@ Detaylı tasarım: `docs/superpowers/specs/2026-10-19-cinar-gold-store-design.md
 - Sunucu tarafı hesap, stok ve sipariş kaydı (şu an yalnızca tarayıcı localStorage).
 - "Bana bildir" kayıtları için gerçek e-posta / SMS gönderimi.
 - Yönetici paneli (stok ve fiyat güncelleme); şimdilik `tools/gen_products.py` düzenlenir.
-- Gerçek ürün fotoğrafları: şu an ürün görselleri illüstrasyon (`assets/img/products/<ürün-id>.svg`). Kendi fotoğraflarınızı `products.json` içindeki `image` yoluyla değiştirebilirsiniz.
+- Mağazanın kendi ürün fotoğrafları: şu an görseller temsilî Pixabay fotoğraflarıdır (`assets/img/products/<ürün-id>.webp`). Kendi fotoğraflarınızı aynı dosya adıyla (kare, 900x900 önerilir) değiştirebilirsiniz.
 
 ## Yayın sonrası görev
 

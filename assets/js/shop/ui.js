@@ -20,7 +20,7 @@ export function stockInfo(stock) {
 }
 
 export function productImg(p) {
-  return el('img', { src: p.image, width: '800', height: '1000', loading: 'lazy', decoding: 'async', alt: p.name });
+  return el('img', { src: p.image, width: '900', height: '900', loading: 'lazy', decoding: 'async', alt: p.name });
 }
 
 export function stockBadge(stock) {

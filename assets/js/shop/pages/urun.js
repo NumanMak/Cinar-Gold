@@ -1,6 +1,14 @@
 import { mountShell } from '../shell.js';
 import { el, formatTL, productImg, stockBadge, addToCart, openNotify, productCard, favoriteButton } from '../ui.js';
 
+// Pixabay fotoğrafları temsilidir; fotoğrafçı adı kaynağa bağlanır.
+function photoCredit(p) {
+  const c = p.imageCredit;
+  if (!c) return el('span', {});
+  return el('p', { class: 'pdetail__credit' }, 'Görsel temsilidir. Fotoğraf: ',
+    el('a', { href: c.url, target: '_blank', rel: 'noopener' }, c.author), ` / ${c.source}`);
+}
+
 const ctx = await mountShell({ page: 'product' });
 const root = document.getElementById('urun');
 const id = new URLSearchParams(location.search).get('id');
@@ -31,7 +39,7 @@ if (!p) {
   }
 
   root.append(el('div', { class: 'pdetail' },
-    el('div', { class: 'pdetail__media' }, productImg(p, '(min-width: 900px) 45vw, 100vw')),
+    el('div', { class: 'pdetail__media' }, productImg(p), photoCredit(p)),
     el('div', { class: 'pdetail__info' },
       el('p', { class: 'pdetail__eyebrow' }, `${p.typeLabel}, ${p.model} modeli`),
       el('h1', { class: 'shop-title' }, p.name),

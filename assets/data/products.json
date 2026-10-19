@@ -4,14 +4,19 @@
   "type": "yuzuk",
   "typeLabel": "Yüzük",
   "model": "Tektaş",
-  "name": "Tektaş Yüzük, Sarı altın",
+  "name": "Tektaş Yüzük, Sarı altın, 2,6 g",
   "metal": "Sarı altın",
   "karat": 14,
   "gram": 2.6,
   "laborRate": 0.2,
   "stoneFee": 0,
   "price": 12560,
-  "image": "assets/img/products/yuzuk-tektas-1.svg",
+  "image": "assets/img/products/yuzuk-tektas-1.webp",
+  "imageCredit": {
+   "author": "kakashi7321",
+   "url": "https://pixabay.com/photos/jewelry-diamond-ring-gold-1473455/",
+   "source": "Pixabay"
+  },
   "stock": 1,
   "desc": "Tek bir taşın ışığını öne çıkaran klasik tektaş montür. Günlük kullanıma da özel günlere de uyan zamansız bir yüzük. 14 ayar sarı altın."
  },
@@ -20,80 +25,105 @@
   "type": "yuzuk",
   "typeLabel": "Yüzük",
   "model": "Tektaş",
-  "name": "Tektaş Yüzük, Rose altın",
-  "metal": "Rose altın",
+  "name": "Tektaş Yüzük, Beyaz altın",
+  "metal": "Beyaz altın",
   "karat": 14,
   "gram": 2.81,
   "laborRate": 0.2,
   "stoneFee": 0,
   "price": 13570,
-  "image": "assets/img/products/yuzuk-tektas-2.svg",
+  "image": "assets/img/products/yuzuk-tektas-2.webp",
+  "imageCredit": {
+   "author": "nanana_nono",
+   "url": "https://pixabay.com/photos/ring-gemstone-diamond-jewelry-6768987/",
+   "source": "Pixabay"
+  },
   "stock": 6,
-  "desc": "Tek bir taşın ışığını öne çıkaran klasik tektaş montür. Günlük kullanıma da özel günlere de uyan zamansız bir yüzük. 14 ayar rose altın."
+  "desc": "Tek bir taşın ışığını öne çıkaran klasik tektaş montür. Günlük kullanıma da özel günlere de uyan zamansız bir yüzük. 14 ayar beyaz altın."
  },
  {
   "id": "yuzuk-tektas-3",
   "type": "yuzuk",
   "typeLabel": "Yüzük",
   "model": "Tektaş",
-  "name": "Tektaş Yüzük, Beyaz altın",
-  "metal": "Beyaz altın",
+  "name": "Tektaş Yüzük, Sarı altın, 2,91 g",
+  "metal": "Sarı altın",
   "karat": 18,
   "gram": 2.91,
   "laborRate": 0.2,
   "stoneFee": 0,
   "price": 18070,
-  "image": "assets/img/products/yuzuk-tektas-3.svg",
+  "image": "assets/img/products/yuzuk-tektas-3.webp",
+  "imageCredit": {
+   "author": "robtowne0",
+   "url": "https://pixabay.com/photos/ring-jewlry-engagement-gold-yellow-879932/",
+   "source": "Pixabay"
+  },
   "stock": 11,
-  "desc": "Tek bir taşın ışığını öne çıkaran klasik tektaş montür. Günlük kullanıma da özel günlere de uyan zamansız bir yüzük. 18 ayar beyaz altın."
+  "desc": "Tek bir taşın ışığını öne çıkaran klasik tektaş montür. Günlük kullanıma da özel günlere de uyan zamansız bir yüzük. 18 ayar sarı altın."
  },
  {
   "id": "yuzuk-telkari-1",
   "type": "yuzuk",
   "typeLabel": "Yüzük",
   "model": "Telkari",
-  "name": "Telkari Yüzük, Sarı altın",
-  "metal": "Sarı altın",
+  "name": "Telkari Yüzük, Rose altın",
+  "metal": "Rose altın",
   "karat": 14,
   "gram": 4.2,
   "laborRate": 0.28,
   "stoneFee": 0,
   "price": 21640,
-  "image": "assets/img/products/yuzuk-telkari-1.svg",
+  "image": "assets/img/products/yuzuk-telkari-1.webp",
+  "imageCredit": {
+   "author": "nad_dyagileva",
+   "url": "https://pixabay.com/photos/gold-ring-crown-1611435/",
+   "source": "Pixabay"
+  },
   "stock": 5,
-  "desc": "İnce altın tellerin el işçiliğiyle işlendiği telkari yüzük. Geleneksel işçiliği taşıyan, karakterli bir duruşu var. 14 ayar sarı altın."
+  "desc": "İnce altın tellerin el işçiliğiyle işlendiği telkari yüzük. Geleneksel işçiliği taşıyan, karakterli bir duruşu var. 14 ayar rose altın."
  },
  {
   "id": "yuzuk-telkari-2",
   "type": "yuzuk",
   "typeLabel": "Yüzük",
   "model": "Telkari",
-  "name": "Telkari Yüzük, Rose altın",
-  "metal": "Rose altın",
+  "name": "Telkari Yüzük, Sarı altın, 4,54 g",
+  "metal": "Sarı altın",
   "karat": 14,
   "gram": 4.54,
   "laborRate": 0.28,
   "stoneFee": 0,
   "price": 23390,
-  "image": "assets/img/products/yuzuk-telkari-2.svg",
+  "image": "assets/img/products/yuzuk-telkari-2.webp",
+  "imageCredit": {
+   "author": "starbright",
+   "url": "https://pixabay.com/photos/drusy-druzy-green-gold-golden-665522/",
+   "source": "Pixabay"
+  },
   "stock": 0,
-  "desc": "İnce altın tellerin el işçiliğiyle işlendiği telkari yüzük. Geleneksel işçiliği taşıyan, karakterli bir duruşu var. 14 ayar rose altın."
+  "desc": "İnce altın tellerin el işçiliğiyle işlendiği telkari yüzük. Geleneksel işçiliği taşıyan, karakterli bir duruşu var. 14 ayar sarı altın."
  },
  {
   "id": "yuzuk-telkari-3",
   "type": "yuzuk",
   "typeLabel": "Yüzük",
   "model": "Telkari",
-  "name": "Telkari Yüzük, Beyaz altın",
-  "metal": "Beyaz altın",
+  "name": "Telkari Yüzük, Sarı altın, 4,7 g",
+  "metal": "Sarı altın",
   "karat": 18,
   "gram": 4.7,
   "laborRate": 0.28,
   "stoneFee": 0,
   "price": 31130,
-  "image": "assets/img/products/yuzuk-telkari-3.svg",
+  "image": "assets/img/products/yuzuk-telkari-3.webp",
+  "imageCredit": {
+   "author": "sarakgraves",
+   "url": "https://pixabay.com/photos/emerald-emeralds-green-gold-2535679/",
+   "source": "Pixabay"
+  },
   "stock": 3,
-  "desc": "İnce altın tellerin el işçiliğiyle işlendiği telkari yüzük. Geleneksel işçiliği taşıyan, karakterli bir duruşu var. 18 ayar beyaz altın."
+  "desc": "İnce altın tellerin el işçiliğiyle işlendiği telkari yüzük. Geleneksel işçiliği taşıyan, karakterli bir duruşu var. 18 ayar sarı altın."
  },
  {
   "id": "yuzuk-alyans-1",
@@ -107,7 +137,12 @@
   "laborRate": 0.12,
   "stoneFee": 0,
   "price": 17130,
-  "image": "assets/img/products/yuzuk-alyans-1.svg",
+  "image": "assets/img/products/yuzuk-alyans-1.webp",
+  "imageCredit": {
+   "author": "qimono",
+   "url": "https://pixabay.com/photos/wedding-rings-engagement-rings-3611277/",
+   "source": "Pixabay"
+  },
   "stock": 9,
   "desc": "İç yüzeyi konfor bombeli, parlak yüzeyli klasik alyans. İç yüzeye isim ve tarih yazdırılabilir. 14 ayar sarı altın."
  },
@@ -116,78 +151,103 @@
   "type": "yuzuk",
   "typeLabel": "Yüzük",
   "model": "Alyans",
-  "name": "Alyans Yüzük, Rose altın",
-  "metal": "Rose altın",
+  "name": "Alyans Yüzük, Beyaz altın",
+  "metal": "Beyaz altın",
   "karat": 14,
   "gram": 4.1,
   "laborRate": 0.12,
   "stoneFee": 0,
   "price": 18480,
-  "image": "assets/img/products/yuzuk-alyans-2.svg",
+  "image": "assets/img/products/yuzuk-alyans-2.webp",
+  "imageCredit": {
+   "author": "HiepHoang",
+   "url": "https://pixabay.com/photos/rings-wedding-rings-white-gold-ring-3813522/",
+   "source": "Pixabay"
+  },
   "stock": 2,
-  "desc": "İç yüzeyi konfor bombeli, parlak yüzeyli klasik alyans. İç yüzeye isim ve tarih yazdırılabilir. 14 ayar rose altın."
+  "desc": "İç yüzeyi konfor bombeli, parlak yüzeyli klasik alyans. İç yüzeye isim ve tarih yazdırılabilir. 14 ayar beyaz altın."
  },
  {
   "id": "yuzuk-alyans-3",
   "type": "yuzuk",
   "typeLabel": "Yüzük",
   "model": "Alyans",
-  "name": "Alyans Yüzük, Beyaz altın",
-  "metal": "Beyaz altın",
+  "name": "Alyans Yüzük, Rose altın",
+  "metal": "Rose altın",
   "karat": 18,
   "gram": 4.26,
   "laborRate": 0.12,
   "stoneFee": 0,
   "price": 24690,
-  "image": "assets/img/products/yuzuk-alyans-3.svg",
+  "image": "assets/img/products/yuzuk-alyans-3.webp",
+  "imageCredit": {
+   "author": "Gypzy",
+   "url": "https://pixabay.com/photos/ring-rings-gold-rose-gold-wedding-2807717/",
+   "source": "Pixabay"
+  },
   "stock": 7,
-  "desc": "İç yüzeyi konfor bombeli, parlak yüzeyli klasik alyans. İç yüzeye isim ve tarih yazdırılabilir. 18 ayar beyaz altın."
+  "desc": "İç yüzeyi konfor bombeli, parlak yüzeyli klasik alyans. İç yüzeye isim ve tarih yazdırılabilir. 18 ayar rose altın."
  },
  {
   "id": "yuzuk-baget-1",
   "type": "yuzuk",
   "typeLabel": "Yüzük",
   "model": "Baget",
-  "name": "Baget Yüzük, Sarı altın",
-  "metal": "Sarı altın",
+  "name": "Baget Yüzük, Beyaz altın, 3,1 g",
+  "metal": "Beyaz altın",
   "karat": 14,
   "gram": 3.1,
   "laborRate": 0.22,
   "stoneFee": 650,
   "price": 15870,
-  "image": "assets/img/products/yuzuk-baget-1.svg",
+  "image": "assets/img/products/yuzuk-baget-1.webp",
+  "imageCredit": {
+   "author": "sarakgraves",
+   "url": "https://pixabay.com/photos/ring-rings-wedding-engagement-gold-3132921/",
+   "source": "Pixabay"
+  },
   "stock": 1,
-  "desc": "Sıralı baget kesim zirkon taşlarla kanal montaj yapılmış, düz çizgili modern yüzük. 14 ayar sarı altın."
+  "desc": "Sıralı baget kesim zirkon taşlarla kanal montaj yapılmış, düz çizgili modern yüzük. 14 ayar beyaz altın."
  },
  {
   "id": "yuzuk-baget-2",
   "type": "yuzuk",
   "typeLabel": "Yüzük",
   "model": "Baget",
-  "name": "Baget Yüzük, Rose altın",
-  "metal": "Rose altın",
+  "name": "Baget Yüzük, Sarı altın",
+  "metal": "Sarı altın",
   "karat": 14,
   "gram": 3.35,
   "laborRate": 0.22,
   "stoneFee": 650,
   "price": 17100,
-  "image": "assets/img/products/yuzuk-baget-2.svg",
+  "image": "assets/img/products/yuzuk-baget-2.webp",
+  "imageCredit": {
+   "author": "MianShahzadRaza",
+   "url": "https://pixabay.com/photos/jewellery-ring-woman-jewelry-1175530/",
+   "source": "Pixabay"
+  },
   "stock": 6,
-  "desc": "Sıralı baget kesim zirkon taşlarla kanal montaj yapılmış, düz çizgili modern yüzük. 14 ayar rose altın."
+  "desc": "Sıralı baget kesim zirkon taşlarla kanal montaj yapılmış, düz çizgili modern yüzük. 14 ayar sarı altın."
  },
  {
   "id": "yuzuk-baget-3",
   "type": "yuzuk",
   "typeLabel": "Yüzük",
   "model": "Baget",
-  "name": "Baget Yüzük, Beyaz altın",
+  "name": "Baget Yüzük, Beyaz altın, 3,47 g",
   "metal": "Beyaz altın",
   "karat": 18,
   "gram": 3.47,
   "laborRate": 0.22,
   "stoneFee": 650,
   "price": 22560,
-  "image": "assets/img/products/yuzuk-baget-3.svg",
+  "image": "assets/img/products/yuzuk-baget-3.webp",
+  "imageCredit": {
+   "author": "MianShahzadRaza",
+   "url": "https://pixabay.com/photos/ring-jewellery-sliver-ring-woman-1175529/",
+   "source": "Pixabay"
+  },
   "stock": 0,
   "desc": "Sıralı baget kesim zirkon taşlarla kanal montaj yapılmış, düz çizgili modern yüzük. 18 ayar beyaz altın."
  },
@@ -196,14 +256,19 @@
   "type": "yuzuk",
   "typeLabel": "Yüzük",
   "model": "Zarif",
-  "name": "Zarif Yüzük, Sarı altın",
+  "name": "Zarif Yüzük, Sarı altın, 1,9 g",
   "metal": "Sarı altın",
   "karat": 14,
   "gram": 1.9,
   "laborRate": 0.2,
   "stoneFee": 250,
   "price": 9430,
-  "image": "assets/img/products/yuzuk-zarif-1.svg",
+  "image": "assets/img/products/yuzuk-zarif-1.webp",
+  "imageCredit": {
+   "author": "sarakgraves",
+   "url": "https://pixabay.com/photos/love-bridal-wedding-ring-2468260/",
+   "source": "Pixabay"
+  },
   "stock": 5,
   "desc": "İnce halka üzerinde yaprak motifli minimal tasarım. Katmanlı kullanıma çok uygun. 14 ayar sarı altın."
  },
@@ -219,7 +284,12 @@
   "laborRate": 0.2,
   "stoneFee": 250,
   "price": 10150,
-  "image": "assets/img/products/yuzuk-zarif-2.svg",
+  "image": "assets/img/products/yuzuk-zarif-2.webp",
+  "imageCredit": {
+   "author": "Agzam",
+   "url": "https://pixabay.com/photos/gold-ring-with-eye-decoration-ring-3383363/",
+   "source": "Pixabay"
+  },
   "stock": 10,
   "desc": "İnce halka üzerinde yaprak motifli minimal tasarım. Katmanlı kullanıma çok uygun. 14 ayar rose altın."
  },
@@ -228,30 +298,40 @@
   "type": "yuzuk",
   "typeLabel": "Yüzük",
   "model": "Zarif",
-  "name": "Zarif Yüzük, Beyaz altın",
-  "metal": "Beyaz altın",
+  "name": "Zarif Yüzük, Sarı altın, 2,13 g",
+  "metal": "Sarı altın",
   "karat": 18,
   "gram": 2.13,
   "laborRate": 0.2,
   "stoneFee": 250,
   "price": 13480,
-  "image": "assets/img/products/yuzuk-zarif-3.svg",
+  "image": "assets/img/products/yuzuk-zarif-3.webp",
+  "imageCredit": {
+   "author": "an_photos",
+   "url": "https://pixabay.com/photos/ring-closeup-white-golden-3030465/",
+   "source": "Pixabay"
+  },
   "stock": 3,
-  "desc": "İnce halka üzerinde yaprak motifli minimal tasarım. Katmanlı kullanıma çok uygun. 18 ayar beyaz altın."
+  "desc": "İnce halka üzerinde yaprak motifli minimal tasarım. Katmanlı kullanıma çok uygun. 18 ayar sarı altın."
  },
  {
   "id": "kolye-gunes-1",
   "type": "kolye",
   "typeLabel": "Kolye",
   "model": "Güneş",
-  "name": "Güneş Kolye, Sarı altın",
+  "name": "Güneş Kolye, Sarı altın, 3,4 g",
   "metal": "Sarı altın",
   "karat": 14,
   "gram": 3.4,
   "laborRate": 0.22,
   "stoneFee": 0,
   "price": 16700,
-  "image": "assets/img/products/kolye-gunes-1.svg",
+  "image": "assets/img/products/kolye-gunes-1.webp",
+  "imageCredit": {
+   "author": "oddobjective",
+   "url": "https://pixabay.com/photos/pendant-gold-medallion-jewelry-939194/",
+   "source": "Pixabay"
+  },
   "stock": 1,
   "desc": "Işın motifli güneş ucu ve ortasında zirkon taşı olan, ışıltılı bir kolye. 14 ayar sarı altın."
  },
@@ -260,46 +340,61 @@
   "type": "kolye",
   "typeLabel": "Kolye",
   "model": "Güneş",
-  "name": "Güneş Kolye, Rose altın",
-  "metal": "Rose altın",
+  "name": "Güneş Kolye, Sarı altın, 3,67 g",
+  "metal": "Sarı altın",
   "karat": 14,
   "gram": 3.67,
   "laborRate": 0.22,
   "stoneFee": 0,
   "price": 18020,
-  "image": "assets/img/products/kolye-gunes-2.svg",
+  "image": "assets/img/products/kolye-gunes-2.webp",
+  "imageCredit": {
+   "author": "94451",
+   "url": "https://pixabay.com/photos/medallion-silver-aiglon-portrait-216043/",
+   "source": "Pixabay"
+  },
   "stock": 6,
-  "desc": "Işın motifli güneş ucu ve ortasında zirkon taşı olan, ışıltılı bir kolye. 14 ayar rose altın."
+  "desc": "Işın motifli güneş ucu ve ortasında zirkon taşı olan, ışıltılı bir kolye. 14 ayar sarı altın."
  },
  {
   "id": "kolye-gunes-3",
   "type": "kolye",
   "typeLabel": "Kolye",
   "model": "Güneş",
-  "name": "Güneş Kolye, Beyaz altın",
-  "metal": "Beyaz altın",
+  "name": "Güneş Kolye, Sarı altın, 3,81 g",
+  "metal": "Sarı altın",
   "karat": 18,
   "gram": 3.81,
   "laborRate": 0.22,
   "stoneFee": 0,
   "price": 24050,
-  "image": "assets/img/products/kolye-gunes-3.svg",
+  "image": "assets/img/products/kolye-gunes-3.webp",
+  "imageCredit": {
+   "author": "chilcutte",
+   "url": "https://pixabay.com/photos/jewelry-necklace-locket-gold-1317657/",
+   "source": "Pixabay"
+  },
   "stock": 11,
-  "desc": "Işın motifli güneş ucu ve ortasında zirkon taşı olan, ışıltılı bir kolye. 18 ayar beyaz altın."
+  "desc": "Işın motifli güneş ucu ve ortasında zirkon taşı olan, ışıltılı bir kolye. 18 ayar sarı altın."
  },
  {
   "id": "kolye-nazar-1",
   "type": "kolye",
   "typeLabel": "Kolye",
   "model": "Nazar",
-  "name": "Nazar Kolye, Sarı altın",
+  "name": "Nazar Kolye, Sarı altın, 2,8 g",
   "metal": "Sarı altın",
   "karat": 14,
   "gram": 2.8,
   "laborRate": 0.2,
   "stoneFee": 300,
   "price": 13820,
-  "image": "assets/img/products/kolye-nazar-1.svg",
+  "image": "assets/img/products/kolye-nazar-1.webp",
+  "imageCredit": {
+   "author": "ulleo",
+   "url": "https://pixabay.com/photos/eye-lucky-charm-symbol-protection-1710285/",
+   "source": "Pixabay"
+  },
   "stock": 5,
   "desc": "Mineli nazar boncuğu ucu olan, hem şık hem koruyucu sembol taşıyan kolye. 14 ayar sarı altın."
  },
@@ -308,46 +403,61 @@
   "type": "kolye",
   "typeLabel": "Kolye",
   "model": "Nazar",
-  "name": "Nazar Kolye, Rose altın",
-  "metal": "Rose altın",
+  "name": "Nazar Kolye, Sarı altın, 3,02 g",
+  "metal": "Sarı altın",
   "karat": 14,
   "gram": 3.02,
   "laborRate": 0.2,
   "stoneFee": 300,
   "price": 14890,
-  "image": "assets/img/products/kolye-nazar-2.svg",
+  "image": "assets/img/products/kolye-nazar-2.webp",
+  "imageCredit": {
+   "author": "Hans",
+   "url": "https://pixabay.com/photos/nazar-amulet-amulet-nazar-bad-look-64999/",
+   "source": "Pixabay"
+  },
   "stock": 0,
-  "desc": "Mineli nazar boncuğu ucu olan, hem şık hem koruyucu sembol taşıyan kolye. 14 ayar rose altın."
+  "desc": "Mineli nazar boncuğu ucu olan, hem şık hem koruyucu sembol taşıyan kolye. 14 ayar sarı altın."
  },
  {
   "id": "kolye-nazar-3",
   "type": "kolye",
   "typeLabel": "Kolye",
   "model": "Nazar",
-  "name": "Nazar Kolye, Beyaz altın",
-  "metal": "Beyaz altın",
+  "name": "Nazar Kolye, Sarı altın, 3,14 g",
+  "metal": "Sarı altın",
   "karat": 18,
   "gram": 3.14,
   "laborRate": 0.2,
   "stoneFee": 300,
   "price": 19800,
-  "image": "assets/img/products/kolye-nazar-3.svg",
+  "image": "assets/img/products/kolye-nazar-3.webp",
+  "imageCredit": {
+   "author": "LoggaWiggler",
+   "url": "https://pixabay.com/photos/eye-blue-eyes-tree-nazar-turkey-64702/",
+   "source": "Pixabay"
+  },
   "stock": 3,
-  "desc": "Mineli nazar boncuğu ucu olan, hem şık hem koruyucu sembol taşıyan kolye. 18 ayar beyaz altın."
+  "desc": "Mineli nazar boncuğu ucu olan, hem şık hem koruyucu sembol taşıyan kolye. 18 ayar sarı altın."
  },
  {
   "id": "kolye-zincir-1",
   "type": "kolye",
   "typeLabel": "Kolye",
   "model": "Zincir",
-  "name": "Zincir Kolye, Sarı altın",
+  "name": "Zincir Kolye, Sarı altın, 7,5 g",
   "metal": "Sarı altın",
   "karat": 14,
   "gram": 7.5,
   "laborRate": 0.1,
   "stoneFee": 0,
   "price": 33210,
-  "image": "assets/img/products/kolye-zincir-1.svg",
+  "image": "assets/img/products/kolye-zincir-1.webp",
+  "imageCredit": {
+   "author": "Hans",
+   "url": "https://pixabay.com/photos/gold-chain-chain-jewellery-gold-5933/",
+   "source": "Pixabay"
+  },
   "stock": 9,
   "desc": "Çift sıra zincir kolye. Tek başına ya da uç takarak kullanılabilen, sade ve güçlü bir parça. 14 ayar sarı altın."
  },
@@ -356,94 +466,124 @@
   "type": "kolye",
   "typeLabel": "Kolye",
   "model": "Zincir",
-  "name": "Zincir Kolye, Rose altın",
-  "metal": "Rose altın",
+  "name": "Zincir Kolye, Sarı altın, 8,1 g",
+  "metal": "Sarı altın",
   "karat": 14,
   "gram": 8.1,
   "laborRate": 0.1,
   "stoneFee": 0,
   "price": 35860,
-  "image": "assets/img/products/kolye-zincir-2.svg",
+  "image": "assets/img/products/kolye-zincir-2.webp",
+  "imageCredit": {
+   "author": "Pezibear",
+   "url": "https://pixabay.com/photos/chain-gold-human-girl-woman-9789500/",
+   "source": "Pixabay"
+  },
   "stock": 2,
-  "desc": "Çift sıra zincir kolye. Tek başına ya da uç takarak kullanılabilen, sade ve güçlü bir parça. 14 ayar rose altın."
+  "desc": "Çift sıra zincir kolye. Tek başına ya da uç takarak kullanılabilen, sade ve güçlü bir parça. 14 ayar sarı altın."
  },
  {
   "id": "kolye-zincir-3",
   "type": "kolye",
   "typeLabel": "Kolye",
   "model": "Zincir",
-  "name": "Zincir Kolye, Beyaz altın",
-  "metal": "Beyaz altın",
+  "name": "Zincir Kolye, Rose altın",
+  "metal": "Rose altın",
   "karat": 18,
   "gram": 8.4,
   "laborRate": 0.1,
   "stoneFee": 0,
   "price": 47820,
-  "image": "assets/img/products/kolye-zincir-3.svg",
+  "image": "assets/img/products/kolye-zincir-3.webp",
+  "imageCredit": {
+   "author": "Goldvine",
+   "url": "https://pixabay.com/photos/diamond-jewelry-pendant-necklace-9395881/",
+   "source": "Pixabay"
+  },
   "stock": 7,
-  "desc": "Çift sıra zincir kolye. Tek başına ya da uç takarak kullanılabilen, sade ve güçlü bir parça. 18 ayar beyaz altın."
+  "desc": "Çift sıra zincir kolye. Tek başına ya da uç takarak kullanılabilen, sade ve güçlü bir parça. 18 ayar rose altın."
  },
  {
-  "id": "kolye-harf-1",
+  "id": "kolye-damla-1",
   "type": "kolye",
   "typeLabel": "Kolye",
-  "model": "Harf",
-  "name": "Harf Kolye, Sarı altın",
+  "model": "Damla",
+  "name": "Damla Kolye, Sarı altın, 2,2 g",
   "metal": "Sarı altın",
   "karat": 14,
-  "gram": 2.4,
+  "gram": 2.2,
   "laborRate": 0.18,
-  "stoneFee": 150,
-  "price": 11550,
-  "image": "assets/img/products/kolye-harf-1.svg",
+  "stoneFee": 250,
+  "price": 10700,
+  "image": "assets/img/products/kolye-damla-1.webp",
+  "imageCredit": {
+   "author": "gzdegz_",
+   "url": "https://pixabay.com/photos/necklace-gold-jeweler-7237778/",
+   "source": "Pixabay"
+  },
   "stock": 1,
-  "desc": "Baş harf plakalı kişiye özel kolye. Harf seçimi sipariş sonrası mağazayla netleştirilir. 14 ayar sarı altın."
+  "desc": "Damla kesim renkli taşlı, ince zincirli sade kolye. Günlük kullanıma ve hediyeye çok uygun. 14 ayar sarı altın."
  },
  {
-  "id": "kolye-harf-2",
+  "id": "kolye-damla-2",
   "type": "kolye",
   "typeLabel": "Kolye",
-  "model": "Harf",
-  "name": "Harf Kolye, Rose altın",
-  "metal": "Rose altın",
+  "model": "Damla",
+  "name": "Damla Kolye, Sarı altın, 2,38 g",
+  "metal": "Sarı altın",
   "karat": 14,
-  "gram": 2.59,
+  "gram": 2.38,
   "laborRate": 0.18,
-  "stoneFee": 150,
-  "price": 12450,
-  "image": "assets/img/products/kolye-harf-2.svg",
+  "stoneFee": 250,
+  "price": 11550,
+  "image": "assets/img/products/kolye-damla-2.webp",
+  "imageCredit": {
+   "author": "gzdegz_",
+   "url": "https://pixabay.com/photos/necklace-gold-jeweler-7237782/",
+   "source": "Pixabay"
+  },
   "stock": 6,
-  "desc": "Baş harf plakalı kişiye özel kolye. Harf seçimi sipariş sonrası mağazayla netleştirilir. 14 ayar rose altın."
+  "desc": "Damla kesim renkli taşlı, ince zincirli sade kolye. Günlük kullanıma ve hediyeye çok uygun. 14 ayar sarı altın."
  },
  {
-  "id": "kolye-harf-3",
+  "id": "kolye-damla-3",
   "type": "kolye",
   "typeLabel": "Kolye",
-  "model": "Harf",
-  "name": "Harf Kolye, Beyaz altın",
-  "metal": "Beyaz altın",
+  "model": "Damla",
+  "name": "Damla Kolye, Sarı altın, 2,46 g",
+  "metal": "Sarı altın",
   "karat": 18,
-  "gram": 2.69,
+  "gram": 2.46,
   "laborRate": 0.18,
-  "stoneFee": 150,
-  "price": 16580,
-  "image": "assets/img/products/kolye-harf-3.svg",
+  "stoneFee": 250,
+  "price": 15270,
+  "image": "assets/img/products/kolye-damla-3.webp",
+  "imageCredit": {
+   "author": "anarosadebastiani",
+   "url": "https://pixabay.com/photos/pendant-jewel-topaz-gold-jewelry-5654712/",
+   "source": "Pixabay"
+  },
   "stock": 0,
-  "desc": "Baş harf plakalı kişiye özel kolye. Harf seçimi sipariş sonrası mağazayla netleştirilir. 18 ayar beyaz altın."
+  "desc": "Damla kesim renkli taşlı, ince zincirli sade kolye. Günlük kullanıma ve hediyeye çok uygun. 18 ayar sarı altın."
  },
  {
   "id": "kolye-kalp-1",
   "type": "kolye",
   "typeLabel": "Kolye",
   "model": "Kalp",
-  "name": "Kalp Kolye, Sarı altın",
+  "name": "Kalp Kolye, Sarı altın, 2,6 g",
   "metal": "Sarı altın",
   "karat": 14,
   "gram": 2.6,
   "laborRate": 0.2,
   "stoneFee": 150,
   "price": 12710,
-  "image": "assets/img/products/kolye-kalp-1.svg",
+  "image": "assets/img/products/kolye-kalp-1.webp",
+  "imageCredit": {
+   "author": "garten-gg",
+   "url": "https://pixabay.com/photos/emotions-love-heart-chain-feelings-2105688/",
+   "source": "Pixabay"
+  },
   "stock": 5,
   "desc": "Kalp ucunun ortasında küçük bir taş olan, hediye için en çok seçilenlerden biri. 14 ayar sarı altın."
  },
@@ -452,32 +592,42 @@
   "type": "kolye",
   "typeLabel": "Kolye",
   "model": "Kalp",
-  "name": "Kalp Kolye, Rose altın",
-  "metal": "Rose altın",
+  "name": "Kalp Kolye, Sarı altın, 2,81 g",
+  "metal": "Sarı altın",
   "karat": 14,
   "gram": 2.81,
   "laborRate": 0.2,
   "stoneFee": 150,
   "price": 13720,
-  "image": "assets/img/products/kolye-kalp-2.svg",
+  "image": "assets/img/products/kolye-kalp-2.webp",
+  "imageCredit": {
+   "author": "evalynn",
+   "url": "https://pixabay.com/photos/vintage-locket-1930s-antique-1251140/",
+   "source": "Pixabay"
+  },
   "stock": 10,
-  "desc": "Kalp ucunun ortasında küçük bir taş olan, hediye için en çok seçilenlerden biri. 14 ayar rose altın."
+  "desc": "Kalp ucunun ortasında küçük bir taş olan, hediye için en çok seçilenlerden biri. 14 ayar sarı altın."
  },
  {
   "id": "kolye-kalp-3",
   "type": "kolye",
   "typeLabel": "Kolye",
   "model": "Kalp",
-  "name": "Kalp Kolye, Beyaz altın",
-  "metal": "Beyaz altın",
+  "name": "Kalp Kolye, Sarı altın, 2,91 g",
+  "metal": "Sarı altın",
   "karat": 18,
   "gram": 2.91,
   "laborRate": 0.2,
   "stoneFee": 150,
   "price": 18220,
-  "image": "assets/img/products/kolye-kalp-3.svg",
+  "image": "assets/img/products/kolye-kalp-3.webp",
+  "imageCredit": {
+   "author": "anarosadebastiani",
+   "url": "https://pixabay.com/photos/accessories-necklace-earrings-5644343/",
+   "source": "Pixabay"
+  },
   "stock": 3,
-  "desc": "Kalp ucunun ortasında küçük bir taş olan, hediye için en çok seçilenlerden biri. 18 ayar beyaz altın."
+  "desc": "Kalp ucunun ortasında küçük bir taş olan, hediye için en çok seçilenlerden biri. 18 ayar sarı altın."
  },
  {
   "id": "bilezik-burma-1",
@@ -491,7 +641,12 @@
   "laborRate": 0.06,
   "stoneFee": 0,
   "price": 59730,
-  "image": "assets/img/products/bilezik-burma-1.svg",
+  "image": "assets/img/products/bilezik-burma-1.webp",
+  "imageCredit": {
+   "author": "akufh1110",
+   "url": "https://pixabay.com/photos/wedding-gold-gold-bracelet-ring-1808235/",
+   "source": "Pixabay"
+  },
   "stock": 1,
   "desc": "Burma desenli klasik altın bilezik. Ağırlığı ve parlaklığıyla yatırım ve takı olarak tercih edilir. 14 ayar sarı altın."
  },
@@ -507,7 +662,12 @@
   "laborRate": 0.06,
   "stoneFee": 0,
   "price": 79870,
-  "image": "assets/img/products/bilezik-burma-2.svg",
+  "image": "assets/img/products/bilezik-burma-2.webp",
+  "imageCredit": {
+   "author": "947051",
+   "url": "https://pixabay.com/photos/stainless-background-white-bracelet-878337/",
+   "source": "Pixabay"
+  },
   "stock": 6,
   "desc": "Burma desenli klasik altın bilezik. Ağırlığı ve parlaklığıyla yatırım ve takı olarak tercih edilir. 18 ayar sarı altın."
  },
@@ -523,7 +683,12 @@
   "laborRate": 0.06,
   "stoneFee": 0,
   "price": 101370,
-  "image": "assets/img/products/bilezik-burma-3.svg",
+  "image": "assets/img/products/bilezik-burma-3.webp",
+  "imageCredit": {
+   "author": "947051",
+   "url": "https://pixabay.com/photos/stainless-background-white-bracelet-878335/",
+   "source": "Pixabay"
+  },
   "stock": 11,
   "desc": "Burma desenli klasik altın bilezik. Ağırlığı ve parlaklığıyla yatırım ve takı olarak tercih edilir. 22 ayar sarı altın."
  },
@@ -539,7 +704,12 @@
   "laborRate": 0.09,
   "stoneFee": 0,
   "price": 78970,
-  "image": "assets/img/products/bilezik-islemeli-1.svg",
+  "image": "assets/img/products/bilezik-islemeli-1.webp",
+  "imageCredit": {
+   "author": "MianShahzadRaza",
+   "url": "https://pixabay.com/photos/jewellery-golden-gold-jewelry-1175533/",
+   "source": "Pixabay"
+  },
   "stock": 5,
   "desc": "Çiçek motifleri ve noktalı kenar işçiliğiyle süslenmiş, geniş yüzeyli işlemeli bilezik. 14 ayar sarı altın."
  },
@@ -555,7 +725,12 @@
   "laborRate": 0.09,
   "stoneFee": 0,
   "price": 105590,
-  "image": "assets/img/products/bilezik-islemeli-2.svg",
+  "image": "assets/img/products/bilezik-islemeli-2.webp",
+  "imageCredit": {
+   "author": "MianShahzadRaza",
+   "url": "https://pixabay.com/photos/jewellery-gold-gold-jewelry-luxury-1175535/",
+   "source": "Pixabay"
+  },
   "stock": 0,
   "desc": "Çiçek motifleri ve noktalı kenar işçiliğiyle süslenmiş, geniş yüzeyli işlemeli bilezik. 18 ayar sarı altın."
  },
@@ -571,7 +746,12 @@
   "laborRate": 0.09,
   "stoneFee": 0,
   "price": 134020,
-  "image": "assets/img/products/bilezik-islemeli-3.svg",
+  "image": "assets/img/products/bilezik-islemeli-3.webp",
+  "imageCredit": {
+   "author": "vidhivakil",
+   "url": "https://pixabay.com/photos/ruby-emerald-bracelet-precious-2426454/",
+   "source": "Pixabay"
+  },
   "stock": 3,
   "desc": "Çiçek motifleri ve noktalı kenar işçiliğiyle süslenmiş, geniş yüzeyli işlemeli bilezik. 22 ayar sarı altın."
  },
@@ -587,7 +767,12 @@
   "laborRate": 0.08,
   "stoneFee": 0,
   "price": 52160,
-  "image": "assets/img/products/bilezik-hasir-1.svg",
+  "image": "assets/img/products/bilezik-hasir-1.webp",
+  "imageCredit": {
+   "author": "starbright",
+   "url": "https://pixabay.com/photos/gold-chain-bracelet-jewelry-665722/",
+   "source": "Pixabay"
+  },
   "stock": 9,
   "desc": "Hasır örgü desenli, bileğe oturan şık ve dayanıklı bilezik. 14 ayar sarı altın."
  },
@@ -603,7 +788,12 @@
   "laborRate": 0.08,
   "stoneFee": 0,
   "price": 69750,
-  "image": "assets/img/products/bilezik-hasir-2.svg",
+  "image": "assets/img/products/bilezik-hasir-2.webp",
+  "imageCredit": {
+   "author": "starbright",
+   "url": "https://pixabay.com/photos/gold-chain-bracelet-jewelry-665721/",
+   "source": "Pixabay"
+  },
   "stock": 2,
   "desc": "Hasır örgü desenli, bileğe oturan şık ve dayanıklı bilezik. 18 ayar sarı altın."
  },
@@ -619,7 +809,12 @@
   "laborRate": 0.08,
   "stoneFee": 0,
   "price": 88530,
-  "image": "assets/img/products/bilezik-hasir-3.svg",
+  "image": "assets/img/products/bilezik-hasir-3.webp",
+  "imageCredit": {
+   "author": "947051",
+   "url": "https://pixabay.com/photos/stainless-background-white-bracelet-878314/",
+   "source": "Pixabay"
+  },
   "stock": 7,
   "desc": "Hasır örgü desenli, bileğe oturan şık ve dayanıklı bilezik. 22 ayar sarı altın."
  },
@@ -629,15 +824,20 @@
   "typeLabel": "Bilezik",
   "model": "Çiçek",
   "name": "Çiçek Bilezik, 14 ayar",
-  "metal": "Sarı altın",
+  "metal": "Rose altın",
   "karat": 14,
   "gram": 9.0,
   "laborRate": 0.12,
   "stoneFee": 250,
   "price": 40820,
-  "image": "assets/img/products/bilezik-cicek-1.svg",
+  "image": "assets/img/products/bilezik-cicek-1.webp",
+  "imageCredit": {
+   "author": "HiepHoang",
+   "url": "https://pixabay.com/photos/gold-jewelry-bracelet-jewelry-3790542/",
+   "source": "Pixabay"
+  },
   "stock": 1,
-  "desc": "İnce gövdesi üzerinde taşlı çiçek motifleri taşıyan zarif bilezik. 14 ayar sarı altın."
+  "desc": "İnce gövdesi üzerinde taşlı çiçek motifleri taşıyan zarif bilezik. 14 ayar rose altın."
  },
  {
   "id": "bilezik-cicek-2",
@@ -651,7 +851,12 @@
   "laborRate": 0.12,
   "stoneFee": 250,
   "price": 54500,
-  "image": "assets/img/products/bilezik-cicek-2.svg",
+  "image": "assets/img/products/bilezik-cicek-2.webp",
+  "imageCredit": {
+   "author": "MianShahzadRaza",
+   "url": "https://pixabay.com/photos/jewellery-fashion-jewelry-1175532/",
+   "source": "Pixabay"
+  },
   "stock": 6,
   "desc": "İnce gövdesi üzerinde taşlı çiçek motifleri taşıyan zarif bilezik. 18 ayar sarı altın."
  },
@@ -667,7 +872,12 @@
   "laborRate": 0.12,
   "stoneFee": 250,
   "price": 69110,
-  "image": "assets/img/products/bilezik-cicek-3.svg",
+  "image": "assets/img/products/bilezik-cicek-3.webp",
+  "imageCredit": {
+   "author": "veerchudasama007",
+   "url": "https://pixabay.com/photos/jewellery-gold-wedding-indian-3968328/",
+   "source": "Pixabay"
+  },
   "stock": 0,
   "desc": "İnce gövdesi üzerinde taşlı çiçek motifleri taşıyan zarif bilezik. 22 ayar sarı altın."
  },
@@ -683,7 +893,12 @@
   "laborRate": 0.07,
   "stoneFee": 450,
   "price": 47820,
-  "image": "assets/img/products/bilezik-kelepce-1.svg",
+  "image": "assets/img/products/bilezik-kelepce-1.webp",
+  "imageCredit": {
+   "author": "ImageParty",
+   "url": "https://pixabay.com/photos/bracelet-jewelry-bangle-fashion-498635/",
+   "source": "Pixabay"
+  },
   "stock": 5,
   "desc": "Açık yapılı, üç taş detaylı kelepçe bilezik. Bileğe kolayca takılır. 14 ayar sarı altın."
  },
@@ -693,15 +908,20 @@
   "typeLabel": "Bilezik",
   "model": "Kelepçe",
   "name": "Kelepçe Bilezik, 18 ayar",
-  "metal": "Sarı altın",
+  "metal": "Beyaz altın",
   "karat": 18,
   "gram": 11.44,
   "laborRate": 0.07,
   "stoneFee": 450,
   "price": 63800,
-  "image": "assets/img/products/bilezik-kelepce-2.svg",
+  "image": "assets/img/products/bilezik-kelepce-2.webp",
+  "imageCredit": {
+   "author": "thefss",
+   "url": "https://pixabay.com/photos/cartier-leopard-head-diamond-1137401/",
+   "source": "Pixabay"
+  },
   "stock": 10,
-  "desc": "Açık yapılı, üç taş detaylı kelepçe bilezik. Bileğe kolayca takılır. 18 ayar sarı altın."
+  "desc": "Açık yapılı, üç taş detaylı kelepçe bilezik. Bileğe kolayca takılır. 18 ayar beyaz altın."
  },
  {
   "id": "bilezik-kelepce-3",
@@ -709,15 +929,20 @@
   "typeLabel": "Bilezik",
   "model": "Kelepçe",
   "name": "Kelepçe Bilezik, 22 ayar",
-  "metal": "Sarı altın",
+  "metal": "Beyaz altın",
   "karat": 22,
   "gram": 11.88,
   "laborRate": 0.07,
   "stoneFee": 450,
   "price": 80850,
-  "image": "assets/img/products/bilezik-kelepce-3.svg",
+  "image": "assets/img/products/bilezik-kelepce-3.webp",
+  "imageCredit": {
+   "author": "starbright",
+   "url": "https://pixabay.com/photos/jewelry-rose-quartz-pink-cuff-665335/",
+   "source": "Pixabay"
+  },
   "stock": 3,
-  "desc": "Açık yapılı, üç taş detaylı kelepçe bilezik. Bileğe kolayca takılır. 22 ayar sarı altın."
+  "desc": "Açık yapılı, üç taş detaylı kelepçe bilezik. Bileğe kolayca takılır. 22 ayar beyaz altın."
  },
  {
   "id": "pirlanta-tektas-kupe-1",
@@ -731,7 +956,12 @@
   "laborRate": 0.15,
   "stoneFee": 14000,
   "price": 24180,
-  "image": "assets/img/products/pirlanta-tektas-kupe-1.svg",
+  "image": "assets/img/products/pirlanta-tektas-kupe-1.webp",
+  "imageCredit": {
+   "author": "PublicDomainPictures",
+   "url": "https://pixabay.com/photos/jewellery-earrings-necklace-silver-2043/",
+   "source": "Pixabay"
+  },
   "stock": 1,
   "desc": "Tek taş pırlanta küpe çifti. Taş bedeli toplam karata göre hesaplanır. 14 ayar beyaz altın, toplam 0,10 ct pırlanta."
  },
@@ -740,32 +970,42 @@
   "type": "pirlanta",
   "typeLabel": "Pırlanta",
   "model": "Tektaş Küpe",
-  "name": "Tektaş Küpe, 0,25 ct, Rose altın",
-  "metal": "Rose altın",
+  "name": "Tektaş Küpe, 0,25 ct, Beyaz altın",
+  "metal": "Beyaz altın",
   "karat": 14,
   "gram": 2.38,
   "laborRate": 0.15,
   "stoneFee": 36000,
   "price": 47020,
-  "image": "assets/img/products/pirlanta-tektas-kupe-2.svg",
+  "image": "assets/img/products/pirlanta-tektas-kupe-2.webp",
+  "imageCredit": {
+   "author": "angelicavaihel",
+   "url": "https://pixabay.com/photos/earrings-diamond-jewelry-gem-6518631/",
+   "source": "Pixabay"
+  },
   "stock": 6,
-  "desc": "Tek taş pırlanta küpe çifti. Taş bedeli toplam karata göre hesaplanır. 14 ayar rose altın, toplam 0,25 ct pırlanta."
+  "desc": "Tek taş pırlanta küpe çifti. Taş bedeli toplam karata göre hesaplanır. 14 ayar beyaz altın, toplam 0,25 ct pırlanta."
  },
  {
   "id": "pirlanta-tektas-kupe-3",
   "type": "pirlanta",
   "typeLabel": "Pırlanta",
   "model": "Tektaş Küpe",
-  "name": "Tektaş Küpe, 0,50 ct, Sarı altın",
-  "metal": "Sarı altın",
+  "name": "Tektaş Küpe, 0,50 ct, Beyaz altın",
+  "metal": "Beyaz altın",
   "karat": 18,
   "gram": 2.51,
   "laborRate": 0.15,
   "stoneFee": 85000,
   "price": 99940,
-  "image": "assets/img/products/pirlanta-tektas-kupe-3.svg",
+  "image": "assets/img/products/pirlanta-tektas-kupe-3.webp",
+  "imageCredit": {
+   "author": "HiepHoang",
+   "url": "https://pixabay.com/photos/silver-jewelry-silver-earring-3790540/",
+   "source": "Pixabay"
+  },
   "stock": 11,
-  "desc": "Tek taş pırlanta küpe çifti. Taş bedeli toplam karata göre hesaplanır. 18 ayar sarı altın, toplam 0,50 ct pırlanta."
+  "desc": "Tek taş pırlanta küpe çifti. Taş bedeli toplam karata göre hesaplanır. 18 ayar beyaz altın, toplam 0,50 ct pırlanta."
  },
  {
   "id": "pirlanta-bestas-kolye-1",
@@ -779,7 +1019,12 @@
   "laborRate": 0.15,
   "stoneFee": 14000,
   "price": 27890,
-  "image": "assets/img/products/pirlanta-bestas-kolye-1.svg",
+  "image": "assets/img/products/pirlanta-bestas-kolye-1.webp",
+  "imageCredit": {
+   "author": "steven_yu",
+   "url": "https://pixabay.com/photos/pendant-diamond-jewelry-jewel-3855108/",
+   "source": "Pixabay"
+  },
   "stock": 5,
   "desc": "Beş pırlantanın yelpaze gibi dizildiği, boynu saran şık bir kolye. 14 ayar beyaz altın, toplam 0,10 ct pırlanta."
  },
@@ -788,16 +1033,21 @@
   "type": "pirlanta",
   "typeLabel": "Pırlanta",
   "model": "Beştaş Kolye",
-  "name": "Beştaş Kolye, 0,25 ct, Rose altın",
-  "metal": "Rose altın",
+  "name": "Beştaş Kolye, 0,25 ct, Beyaz altın",
+  "metal": "Beyaz altın",
   "karat": 14,
   "gram": 3.24,
   "laborRate": 0.15,
   "stoneFee": 36000,
   "price": 51000,
-  "image": "assets/img/products/pirlanta-bestas-kolye-2.svg",
+  "image": "assets/img/products/pirlanta-bestas-kolye-2.webp",
+  "imageCredit": {
+   "author": "steven_yu",
+   "url": "https://pixabay.com/photos/pendant-jewellery-jewelry-diamonds-4704041/",
+   "source": "Pixabay"
+  },
   "stock": 0,
-  "desc": "Beş pırlantanın yelpaze gibi dizildiği, boynu saran şık bir kolye. 14 ayar rose altın, toplam 0,25 ct pırlanta."
+  "desc": "Beş pırlantanın yelpaze gibi dizildiği, boynu saran şık bir kolye. 14 ayar beyaz altın, toplam 0,25 ct pırlanta."
  },
  {
   "id": "pirlanta-bestas-kolye-3",
@@ -811,7 +1061,12 @@
   "laborRate": 0.15,
   "stoneFee": 85000,
   "price": 105350,
-  "image": "assets/img/products/pirlanta-bestas-kolye-3.svg",
+  "image": "assets/img/products/pirlanta-bestas-kolye-3.webp",
+  "imageCredit": {
+   "author": "Bruceandyqq",
+   "url": "https://pixabay.com/photos/jewelry-ruby-pendant-625724/",
+   "source": "Pixabay"
+  },
   "stock": 3,
   "desc": "Beş pırlantanın yelpaze gibi dizildiği, boynu saran şık bir kolye. 18 ayar sarı altın, toplam 0,50 ct pırlanta."
  },
@@ -827,7 +1082,12 @@
   "laborRate": 0.12,
   "stoneFee": 14000,
   "price": 47810,
-  "image": "assets/img/products/pirlanta-baget-bileklik-1.svg",
+  "image": "assets/img/products/pirlanta-baget-bileklik-1.webp",
+  "imageCredit": {
+   "author": "steven_yu",
+   "url": "https://pixabay.com/photos/diamond-jewellery-bracelet-1817291/",
+   "source": "Pixabay"
+  },
   "stock": 9,
   "desc": "Boydan boya sıralı pırlantalarla hazırlanan, ışığı her açıdan yakalayan bileklik. 14 ayar beyaz altın, toplam 0,10 ct pırlanta."
  },
@@ -836,32 +1096,42 @@
   "type": "pirlanta",
   "typeLabel": "Pırlanta",
   "model": "Baget Bileklik",
-  "name": "Baget Bileklik, 0,25 ct, Rose altın",
-  "metal": "Rose altın",
+  "name": "Baget Bileklik, 0,25 ct, Sarı altın",
+  "metal": "Sarı altın",
   "karat": 14,
   "gram": 8.1,
   "laborRate": 0.12,
   "stoneFee": 36000,
   "price": 72510,
-  "image": "assets/img/products/pirlanta-baget-bileklik-2.svg",
+  "image": "assets/img/products/pirlanta-baget-bileklik-2.webp",
+  "imageCredit": {
+   "author": "Hans",
+   "url": "https://pixabay.com/photos/chain-jewellery-gemstone-precious-2119612/",
+   "source": "Pixabay"
+  },
   "stock": 2,
-  "desc": "Boydan boya sıralı pırlantalarla hazırlanan, ışığı her açıdan yakalayan bileklik. 14 ayar rose altın, toplam 0,25 ct pırlanta."
+  "desc": "Boydan boya sıralı pırlantalarla hazırlanan, ışığı her açıdan yakalayan bileklik. 14 ayar sarı altın, toplam 0,25 ct pırlanta."
  },
  {
   "id": "pirlanta-baget-bileklik-3",
   "type": "pirlanta",
   "typeLabel": "Pırlanta",
   "model": "Baget Bileklik",
-  "name": "Baget Bileklik, 0,50 ct, Sarı altın",
-  "metal": "Sarı altın",
+  "name": "Baget Bileklik, 0,50 ct, Beyaz altın",
+  "metal": "Beyaz altın",
   "karat": 18,
   "gram": 8.55,
   "laborRate": 0.12,
   "stoneFee": 85000,
   "price": 134560,
-  "image": "assets/img/products/pirlanta-baget-bileklik-3.svg",
+  "image": "assets/img/products/pirlanta-baget-bileklik-3.webp",
+  "imageCredit": {
+   "author": "sarakgraves",
+   "url": "https://pixabay.com/photos/jewelry-luxury-wealth-gem-precious-3132919/",
+   "source": "Pixabay"
+  },
   "stock": 7,
-  "desc": "Boydan boya sıralı pırlantalarla hazırlanan, ışığı her açıdan yakalayan bileklik. 18 ayar sarı altın, toplam 0,50 ct pırlanta."
+  "desc": "Boydan boya sıralı pırlantalarla hazırlanan, ışığı her açıdan yakalayan bileklik. 18 ayar beyaz altın, toplam 0,50 ct pırlanta."
  },
  {
   "id": "pirlanta-halo-kolye-1",
@@ -875,7 +1145,12 @@
   "laborRate": 0.15,
   "stoneFee": 14000,
   "price": 28810,
-  "image": "assets/img/products/pirlanta-halo-kolye-1.svg",
+  "image": "assets/img/products/pirlanta-halo-kolye-1.webp",
+  "imageCredit": {
+   "author": "Engin_Akyurt",
+   "url": "https://pixabay.com/photos/necklace-gift-of-jewelry-luxury-2405165/",
+   "source": "Pixabay"
+  },
   "stock": 1,
   "desc": "Ortadaki taşı küçük pırlantalar çevreleyen halo kolye. Parıltıyı katlayan bir tasarım. 14 ayar beyaz altın, toplam 0,10 ct pırlanta."
  },
@@ -891,7 +1166,12 @@
   "laborRate": 0.15,
   "stoneFee": 36000,
   "price": 52020,
-  "image": "assets/img/products/pirlanta-halo-kolye-2.svg",
+  "image": "assets/img/products/pirlanta-halo-kolye-2.webp",
+  "imageCredit": {
+   "author": "Bruceandyqq",
+   "url": "https://pixabay.com/photos/jewelry-ruby-pendant-625727/",
+   "source": "Pixabay"
+  },
   "stock": 6,
   "desc": "Ortadaki taşı küçük pırlantalar çevreleyen halo kolye. Parıltıyı katlayan bir tasarım. 14 ayar rose altın, toplam 0,25 ct pırlanta."
  },
@@ -907,7 +1187,12 @@
   "laborRate": 0.15,
   "stoneFee": 85000,
   "price": 106720,
-  "image": "assets/img/products/pirlanta-halo-kolye-3.svg",
+  "image": "assets/img/products/pirlanta-halo-kolye-3.webp",
+  "imageCredit": {
+   "author": "steven_yu",
+   "url": "https://pixabay.com/photos/diamond-jewellery-necklace-luxury-3855116/",
+   "source": "Pixabay"
+  },
   "stock": 0,
   "desc": "Ortadaki taşı küçük pırlantalar çevreleyen halo kolye. Parıltıyı katlayan bir tasarım. 18 ayar sarı altın, toplam 0,50 ct pırlanta."
  },
@@ -923,7 +1208,12 @@
   "laborRate": 0.15,
   "stoneFee": 14000,
   "price": 29740,
-  "image": "assets/img/products/pirlanta-tria-yuzuk-1.svg",
+  "image": "assets/img/products/pirlanta-tria-yuzuk-1.webp",
+  "imageCredit": {
+   "author": "thefss",
+   "url": "https://pixabay.com/photos/emerald-ring-luxury-accessories-1137412/",
+   "source": "Pixabay"
+  },
   "stock": 5,
   "desc": "Üç taşlı trilogy yüzük; geçmişi, bugünü ve geleceği simgeler. 14 ayar beyaz altın, toplam 0,10 ct pırlanta."
  },
@@ -932,31 +1222,41 @@
   "type": "pirlanta",
   "typeLabel": "Pırlanta",
   "model": "Tria Yüzük",
-  "name": "Tria Yüzük, 0,25 ct, Rose altın",
-  "metal": "Rose altın",
+  "name": "Tria Yüzük, 0,25 ct, Sarı altın",
+  "metal": "Sarı altın",
   "karat": 14,
   "gram": 3.67,
   "laborRate": 0.15,
   "stoneFee": 36000,
   "price": 52990,
-  "image": "assets/img/products/pirlanta-tria-yuzuk-2.svg",
+  "image": "assets/img/products/pirlanta-tria-yuzuk-2.webp",
+  "imageCredit": {
+   "author": "Servetphotograph",
+   "url": "https://pixabay.com/photos/ring-diamond-wedding-ring-5475926/",
+   "source": "Pixabay"
+  },
   "stock": 10,
-  "desc": "Üç taşlı trilogy yüzük; geçmişi, bugünü ve geleceği simgeler. 14 ayar rose altın, toplam 0,25 ct pırlanta."
+  "desc": "Üç taşlı trilogy yüzük; geçmişi, bugünü ve geleceği simgeler. 14 ayar sarı altın, toplam 0,25 ct pırlanta."
  },
  {
   "id": "pirlanta-tria-yuzuk-3",
   "type": "pirlanta",
   "typeLabel": "Pırlanta",
   "model": "Tria Yüzük",
-  "name": "Tria Yüzük, 0,50 ct, Sarı altın",
-  "metal": "Sarı altın",
+  "name": "Tria Yüzük, 0,50 ct, Beyaz altın",
+  "metal": "Beyaz altın",
   "karat": 18,
   "gram": 3.88,
   "laborRate": 0.15,
   "stoneFee": 85000,
   "price": 108090,
-  "image": "assets/img/products/pirlanta-tria-yuzuk-3.svg",
+  "image": "assets/img/products/pirlanta-tria-yuzuk-3.webp",
+  "imageCredit": {
+   "author": "DominiqueVince",
+   "url": "https://pixabay.com/photos/ring-diamond-engagement-jewellery-4696382/",
+   "source": "Pixabay"
+  },
   "stock": 3,
-  "desc": "Üç taşlı trilogy yüzük; geçmişi, bugünü ve geleceği simgeler. 18 ayar sarı altın, toplam 0,50 ct pırlanta."
+  "desc": "Üç taşlı trilogy yüzük; geçmişi, bugünü ve geleceği simgeler. 18 ayar beyaz altın, toplam 0,50 ct pırlanta."
  }
 ]
