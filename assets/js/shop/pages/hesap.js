@@ -22,7 +22,7 @@ const ERRORS = {
 
 const errorText = (code, fallback) => t(ERRORS[code] ?? fallback);
 const DEMO_NOTE = 'Bu bir demo hesaptır; verileriniz yalnızca bu tarayıcıda saklanır.';
-const STATUS = { beklemede: 'Onay bekliyor', iptal: 'İptal edildi' }; // t() ile gösterilir
+const STATUS = { beklemede: 'Onay bekliyor', onaylandi: 'Onaylandı', tamamlandi: 'Tamamlandı', iptal: 'İptal edildi' }; // t() ile gösterilir
 const PAYMENT = { havale: 'Havale / EFT', magaza: 'Mağazada ödeme' };
 const SECTIONS = [
   ['genel', 'Genel bakış'], ['siparisler', 'Siparişlerim'], ['favoriler', 'Favorilerim'], ['adresler', 'Adreslerim'],

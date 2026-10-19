@@ -60,7 +60,7 @@ test('sozlukteki her giris dolu; yer tutucular anahtar ve degerde ayni; Ingilizc
 });
 
 test('statik sayfalarin (HTML) her metin parcasi ve oznitelik metni sozlukte vardir', () => {
-  const pages = ['index.html', 'magaza.html', 'urun.html', 'sepet.html', 'hesap.html', '404.html'];
+  const pages = ['index.html', 'magaza.html', 'urun.html', 'sepet.html', 'hesap.html', 'admin.html', '404.html'];
   const ignore = new Set(['0507 351 73 47', 'E-posta']);
   const missing = [];
   for (const p of pages) {

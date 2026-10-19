@@ -21,14 +21,16 @@ Detaylı tasarım: `docs/superpowers/specs/2026-10-19-cinar-gold-store-design.md
 14. **Giriş yap ve kullanıcı menüsü:** sağ üstte misafire "Giriş yap" düğmesi; girişten sonra avatar ve açılır menü (Siparişlerim, Favorilerim, Adreslerim, Hesap bilgilerim; ikincil: stok bildirimlerim, izinler, destek, çıkış). Menü klavye ile kullanılır (ok tuşları, Esc).
 15. **Hesap bölümleri:** genel bakış, siparişler (iptal ve stok iadesi), favoriler, adres defteri, stok bildirimleri, bilgiler ve şifre, izinler.
 16. **Katalog ve fiyat:** 60 ürün için kuyumculuk fiyatı `gram x ayar fiyatı x (1 + işçilik) + taş bedeli` ile Özsafir 22 ayar fiyatından canlı hesaplanır; ürün fotoğrafları Pixabay'dan (ücretsiz ticari lisans) seçilmiş temsilî fotoğraflardır; fotoğrafçı adı ürün sayfasında gösterilir.
-17. **İzin penceresi:** kişisel bilgi alan her akıştan önce (kayıt, giriş, bildirim, sipariş) KVKK aydınlatması ve izinler sorulur; zorunlu izin verilmezse form gönderilmez.
+17. **Dil seçeneği:** üst çubukta tek tuşla Türkçe/İngilizce (EN/TR); tüm sayfalar, ürün adları ve açıklamaları, para biçimi, altın fiyat şeridi ve hesap/yönetim ekranları çevrilir. Çeviri sözlüğü `assets/js/shop/i18n-en.js`, ürün çevirileri `tools/gen_products.py` içindedir. Test: `tests/i18n-coverage.test.mjs` çevrilmemiş metni yakalar.
+18. **Yönetici hesabı ve panel (`admin.html`):** yalnızca yönetici rolündeki hesap görür; siparişleri onaylama / tamamlama / iptal etme (iptalde stok geri gelir), stok düzenleme, stok bildirim istekleri. Menüde "Yönetim paneli" bağlantısı yalnızca yöneticide çıkar.
+19. **İzin penceresi:** kişisel bilgi alan her akıştan önce (kayıt, giriş, bildirim, sipariş) KVKK aydınlatması ve izinler sorulur; zorunlu izin verilmezse form gönderilmez.
 
 ## MVP'de olmayanlar (sonraki sürümler)
 
 - Gerçek kart ödemesi.
 - Sunucu tarafı hesap, stok ve sipariş kaydı (şu an yalnızca tarayıcı localStorage).
 - "Bana bildir" kayıtları için gerçek e-posta / SMS gönderimi.
-- Yönetici paneli (stok ve fiyat güncelleme); şimdilik `tools/gen_products.py` düzenlenir.
+- Gerçek (sunucu destekli) yönetici paneli: şu anki panel yalnızca aynı tarayıcıdaki siparişleri ve stoğu yönetir; farklı müşterilerin siparişlerini tek yerde toplamak için arka uç gerekir. Fiyat düzenleme de yok (`tools/gen_products.py`).
 - Mağazanın kendi ürün fotoğrafları: şu an görseller temsilî Pixabay fotoğraflarıdır (`assets/img/products/<ürün-id>.webp`). Kendi fotoğraflarınızı aynı dosya adıyla (kare, 900x900 önerilir) değiştirebilirsiniz.
 
 ## Yayın sonrası görev

@@ -149,3 +149,56 @@ test('updateProfile address bos degilse varsayilan adresi gunceller (yoksa olust
   assert.equal(auth.current().addresses.length, 1);
   assert.equal(auth.current().address, 'Yeni Mah. 7. Sk. No:1 Fethiye');
 });
+
+test('yeni kayitlar musteridir: role customer, isAdmin false', async () => {
+  const auth = createAuth(createStore(memoryBackend()));
+  const u = await auth.register(ayse);
+  assert.equal(u.role, 'customer');
+  assert.equal(auth.isAdmin(), false);
+});
+
+test('hasAdmin baslangicta false; createAdmin ilk yoneticiyi olusturur, oturum acar ve role admin olur', async () => {
+  const auth = createAuth(createStore(memoryBackend()));
+  assert.equal(auth.hasAdmin(), false);
+  const u = await auth.createAdmin({ name: 'Yönetici', email: 'Admin@Ornek.com', password: 'cok-guclu-sifre-1' });
+  assert.equal(u.role, 'admin');
+  assert.equal(u.email, 'admin@ornek.com');
+  assert.equal(auth.hasAdmin(), true);
+  assert.equal(auth.isAdmin(), true);
+  assert.equal(auth.current().role, 'admin');
+});
+
+test('createAdmin zaten yonetici varsa ADMIN_VAR firlatir ve ikinci yonetici olusmaz', async () => {
+  const store = createStore(memoryBackend());
+  const auth = createAuth(store);
+  await auth.createAdmin({ name: 'Y', email: 'a@b.com', password: 'cok-guclu-sifre-1' });
+  await assert.rejects(auth.createAdmin({ name: 'Z', email: 'z@b.com', password: 'cok-guclu-sifre-2' }), /ADMIN_VAR/);
+  assert.equal(store.get('users', []).length, 1);
+});
+
+test('createAdmin sifre kisa veya e-posta kayitliysa ayni kurallarla hata verir', async () => {
+  const auth = createAuth(createStore(memoryBackend()));
+  await assert.rejects(auth.createAdmin({ name: 'Y', email: 'a@b.com', password: 'kisa' }), /SIFRE_KISA/);
+  await auth.register({ name: 'Müşteri', email: 'a@b.com', password: 'gizli-sifre-1' });
+  await assert.rejects(auth.createAdmin({ name: 'Y', email: 'a@b.com', password: 'cok-guclu-sifre-1' }), /EMAIL_KAYITLI/);
+  assert.equal(auth.hasAdmin(), false);
+});
+
+test('yonetici cikis yapip ayni sifreyle girince yine admin olur; musteri girisi admin degildir', async () => {
+  const store = createStore(memoryBackend());
+  const auth = createAuth(store);
+  await auth.createAdmin({ name: 'Y', email: 'a@b.com', password: 'cok-guclu-sifre-1' });
+  auth.logout();
+  assert.equal(auth.isAdmin(), false);
+  await auth.login('a@b.com', 'cok-guclu-sifre-1');
+  assert.equal(auth.isAdmin(), true);
+  await auth.register(ayse);
+  assert.equal(auth.isAdmin(), false);
+});
+
+test('kullanici kaydindan role alani disaridan degistirilemez: updateProfile role vermez', async () => {
+  const auth = createAuth(createStore(memoryBackend()));
+  await auth.register(ayse);
+  auth.updateProfile({ role: 'admin', name: 'Ayşe' });
+  assert.equal(auth.isAdmin(), false);
+});

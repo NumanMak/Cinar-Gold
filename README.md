@@ -48,6 +48,14 @@ sitesinin herkese açık fiyat tablosunu (görünen HTML) okur, API anahtarı ve
 commit atar. Dosya 30 saatten eskiyse veya okunamazsa şerit Truncgil'e düşer, o da çalışmazsa mağazayı aramaya yönlendirir.
 Yerelde denemek için: `python tools/fetch_gold.py`. Testler: `python -m unittest discover -s tools -p "test_*.py"`.
 
+## Dil ve yönetici hesabı
+
+- **Dil:** Üst çubuktaki EN / TR düğmesi dili değiştirir, seçim hatırlanır (`?lang=en` ile de açılabilir). Yeni metin eklerken
+  Türkçe metni `t('...')` ile sarın ve İngilizcesini `assets/js/shop/i18n-en.js` dosyasına ekleyin; `node --test tests/` eksiği bulur.
+- **Yönetici:** `admin.html` sayfasında bu tarayıcının ilk yöneticisi oluşturulur. Panel sipariş onayı, stok ve bildirim isteklerini yönetir.
+  Veriler tarayıcıda durduğu için yönetici yalnızca aynı tarayıcıda (aynı adreste) verilen siparişleri görür. Yönetici rolü tarayıcıda
+  saklandığı için güvenlik sınırı değildir; gerçek kullanım için arka uç gerekir.
+
 ## Mağaza (demo)
 
 Online alışveriş akışı sunucusuz çalışır: hesaplar, sepet, stok düşümü, "Bana bildir" kayıtları ve siparişler

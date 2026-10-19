@@ -1,7 +1,7 @@
 // Üst bilgideki hesap alanı: misafirde "Giriş yap" düğmesi, girişte kullanıcı menüsü.
 // Menü Baymard'ın hesap menüsü bulgularına göre ikiye ayrılır: sık kullanılan birincil bağlantılar ve daha sönük ikincil bağlantılar.
 import { el } from './ui.js';
-import { listOrders } from './orders.js';
+import { listOrders, listAllOrders } from './orders.js';
 import { createWishlist } from './wishlist.js';
 import { t } from './i18n.js';
 
@@ -21,6 +21,7 @@ export function createAccountControl({ auth, store, notify }) {
   function renderUser(user) {
     const orders = listOrders(store, user.id).length;
     const favorites = createWishlist(store, user.id).count();
+    const pendingCount = user.role === 'admin' ? listAllOrders(store).filter((o) => o.status === 'beklemede').length : 0;
     const alerts = notify.forContact({ email: user.email, phone: user.phone }).length;
 
     const link = (href, text, count, cls = '') => {
@@ -39,10 +40,13 @@ export function createAccountControl({ auth, store, notify }) {
       link('hesap.html#izinler', t('İzinler ve gizlilik'), 0, 'usermenu__item--quiet'),
       whatsapp, logout,
     ];
+    // Yönetici hesabına özel bağlantı, birincil grubun en üstünde.
+    if (user.role === 'admin') items.unshift(link('admin.html', t('Yönetim paneli'), pendingCount, ''));
+    const primaryCount = user.role === 'admin' ? 5 : 4;
     const panel = el('div', { class: 'usermenu__panel', id: 'kullanici-menusu', role: 'menu', 'aria-label': t('Kullanıcı menüsü'), hidden: '' },
       el('div', { class: 'usermenu__who' }, el('strong', {}, user.name), el('span', {}, user.email)),
-      el('div', { class: 'usermenu__group', role: 'none' }, ...items.slice(0, 4)),
-      el('div', { class: 'usermenu__group usermenu__group--quiet', role: 'none' }, ...items.slice(4)));
+      el('div', { class: 'usermenu__group', role: 'none' }, ...items.slice(0, primaryCount)),
+      el('div', { class: 'usermenu__group usermenu__group--quiet', role: 'none' }, ...items.slice(primaryCount)));
     const btn = el('button', { class: 'usermenu__btn', type: 'button', 'aria-haspopup': 'menu', 'aria-expanded': 'false', 'aria-controls': 'kullanici-menusu' },
       el('span', { class: 'usermenu__avatar', 'aria-hidden': 'true' }, initials(user.name)),
       el('span', { class: 'usermenu__name' }, user.name.trim().split(/\s+/)[0]),
