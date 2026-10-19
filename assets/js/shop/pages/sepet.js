@@ -68,7 +68,18 @@ function orderForm(q) {
   const name = el('input', { type: 'text', name: 'ad', autocomplete: 'name', required: '', value: user ? user.name : '' });
   const phone = el('input', { type: 'tel', name: 'telefon', autocomplete: 'tel', required: '', value: user ? user.phone : '' });
   const address = el('textarea', { name: 'adres', rows: '3', autocomplete: 'street-address', placeholder: 'Mahalle, cadde/sokak, bina ve daire no, ilçe, il' }, user ? user.address : '');
-  const addressField = el('label', { class: 'field', id: 'adres-alani', hidden: '' }, el('span', {}, 'Teslimat adresi'), address);
+  // Kayıtlı adresler: seçilince metin alanı dolar; "Yeni adres" metni boşaltır.
+  const saved = el('select', { name: 'kayitli-adres', 'aria-label': 'Kayıtlı adreslerim' },
+    ...(user ? user.addresses.map((a) => el('option', { value: a.id }, `${a.title}${a.isDefault ? ' (varsayılan)' : ''}`)) : []),
+    el('option', { value: '' }, 'Yeni adres gir'));
+  if (user && user.addresses.length) saved.value = (user.addresses.find((a) => a.isDefault) ?? user.addresses[0]).id;
+  saved.addEventListener('change', () => {
+    const a = user.addresses.find((x) => x.id === saved.value);
+    address.value = a ? a.text : '';
+  });
+  const addressField = el('div', { class: 'field', id: 'adres-alani', hidden: '' },
+    ...(user && user.addresses.length ? [el('label', { class: 'field' }, el('span', {}, 'Kayıtlı adreslerim'), saved)] : []),
+    el('label', { class: 'field' }, el('span', {}, 'Teslimat adresi'), address));
   const deliver = (value, text, checked) => el('label', { class: 'check' }, el('input', { type: 'radio', name: 'teslimat', value, ...(checked ? { checked: '' } : {}) }), el('span', {}, text));
   const pay = (value, text, checked) => el('label', { class: 'check' }, el('input', { type: 'radio', name: 'odeme', value, ...(checked ? { checked: '' } : {}) }), el('span', {}, text));
   const msg = el('p', { class: 'form-msg', role: 'alert' }, flash);
@@ -110,7 +121,13 @@ function orderForm(q) {
         userId: user ? user.id : null, name: name.value, phone: phone.value,
         payment: form.elements.odeme.value, delivery: form.elements.teslimat.value, address: address.value, code,
       });
-      if (user) auth.updateProfile({ phone: phone.value, ...(order.delivery === 'adres' ? { address: order.address } : {}) });
+      if (user) {
+        auth.updateProfile({ phone: phone.value });
+        // Yeni bir adres girildiyse adres defterine eklenir.
+        if (order.delivery === 'adres' && !user.addresses.some((a) => a.text === order.address)) {
+          auth.addAddress({ title: `Adresim ${user.addresses.length + 1}`, text: order.address });
+        }
+      }
       store.remove('coupon');
       code = '';
       ctx.refresh();

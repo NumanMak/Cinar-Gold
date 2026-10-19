@@ -3,7 +3,14 @@ const ITER = 100000;
 const hex = (buf) => [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
 const unhex = (s) => Uint8Array.from(s.match(/../g) ?? [], (h) => parseInt(h, 16));
 const norm = (email) => String(email ?? '').trim().toLowerCase();
-const pub = ({ id, name, email, phone = '', address = '' }) => ({ id, name, email, phone, address });
+const MIN_ADDRESS = 10;
+// Eski kayıtlarda tek metin olan "address" alanı varsa adres defterine dönüştürülür.
+const addressesOf = (u) => u.addresses ?? (u.address ? [{ id: 'adres-1', title: 'Adresim', text: u.address, isDefault: true }] : []);
+const defaultAddress = (list) => list.find((a) => a.isDefault) ?? list[0];
+const pub = (u) => {
+  const addresses = addressesOf(u);
+  return { id: u.id, name: u.name, email: u.email, phone: u.phone ?? '', address: defaultAddress(addresses)?.text ?? '', addresses };
+};
 
 async function hash(password, saltBytes) {
   const subtle = globalThis.crypto.subtle;
@@ -17,8 +24,15 @@ function same(a, b) {
   return d === 0;
 }
 
+const newId = () => hex(globalThis.crypto.getRandomValues(new Uint8Array(6)));
+
 export function createAuth(store) {
   const users = () => store.get('users', []);
+  const saveAddresses = (user, addresses) => {
+    const next = { ...user, addresses };
+    delete next.address;
+    store.set('users', users().map((u) => (u.id === user.id ? next : u)));
+  };
 
   return {
     async register({ name, email, password }) {
@@ -53,9 +67,40 @@ export function createAuth(store) {
         if (!next.name) throw new Error('ZORUNLU_ALAN');
       }
       if (patch.phone !== undefined) next.phone = String(patch.phone).trim();
-      if (patch.address !== undefined) next.address = String(patch.address).trim();
+      if (patch.address !== undefined && String(patch.address).trim()) {
+        // Varsayılan adres güncellenir; hiç adres yoksa oluşturulur.
+        const text = String(patch.address).trim();
+        const list = addressesOf(next);
+        const def = defaultAddress(list);
+        next.addresses = def ? list.map((a) => (a === def ? { ...a, text } : a)) : [{ id: newId(), title: 'Adresim', text, isDefault: true }];
+      }
+      delete next.address;
       store.set('users', users().map((u) => (u.id === id ? next : u)));
       return pub(next);
+    },
+    addAddress({ title, text }) {
+      const id = store.get('session', null);
+      const user = users().find((u) => u.id === id);
+      if (!user) throw new Error('GIRIS_HATALI');
+      const t = String(title ?? '').trim();
+      const body = String(text ?? '').trim();
+      if (!t || body.length < MIN_ADDRESS) throw new Error('ZORUNLU_ALAN');
+      const list = addressesOf(user);
+      const address = { id: newId(), title: t, text: body, isDefault: list.length === 0 };
+      saveAddresses(user, [...list, address]);
+      return address;
+    },
+    setDefaultAddress(addressId) {
+      const user = users().find((u) => u.id === store.get('session', null));
+      if (!user) throw new Error('GIRIS_HATALI');
+      saveAddresses(user, addressesOf(user).map((a) => ({ ...a, isDefault: a.id === addressId })));
+    },
+    removeAddress(addressId) {
+      const user = users().find((u) => u.id === store.get('session', null));
+      if (!user) throw new Error('GIRIS_HATALI');
+      const rest = addressesOf(user).filter((a) => a.id !== addressId);
+      if (rest.length && !rest.some((a) => a.isDefault)) rest[0] = { ...rest[0], isDefault: true };
+      saveAddresses(user, rest);
     },
     async changePassword(oldPassword, newPassword) {
       const id = store.get('session', null);

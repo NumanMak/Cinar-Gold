@@ -106,3 +106,46 @@ test('changePassword eski sifre yanlissa GIRIS_HATALI, kisaysa SIFRE_KISA, basar
   await assert.rejects(auth.login('ayse@ornek.com', 'gizli-sifre-1'), /GIRIS_HATALI/);
   await auth.login('ayse@ornek.com', 'yeni-sifre-22');
 });
+
+test('addAddress adres ekler, ilk adres varsayilan olur, current().address varsayilan adrestir', async () => {
+  const auth = createAuth(createStore(memoryBackend()));
+  await auth.register(ayse);
+  const a1 = auth.addAddress({ title: 'Ev', text: 'Atatürk Cd. No:5 Fethiye Muğla' });
+  assert.ok(a1.id);
+  assert.equal(a1.isDefault, true);
+  const a2 = auth.addAddress({ title: 'İş', text: 'Çarşı Mah. 12. Sk. No:3 Fethiye' });
+  assert.equal(a2.isDefault, false);
+  assert.equal(auth.current().addresses.length, 2);
+  assert.equal(auth.current().address, 'Atatürk Cd. No:5 Fethiye Muğla');
+});
+
+test('addAddress baslik bossa veya adres 10 karakterden kisaysa ZORUNLU_ALAN, oturum yoksa GIRIS_HATALI', async () => {
+  const auth = createAuth(createStore(memoryBackend()));
+  assert.throws(() => auth.addAddress({ title: 'Ev', text: 'Atatürk Cd. No:5 Fethiye' }), /GIRIS_HATALI/);
+  await auth.register(ayse);
+  assert.throws(() => auth.addAddress({ title: ' ', text: 'Atatürk Cd. No:5 Fethiye Muğla' }), /ZORUNLU_ALAN/);
+  assert.throws(() => auth.addAddress({ title: 'Ev', text: 'kısa' }), /ZORUNLU_ALAN/);
+});
+
+test('setDefaultAddress varsayilani degistirir, removeAddress siler ve varsayilan silinirse siradaki varsayilan olur', async () => {
+  const auth = createAuth(createStore(memoryBackend()));
+  await auth.register(ayse);
+  const a1 = auth.addAddress({ title: 'Ev', text: 'Atatürk Cd. No:5 Fethiye Muğla' });
+  const a2 = auth.addAddress({ title: 'İş', text: 'Çarşı Mah. 12. Sk. No:3 Fethiye' });
+  auth.setDefaultAddress(a2.id);
+  assert.equal(auth.current().address, 'Çarşı Mah. 12. Sk. No:3 Fethiye');
+  auth.removeAddress(a2.id);
+  assert.deepEqual(auth.current().addresses.map((a) => [a.id, a.isDefault]), [[a1.id, true]]);
+  auth.removeAddress(a1.id);
+  assert.equal(auth.current().address, '');
+});
+
+test('updateProfile address bos degilse varsayilan adresi gunceller (yoksa olusturur)', async () => {
+  const auth = createAuth(createStore(memoryBackend()));
+  await auth.register(ayse);
+  auth.updateProfile({ address: 'Atatürk Cd. No:5 Fethiye Muğla' });
+  assert.equal(auth.current().addresses.length, 1);
+  auth.updateProfile({ address: 'Yeni Mah. 7. Sk. No:1 Fethiye' });
+  assert.equal(auth.current().addresses.length, 1);
+  assert.equal(auth.current().address, 'Yeni Mah. 7. Sk. No:1 Fethiye');
+});

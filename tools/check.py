@@ -58,6 +58,11 @@ cat_ok = (len(products) == 60 and set(per_type.values()) == {15} and len(per_typ
 print("ürün:", len(products), dict(per_type), "model başına:", sorted(set(per_model.values())), "TAMAM" if cat_ok else "SORUN")
 ok &= cat_ok
 
+imgs = [p["image"] for p in products]
+img_ok = all((ROOT / i).is_file() for i in imgs) and len(set(imgs)) == len(imgs)
+print("ürün görselleri:", len(imgs), "TAMAM" if img_ok else "SORUN (eksik veya tekrarlı görsel)")
+ok &= img_ok
+
 print("== altın fiyatı")
 gold = json.loads((ROOT / "assets" / "data" / "gold.json").read_text(encoding="utf-8"))
 gold_ok = (set(gold["items"]) == {"gram22", "quarter", "half", "full", "ata", "resat"}

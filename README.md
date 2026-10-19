@@ -23,7 +23,8 @@ Ardından tarayıcıda `http://localhost:8000` adresini açın.
 | Adres ve harita | `index.html` iletişim bölümü, harita `iframe` adresi ve JSON-LD `address` |
 | Alan adı | `index.html` (canonical, og:url, og:image, JSON-LD), `robots.txt`, `sitemap.xml`. Şu an `https://www.cinargold.com.tr/` yazılı |
 | Ana sayfadaki vitrin ürünleri | `index.html` içindeki `data-product` öğeleri: ad, açıklama, özellikler (`data-specs`, `|` ile ayrılır) ve görsel (`data-img`) |
-| Mağaza kataloğu (60 ürün: fiyat, stok, model) | `tools/gen_products.py` dosyasını düzenleyip `python tools/gen_products.py` çalıştırın; çıktı `assets/data/products.json` |
+| Mağaza kataloğu (60 ürün: gram, ayar, işçilik, stok, model) | `tools/gen_products.py` dosyasını düzenleyip `python tools/gen_products.py` çalıştırın; çıktı `assets/data/products.json` ve `assets/img/products/*.svg`. Fiyat `gram x ayar fiyatı x (1 + işçilik) + taş bedeli`, ayar fiyatı Özsafir 22 ayar fiyatından tarayıcıda canlı hesaplanır |
+| Ürün fotoğrafı | Görseller illüstrasyondur. Gerçek fotoğraf için `products.json` içindeki ilgili ürünün `image` yolunu değiştirin (jpg/webp/svg) |
 | Kupon kodu ve oranı | `assets/js/shop/coupon.js` |
 | Kayan duyuru metni | `assets/js/shop/shell.js` içinde `PROMO_TEXT` |
 

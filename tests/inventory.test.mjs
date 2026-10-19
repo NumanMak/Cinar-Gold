@@ -44,3 +44,13 @@ test('bozuk stok kaydi (negatif, metin) baslangic stoguna doner', () => {
   store.set('stock', { [inStock.id]: '3' });
   assert.equal(createInventory(store, products).stockOf(inStock.id), inStock.stock);
 });
+
+test('restore stogu artirir ve bilinmeyen id veya gecersiz adette hata firlatir', () => {
+  const inv = createInventory(createStore(memoryBackend()), products);
+  inv.decrement(inStock.id, 2);
+  inv.restore(inStock.id, 2);
+  assert.equal(inv.stockOf(inStock.id), inStock.stock);
+  assert.throws(() => inv.restore('yok', 1), /URUN_YOK/);
+  assert.throws(() => inv.restore(inStock.id, 0), /STOK_GECERSIZ/);
+  assert.throws(() => inv.restore(inStock.id, 1.5), /STOK_GECERSIZ/);
+});

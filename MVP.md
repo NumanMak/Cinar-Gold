@@ -18,7 +18,10 @@ Detaylı tasarım: `docs/superpowers/specs/2026-10-19-cinar-gold-store-design.md
 11. **Sepette teslimat:** mağazadan teslim veya adrese teslim (açık adres zorunlu), hesaptan ön doldurma.
 12. **Mağaza araması ve sıralama:** Türkçe karakterden bağımsız arama, fiyat ve ada göre sıralama; ürün sayfasında benzer ürünler.
 13. **Canlı altın fiyatı:** Özsafir Gold sitesinin herkese açık fiyat tablosu (`tools/fetch_gold.py`, `.github/workflows/gold.yml` her 20 dakikada çalıştırır); dosya eskirse Truncgil yedek kaynağı kullanılır.
-14. **İzin penceresi:** kişisel bilgi alan her akıştan önce (kayıt, giriş, bildirim, sipariş) KVKK aydınlatması ve izinler sorulur; zorunlu izin verilmezse form gönderilmez.
+14. **Giriş yap ve kullanıcı menüsü:** sağ üstte misafire "Giriş yap" düğmesi; girişten sonra avatar ve açılır menü (Siparişlerim, Favorilerim, Adreslerim, Hesap bilgilerim; ikincil: stok bildirimlerim, izinler, destek, çıkış). Menü klavye ile kullanılır (ok tuşları, Esc).
+15. **Hesap bölümleri:** genel bakış, siparişler (iptal ve stok iadesi), favoriler, adres defteri, stok bildirimleri, bilgiler ve şifre, izinler.
+16. **Katalog ve fiyat:** 60 ürün için kuyumculuk fiyatı `gram x ayar fiyatı x (1 + işçilik) + taş bedeli` ile Özsafir 22 ayar fiyatından canlı hesaplanır; ürünlerin görselleri `tools/gen_product_art.py` ile üretilen illüstrasyonlardır.
+17. **İzin penceresi:** kişisel bilgi alan her akıştan önce (kayıt, giriş, bildirim, sipariş) KVKK aydınlatması ve izinler sorulur; zorunlu izin verilmezse form gönderilmez.
 
 ## MVP'de olmayanlar (sonraki sürümler)
 
@@ -26,7 +29,7 @@ Detaylı tasarım: `docs/superpowers/specs/2026-10-19-cinar-gold-store-design.md
 - Sunucu tarafı hesap, stok ve sipariş kaydı (şu an yalnızca tarayıcı localStorage).
 - "Bana bildir" kayıtları için gerçek e-posta / SMS gönderimi.
 - Yönetici paneli (stok ve fiyat güncelleme); şimdilik `tools/gen_products.py` düzenlenir.
-- Gerçek ürün fotoğrafları (şu an stok görseller yeniden kullanılıyor).
+- Gerçek ürün fotoğrafları: şu an ürün görselleri illüstrasyon (`assets/img/products/<ürün-id>.svg`). Kendi fotoğraflarınızı `products.json` içindeki `image` yoluyla değiştirebilirsiniz.
 
 ## Yayın sonrası görev
 

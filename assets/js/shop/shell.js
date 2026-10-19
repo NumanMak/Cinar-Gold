@@ -8,13 +8,15 @@ import { createAuth } from './auth.js';
 import { createConsent } from './consent.js';
 import { createNotify } from './notify.js';
 import { el } from './ui.js';
+import { createAccountControl } from './usermenu.js';
+import { loadGold, repriceProducts } from './pricing.js';
+import { createWishlist } from './wishlist.js';
 
 export const PROMO_TEXT = 'Açılışa özel %10 indirim: CINAR10';
 
 const SVG = {
   theme: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>',
   cart: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 11H6.2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>',
-  user: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5 20c.6-3.6 3.4-5.5 7-5.5s6.4 1.9 7 5.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
 };
 
 function buildPromo() {
@@ -33,9 +35,7 @@ function buildActions() {
   themeBtn.append(el('span', { class: 'visually-hidden' }, 'Koyu / açık temayı değiştir'));
   const cart = el('a', { class: 'shop-act', href: 'sepet.html', html: SVG.cart });
   cart.append(el('span', { class: 'shop-act__label' }, 'Sepet'), el('span', { class: 'shop-act__badge', id: 'sepet-sayac' }, '0'));
-  const acc = el('a', { class: 'shop-act', href: 'hesap.html', html: SVG.user });
-  acc.append(el('span', { class: 'shop-act__label', 'data-account-label': '' }, 'Giriş'));
-  return { wrap: el('div', { class: 'shop-actions' }, themeBtn, cart, acc), themeBtn, acc };
+  return { wrap: el('div', { class: 'shop-actions' }, themeBtn, cart), themeBtn };
 }
 
 function buildShopHeader() {
@@ -65,11 +65,16 @@ export async function mountShell({ page }) {
 
   const actions = buildActions();
   const homeActions = document.querySelector('.nav__actions');
+  // Hesap alanı (Giriş yap / kullanıcı menüsü) her zaman sağ üstte, en sonda durur.
+  const auth = createAuth(store);
+  const notify = createNotify(store);
+  const account = createAccountControl({ auth, store, notify });
   if (page === 'home' && homeActions) {
     homeActions.prepend(actions.wrap);
+    homeActions.querySelector('.nav__toggle').before(account.node);
   } else {
     const header = buildShopHeader();
-    header.querySelector('.shop-nav__inner').append(actions.wrap);
+    header.querySelector('.shop-nav__inner').append(actions.wrap, account.node);
     document.querySelector('.promo').after(header);
     document.body.append(buildShopFooter());
   }
@@ -87,16 +92,15 @@ export async function mountShell({ page }) {
     document.querySelector('.promo').after(el('p', { class: 'shop-error', role: 'alert' }, 'Ürünler yüklenemedi, sayfayı yenileyin.'));
   }
 
+  // Fiyatlar canlı altın fiyatından hesaplanır; veri yoksa veya eskiyse products.json'daki fiyat kalır.
+  repriceProducts(products, await loadGold());
   const inventory = createInventory(store, products);
   const cart = createCart(store, products, inventory);
-  const auth = createAuth(store);
   const consent = createConsent(store);
-  const notify = createNotify(store);
 
   const refresh = () => {
     document.getElementById('sepet-sayac').textContent = String(cart.count());
-    const user = auth.current();
-    actions.acc.querySelector('[data-account-label]').textContent = user ? user.name.split(' ')[0] : 'Giriş';
+    account.update();
     actions.themeBtn.setAttribute('aria-pressed', String(theme.current() === 'dark'));
   };
   actions.themeBtn.addEventListener('click', () => { theme.toggle(); refresh(); });
@@ -111,7 +115,10 @@ export async function mountShell({ page }) {
     return !!choices;
   }
 
-  return { store, products, inventory, cart, auth, consent, notify, requireConsent, refresh };
+  // Favoriler oturumdaki kullanıcıya (yoksa misafire) aittir; her çağrıda güncel sahip alınır.
+  const wishlist = () => createWishlist(store, auth.current()?.id ?? null);
+
+  return { store, products, inventory, cart, auth, consent, notify, wishlist, requireConsent, refresh };
 }
 
 // İzin penceresi: kabulde seçimleri, vazgeçişte null döner.
