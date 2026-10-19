@@ -16,6 +16,7 @@ const ERRORS = {
   ZORUNLU_ALAN: 'Tüm alanları doldurun (adres en az 10 karakter olmalı).',
   IPTAL_EDILEMEZ: 'Bu sipariş artık iptal edilemez.',
   SUNUCU_YOK: 'Sunucuya ulaşılamadı, tekrar deneyin.',
+  COK_FAZLA_ISTEK: 'Çok fazla deneme yapıldı, lütfen biraz bekleyip tekrar deneyin.',
   SIPARIS_YOK: 'Sipariş bulunamadı.',
   SUNUCU_HATASI: 'Sunucu hatası, lütfen biraz sonra tekrar deneyin.',
   EMAIL_DOGRULANMADI: 'E-posta adresiniz henüz doğrulanmadı. Gelen kutunuzdaki bağlantıya tıklayın.',

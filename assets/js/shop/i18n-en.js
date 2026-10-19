@@ -231,6 +231,7 @@ export const EN = {
   'Önce e-posta adresinizi yazın.': 'Enter your email address first.',
   'Şifre sıfırlama bağlantısı e-postanıza gönderildi.': 'A password reset link has been sent to your email.',
   'Tüm alanları doldurun.': 'Fill in all fields.',
+  'Çok fazla deneme yapıldı, lütfen biraz bekleyip tekrar deneyin.': 'Too many attempts, please wait a moment and try again.',
   'Sunucuya ulaşılamadı, tekrar deneyin.': 'The server could not be reached, please try again.',
   'Bu işlem için yönetici yetkisi gerekir.': 'Admin permission is required for this action.',
   'Yönetici hesabını oluştur': 'Create the admin account',

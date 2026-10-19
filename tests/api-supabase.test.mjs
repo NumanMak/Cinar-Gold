@@ -96,6 +96,8 @@ test('supabase: sunucu hata kodlari Error(kod) olur; kimlik hatalari ve bilinmey
     [{ status: 400, body: { message: 'YETKI_YOK' } }, 'YETKI_YOK'],
     [{ status: 400, body: { code: '22P02', message: 'invalid input syntax for type integer: "1.5"' } }, 'ZORUNLU_ALAN'],
     [{ status: 500, body: { message: 'beklenmeyen sunucu hatasi' } }, 'SUNUCU_HATASI'],
+    [{ status: 429, body: { message: 'Too many requests' } }, 'COK_FAZLA_ISTEK'],
+    [{ status: 429, body: { error_code: 'over_request_rate_limit', msg: 'rate' } }, 'COK_FAZLA_ISTEK'],
     [new TypeError('fetch failed'), 'SUNUCU_YOK'],
   ];
   for (const [out, want] of cases) {

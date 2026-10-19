@@ -16,6 +16,7 @@ const ERRORS = {
   SEPET_BOS: 'Sepetiniz boş.',
   ZORUNLU_ALAN: 'Ad soyad, telefon, ödeme yöntemi ve (adrese teslimde) en az 10 karakterlik açık adresi doldurun.',
   SUNUCU_YOK: 'Sunucuya ulaşılamadı, tekrar deneyin.',
+  COK_FAZLA_ISTEK: 'Çok fazla deneme yapıldı, lütfen biraz bekleyip tekrar deneyin.',
 };
 // Sepeti değiştirmiş olabilecek hatalar: sepet yeniden çizilir ve mesaj yeni formda gösterilir.
 const STALE = ['SIPARIS_GECERSIZ', 'STOK_YETERSIZ', 'SEPET_BOS', 'URUN_YOK'];

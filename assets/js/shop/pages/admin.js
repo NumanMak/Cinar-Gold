@@ -21,6 +21,7 @@ const ERRORS = {
   STOK_GECERSIZ: 'Stok, 0 veya daha büyük bir tam sayı olmalı.',
   YETKI_YOK: 'Bu işlem için yönetici yetkisi gerekir.',
   SUNUCU_YOK: 'Sunucuya ulaşılamadı, tekrar deneyin.',
+  COK_FAZLA_ISTEK: 'Çok fazla deneme yapıldı, lütfen biraz bekleyip tekrar deneyin.',
 };
 const errorText = (code, fallback) => t(ERRORS[code] ?? fallback);
 const STATUS = { beklemede: 'Onay bekliyor', onaylandi: 'Onaylandı', tamamlandi: 'Tamamlandı', iptal: 'İptal edildi' };

@@ -11,6 +11,7 @@ const filled = (s) => String(s ?? '').trim() !== '';
 function mapError(status, body) {
   const m = String(body?.message ?? body?.msg ?? body?.error_description ?? body?.error ?? '');
   if (CODES.has(m)) return new Error(m);
+  if (status === 429 || ['over_request_rate_limit', 'over_email_send_rate_limit', 'over_sms_send_rate_limit'].includes(body?.error_code)) return new Error('COK_FAZLA_ISTEK');
   const lm = m.toLowerCase();
   if (lm.includes('invalid login credentials')) return new Error('GIRIS_HATALI');
   if (lm.includes('email not confirmed')) return new Error('EMAIL_DOGRULANMADI');
