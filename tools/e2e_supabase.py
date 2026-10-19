@@ -2,7 +2,7 @@
 sipariş iptal edilir (stok geri gelir), hesap silinir (sipariş 'silindi' olarak anonimleşir).
 TEST_ADMIN_EMAIL / TEST_ADMIN_PASSWORD ortam değişkenleri verilirse yönetici adımı da çalışır.
 Gerçek arka uçta kayıt hız sınırı vardır; art arda çalıştırmalar arasında birkaç dakika bekleyin.
-Kullanım: python tools/e2e_supabase.py
+Kullanım: python tools/e2e_supabase.py  (yayındaki site için SITE_URL=https://... verin)
 """
 import json
 import os
@@ -24,7 +24,7 @@ PW = "E2E-sifre-2026-xyz"
 STATE: dict = {}
 
 REST_JS = """(async (path) => {
-  const { CONFIG } = await import('/assets/js/shop/config.js');
+  const { CONFIG } = await import('./assets/js/shop/config.js');
   const r = await fetch(CONFIG.url + path, { headers: { apikey: CONFIG.anonKey } });
   return await r.json();
 })"""
@@ -42,7 +42,7 @@ def server_stock(pg):
 def t_catalog(pg):
     pg.goto("magaza.html")
     pg.wait("document.querySelectorAll('#urunler .pcard').length === 60")
-    check(pg.ev("import('/assets/js/shop/config.js').then(m => m.CONFIG.mode)") == "supabase", "mod supabase değil")
+    check(pg.ev("import('./assets/js/shop/config.js').then(m => m.CONFIG.mode)") == "supabase", "mod supabase değil")
     price = rest(pg, f"/rest/v1/products_priced?select=price&id=eq.{PID}")[0]["price"]
     STATE["price"] = price
     pg.goto("sepet.html")
@@ -166,20 +166,22 @@ SCENARIOS = [t_catalog, t_signup, t_order, t_cancel, t_privacy, t_admin]
 
 
 def main() -> int:
-    httpd, port = qa.start_server(base.ROOT)
+    site = os.environ.get("SITE_URL", "").rstrip("/")  # örn. https://numanmak.github.io/Cinar-Gold: yayındaki siteyi sınar
+    httpd, port = (None, 0) if site else qa.start_server(base.ROOT)
     qa.PROFILE_DIR = Path(tempfile.mkdtemp(prefix="cg-e2e-sb-"))
     edge = qa.Edge()
     edge.start()
     try:
         cdp = qa.CDP(edge.new_tab_ws())
-        pg = SbPage(cdp, f"http://127.0.0.1:{port}", local=False)
+        pg = SbPage(cdp, site or f"http://127.0.0.1:{port}", local=False)
         cdp.send("Emulation.setDeviceMetricsOverride", {"width": 1280, "height": 900, "deviceScaleFactor": 1, "mobile": False})
         for s in SCENARIOS:
             s(pg)
         cdp.close()
     finally:
         edge.stop()
-        httpd.shutdown()
+        if httpd:
+            httpd.shutdown()
     failed = [r for r in base.RESULTS if not r[1]]
     print(f"\n{len(base.RESULTS) - len(failed)}/{len(base.RESULTS)} adım geçti")
     return 1 if failed else 0
