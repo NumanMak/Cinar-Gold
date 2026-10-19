@@ -6,10 +6,12 @@ Depo sayfası → Security → Report a vulnerability.
 
 ## Bu sitenin güvenlik modeli (bilmeniz gerekenler)
 
-- Site **statik** bir mağaza demosudur: hesaplar, sepet, stok ve siparişler yalnızca ziyaretçinin tarayıcısında (localStorage) tutulur.
-  Sunucu olmadığı için bu veriler gerçek bir güvenlik sınırı oluşturmaz; **yönetici rolü de tarayıcıda saklanır** ve gerçek
-  müşteri verisi/ödeme için kullanılmamalıdır.
-- Gerçek kullanım (ödeme, çok kullanıcılı hesap, siparişlerin merkezi onayı) için sunucu tarafı bir arka uç gerekir.
+- Site statik sayfalardan ve **Supabase** arka ucundan oluşur. Hesap, stok, sipariş ve izin verileri Supabase'te tutulur; erişimi
+  satır düzeyi güvenlik (RLS) belirler: müşteri yalnızca kendi verisini görür, fiyat/kupon/stok hesabı sunucudaki işlevlerde yapılır
+  (`supabase/schema.sql`). Yönetici rolü yalnızca veritabanında SQL ile verilir; müşteri bunu tarayıcıdan değiştiremez.
+- Tarayıcıda yalnızca herkese açık anahtar (publishable/anon) bulunur. Gizli anahtar (service_role/secret) ve veritabanı şifresi
+  koda, depoya veya sohbete **asla** konmaz; sızarsa Supabase panelinden hemen yenilenir.
+- Ödeme alınmaz (havale/WhatsApp). KVKK: izinler kayıt altına alınır, kullanıcı verisini indirebilir ve hesabını silebilir.
 - Tarayıcıda çalışan kod (HTML/CSS/JS) doğası gereği herkes tarafından görülebilir; sır (API anahtarı, şifre) kod içine konmaz.
 
 ## Uygulanan korumalar

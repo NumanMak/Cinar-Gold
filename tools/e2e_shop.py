@@ -19,12 +19,15 @@ SOLD_OUT = next(p for p in PRODUCTS if p["stock"] == 0)
 
 
 class Page:
-    def __init__(self, cdp, base):
+    def __init__(self, cdp, base, local=True):
         self.cdp, self.base = cdp, base
         self.errors: list[str] = []
         cdp.on(self._on_event)
         for m in ("Page.enable", "Runtime.enable", "Log.enable"):
             cdp.send(m)
+        # Bu senaryo yerel (tarayıcı içi) modu sınar; gerçek arka uç için tools/e2e_supabase.py vardır.
+        if local:
+            cdp.send("Page.addScriptToEvaluateOnNewDocument", {"source": "try{localStorage.setItem('cg:dev-mode','local')}catch(e){}"})
 
     def _on_event(self, method, p):
         self._collect(method, p)

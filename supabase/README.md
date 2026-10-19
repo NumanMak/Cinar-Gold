@@ -29,7 +29,7 @@ Kayıt hız sınırı nedeniyle ardışık çalıştırmalar arasında 3-5 dakik
 
 ```sql
 -- test siparişleri ve test kullanıcıları (gerçek müşteriler etkilenmez: e-postası @cinargold.test olanlar)
-delete from public.orders where name like 'TEST %';
+delete from public.orders where name like 'TEST %' or name = 'silindi';  -- 'silindi': tarayıcı testinin silinen hesabından kalan anonim siparişler
 delete from auth.users where email like '%@cinargold.test';
 ```
 

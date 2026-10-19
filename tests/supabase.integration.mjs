@@ -77,6 +77,10 @@ const skip = enabled ? false : 'SUPABASE_* ortam değişkenleri yok';
 
 if (enabled) {
   contract('supabase', async () => {
+    // Önceki testlerin siparişleri stoğu tüketmiş olabilir: test ürünlerinin stoğu her testten önce başlangıç değerine döner.
+    const reset = await makeAdminApi();
+    const cur = await reset.api.stock.load();
+    for (const id of [A.id, B.id]) if (cur[id] !== initialStock[id]) await reset.api.stock.adminSet(id, initialStock[id]);
     const { api } = newApi();
     // Her test için e-postalar ad başına sabit ama testler arasında benzersizdir.
     const names = new Map();
