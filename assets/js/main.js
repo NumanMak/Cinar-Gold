@@ -31,6 +31,10 @@
   };
   const PRICE_URL = 'https://finans.truncgil.com/v4/today.json';
   const PRICE_REFRESH_MS = 5 * 60 * 1000;
+  const GOLD_URL = 'assets/data/gold.json';
+  const GOLD_MAX_AGE_MS = 30 * 60 * 60 * 1000;
+  // Özsafir anahtarı -> Truncgil anahtarı (yedek kaynak)
+  const FALLBACK_KEYS = { quarter: 'CEYREKALTIN', half: 'YARIMALTIN', full: 'TAMALTIN', ata: 'ATAALTIN', resat: 'RESATALTIN', gram22: 'YIA' };
 
   const safe = (name, fn) => {
     try { fn(); } catch (err) { console.warn(`[cinar-gold] ${name}:`, err); }
@@ -580,6 +584,7 @@
     if (!box || typeof fetch !== 'function') return;
     const items = $$('[data-key]', box);
     const time = $('[data-market-time]', box);
+    const sourceEl = $('[data-market-source]', box);
     const money2 = new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', minimumFractionDigits: 2, maximumFractionDigits: 2 });
     const money0 = new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', maximumFractionDigits: 0 });
     const pct = new Intl.NumberFormat('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -592,18 +597,46 @@
       el.classList.add('is-flash');
     };
 
+    // Kaynak 1: assets/data/gold.json (Özsafir Gold, zamanlanmış görev yazar). Eskiyse veya okunamazsa kaynak 2: Truncgil.
+    async function fromFile(signal) {
+      const res = await fetch(GOLD_URL, { cache: 'no-store', signal });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      const age = Date.now() - Date.parse(data.fetchedAt);
+      if (!(age > -5 * 60 * 1000 && age <= GOLD_MAX_AGE_MS)) throw new Error('Fiyat dosyası eski');
+      const m = /(\d{2}):(\d{2})/.exec(String(data.updatedAt || ''));
+      return {
+        source: data.source || 'Özsafir Gold',
+        time: m ? `Son güncelleme ${m[1]}:${m[2]}` : 'Güncel piyasa verisi',
+        get: (key) => { const d = data.items && data.items[key]; return d ? { value: Number(d.sell), buy: Number(d.buy) } : null; },
+      };
+    }
+
+    async function fromTruncgil(signal) {
+      const res = await fetch(PRICE_URL, { cache: 'no-store', signal });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      const m = /(\d{2}):(\d{2})/.exec(String(data.Update_Date || ''));
+      return {
+        source: 'Truncgil Finans',
+        time: m ? `Son güncelleme ${m[1]}:${m[2]}` : 'Güncel piyasa verisi',
+        get: (key) => { const d = data[FALLBACK_KEYS[key]]; return d ? { value: Number(d.Selling), change: Number(d.Change) } : null; },
+      };
+    }
+
     async function load() {
       const ctrl = typeof AbortController === 'function' ? new AbortController() : null;
       const timer = setTimeout(() => ctrl && ctrl.abort(), 9000);
       try {
-        const res = await fetch(PRICE_URL, { cache: 'no-store', signal: ctrl ? ctrl.signal : undefined });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
+        const signal = ctrl ? ctrl.signal : undefined;
+        let feed;
+        try { feed = await fromFile(signal); } catch (e) { feed = await fromTruncgil(signal); }
         let count = 0;
         items.forEach((li) => {
-          const d = data[li.dataset.key];
-          const value = d ? Number(d.Selling) : NaN;
-          if (!Number.isFinite(value) || value <= 0) return;
+          const d = feed.get(li.dataset.key);
+          const value = d ? d.value : NaN;
+          if (!Number.isFinite(value) || value <= 0) { li.hidden = true; return; }
+          li.hidden = false;
           count += 1;
           const priceEl = $('[data-price]', li);
           const chgEl = $('[data-chg]', li);
@@ -612,24 +645,29 @@
             priceEl.textContent = txt;
             if (loadedOnce) flash(priceEl);
           }
-          const change = Number(d.Change);
-          if (chgEl && Number.isFinite(change)) {
+          if (!chgEl) return;
+          chgEl.classList.remove('is-up', 'is-down');
+          if (Number.isFinite(d.buy) && d.buy > 0) {
+            chgEl.textContent = `Alış ${(d.buy >= 10000 ? money0 : money2).format(d.buy)}`;
+          } else if (Number.isFinite(d.change)) {
             const arrow = document.createElement('span');
             arrow.setAttribute('aria-hidden', 'true');
-            arrow.textContent = change > 0 ? '▲ ' : change < 0 ? '▼ ' : '';
+            arrow.textContent = d.change > 0 ? '▲ ' : d.change < 0 ? '▼ ' : '';
             const sr = document.createElement('span');
             sr.className = 'visually-hidden';
-            sr.textContent = change > 0 ? 'artış ' : change < 0 ? 'düşüş ' : 'değişim ';
-            chgEl.replaceChildren(arrow, sr, document.createTextNode(`%${pct.format(Math.abs(change))}`));
-            chgEl.classList.toggle('is-up', change > 0);
-            chgEl.classList.toggle('is-down', change < 0);
+            sr.textContent = d.change > 0 ? 'artış ' : d.change < 0 ? 'düşüş ' : 'değişim ';
+            chgEl.replaceChildren(arrow, sr, document.createTextNode(`%${pct.format(Math.abs(d.change))}`));
+            chgEl.classList.toggle('is-up', d.change > 0);
+            chgEl.classList.toggle('is-down', d.change < 0);
+          } else {
+            chgEl.textContent = '';
           }
         });
         if (!count) throw new Error('Fiyat verisi boş');
         loadedOnce = true;
         box.classList.remove('is-error');
-        const m = /(\d{2}):(\d{2})/.exec(String(data.Update_Date || ''));
-        time.textContent = m ? `Son güncelleme ${m[1]}:${m[2]}` : 'Güncel piyasa verisi';
+        time.textContent = feed.time;
+        if (sourceEl) sourceEl.textContent = feed.source;
       } catch (err) {
         if (!loadedOnce) {
           box.classList.add('is-error');

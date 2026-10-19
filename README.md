@@ -39,6 +39,14 @@ Ardından tarayıcıda `http://localhost:8000` adresini açın.
 - "Hareketi azalt" tercihine saygı: animasyonlar kapanır, video yerine fotoğraf gösterilir
 - SEO: başlık ve açıklama, Open Graph görseli, `JewelryStore` yapılandırılmış verisi, `sitemap.xml`, `robots.txt`
 
+## Altın fiyatları (Özsafir Gold)
+
+Ana sayfadaki fiyat şeridi `assets/data/gold.json` dosyasını okur. Dosyayı `tools/fetch_gold.py` yazar: Özsafir Gold
+sitesinin herkese açık fiyat tablosunu (görünen HTML) okur, API anahtarı veya gizli uç kullanmaz. GitHub'a yüklenince
+`.github/workflows/gold.yml` bunu her 20 dakikada çalıştırır ve yalnızca fiyat değiştiğinde (ya da 12 saatte bir)
+commit atar. Dosya 30 saatten eskiyse veya okunamazsa şerit Truncgil'e düşer, o da çalışmazsa mağazayı aramaya yönlendirir.
+Yerelde denemek için: `python tools/fetch_gold.py`. Testler: `python -m unittest discover -s tools -p "test_*.py"`.
+
 ## Mağaza (demo)
 
 Online alışveriş akışı sunucusuz çalışır: hesaplar, sepet, stok düşümü, "Bana bildir" kayıtları ve siparişler

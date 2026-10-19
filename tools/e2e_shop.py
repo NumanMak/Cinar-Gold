@@ -369,7 +369,34 @@ def t_mobile_overflow(pg):
         pg.cdp.send("Emulation.setDeviceMetricsOverride", {"width": 1280, "height": 900, "deviceScaleFactor": 1, "mobile": False})
 
 
-SCENARIOS = [t_catalog, t_promo, t_theme, t_soldout, t_missing_and_xss, t_cart_coupon, t_order, t_account, t_order_error, t_search_sort, t_similar, t_delivery_account, t_alerts, t_mobile_overflow, t_blocked_storage]
+@step("ana sayfa altın fiyatları: Özsafir dosyasından gelir, kaynak yazılır; dosya eskiyse Truncgil'e düşer")
+def t_gold(pg):
+    gold = json.loads((ROOT / "assets" / "data" / "gold.json").read_text(encoding="utf-8"))
+    pg.goto("index.html")
+    pg.wait("document.querySelector('.market__item [data-price]').textContent !== '-'")
+    check(pg.text("[data-market-source]") == "Özsafir Gold", "kaynak Özsafir Gold değil")
+    check(pg.ev("document.querySelectorAll('.market__item:not([hidden])').length") == 6, "6 fiyat görünmüyor")
+    sell = gold["items"]["quarter"]["sell"]
+    shown = pg.text(".market__item[data-key=quarter] [data-price]")
+    check(f"{sell:,}".replace(",", ".") in shown, f"çeyrek fiyatı yanlış: {shown}")
+    check("Alış" in pg.text(".market__item[data-key=quarter] [data-chg]"), "alış fiyatı yok")
+    stub = """(() => { const real = window.fetch.bind(window);
+      window.fetch = (u, o) => {
+        const url = String(u);
+        if (url.includes('gold.json')) return Promise.resolve(new Response(JSON.stringify({source:'Özsafir Gold',fetchedAt:'2020-01-01T00:00:00+00:00',updatedAt:'10:00',items:{}}), {status:200}));
+        if (url.includes('truncgil')) return Promise.resolve(new Response(JSON.stringify({Update_Date:'2026-10-19 12:34:00',CEYREKALTIN:{Selling:11111,Change:0.5},YARIMALTIN:{Selling:22222,Change:-0.2},TAMALTIN:{Selling:44444,Change:0.1},ATAALTIN:{Selling:45555,Change:0.1},YIA:{Selling:6666,Change:0.3}}), {status:200}));
+        return real(u, o); }; })();"""
+    sid = pg.cdp.send("Page.addScriptToEvaluateOnNewDocument", {"source": stub})["identifier"]
+    try:
+        pg.goto("index.html")
+        pg.wait("document.querySelector('[data-market-source]').textContent === 'Truncgil Finans'")
+        check(pg.ev("document.querySelectorAll('.market__item:not([hidden])').length") == 5, "yedek kaynakta eksik reşat gizlenmedi")
+        check("11.111" in pg.text(".market__item[data-key=quarter] [data-price]"), "yedek fiyat görünmüyor")
+    finally:
+        pg.cdp.send("Page.removeScriptToEvaluateOnNewDocument", {"identifier": sid})
+
+
+SCENARIOS = [t_catalog, t_promo, t_theme, t_soldout, t_missing_and_xss, t_cart_coupon, t_order, t_account, t_order_error, t_search_sort, t_similar, t_delivery_account, t_alerts, t_mobile_overflow, t_gold, t_blocked_storage]
 
 
 def main() -> int:
