@@ -224,7 +224,41 @@ def t_order(pg):
     pg.wait("!!document.querySelector('.stock')")
 
 
-SCENARIOS = [t_catalog, t_promo, t_theme, t_soldout, t_missing_and_xss, t_cart_coupon, t_order]
+@step("hesap: izin önce sorulur; kayıt, çıkış, hatalı ve doğru giriş; ad HTML olarak yorumlanmaz")
+def t_account(pg):
+    pg.goto("hesap.html")
+    pg.ev("localStorage.removeItem('cg:consent')")
+    pg.wait("!!document.querySelector('.auth')")
+    pg.ev("[...document.querySelectorAll('.auth .chip')].find(b=>b.textContent==='Kayıt ol').click()")
+    pg.wait("!!document.querySelector('#form-kayit')")
+    pg.set_value("#form-kayit input[name=ad]", "<b>Ayşe</b> Yılmaz")
+    pg.set_value("#form-kayit input[name=email]", "ayse@ornek.com")
+    pg.set_value("#form-kayit input[name=sifre]", "gizli-sifre-1")
+    pg.click("#form-kayit button[type=submit]")
+    pg.decline_consent()
+    pg.wait("document.querySelector('#form-kayit .form-msg').textContent.includes('izin')")
+    check(pg.ev("JSON.parse(localStorage.getItem('cg:users')||'[]').length") == 0, "izin yokken kullanıcı oluştu")
+    pg.click("#form-kayit button[type=submit]")
+    pg.accept_consent()
+    pg.wait("!!document.querySelector('.account')")
+    check("<b>Ayşe</b>" in pg.text(".account .shop-lead"), "ad düz metin olarak görünmüyor")
+    check(pg.ev("document.querySelectorAll('.account b').length") == 0, "ad HTML olarak yorumlandı")
+    check("verildi" in pg.text("#izin-durum"), "izin durumu yok")
+    users = pg.ev("localStorage.getItem('cg:users')")
+    check("gizli-sifre-1" not in users, "düz şifre saklanmış")
+    pg.click(".account .pdetail__buy button")
+    pg.wait("!!document.querySelector('.auth')")
+    pg.ev("document.querySelector('#form-giris')||0")
+    pg.set_value("#form-giris input[name=email]", "ayse@ornek.com")
+    pg.set_value("#form-giris input[name=sifre]", "yanlis-sifre")
+    pg.click("#form-giris button[type=submit]")
+    pg.wait("document.querySelector('#form-giris .form-msg').textContent.includes('hatalı')")
+    pg.set_value("#form-giris input[name=sifre]", "gizli-sifre-1")
+    pg.click("#form-giris button[type=submit]")
+    pg.wait("!!document.querySelector('.account')")
+
+
+SCENARIOS = [t_catalog, t_promo, t_theme, t_soldout, t_missing_and_xss, t_cart_coupon, t_order, t_account]
 
 
 def main() -> int:

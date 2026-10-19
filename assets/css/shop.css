@@ -210,3 +210,11 @@ html.has-promo .mmenu { padding-top: calc(var(--nav-h) + var(--promo-h) + 24px);
 .done { display: grid; gap: 12px; margin-top: 24px; max-width: 36rem; }
 .done__title { font-size: 1.75rem; }
 .done__list { margin: 0; padding-left: 18px; color: var(--text-2); }
+
+/* ===== Hesap ===== */
+.auth { display: grid; gap: 18px; max-width: 26rem; margin-top: 24px; }
+.auth-form { display: grid; gap: 4px; }
+.account { display: grid; gap: 12px; margin-top: 24px; max-width: 40rem; }
+.orders { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.order { padding: 14px 16px; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--graphite); }
+.order__head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; margin-bottom: 6px; }

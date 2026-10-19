@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hesabım | Çınar Gold Kuyumculuk</title>
+<meta name="description" content="Çınar Gold hesabınıza giriş yapın veya kayıt olun, siparişlerinizi görüntüleyin.">
+<meta name="theme-color" content="#000000">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="site.webmanifest">
+<link rel="stylesheet" href="assets/css/fonts.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/shop.css">
+<script>
+  (function (d) {
+    try {
+      var t = JSON.parse(localStorage.getItem('cg:theme'));
+      if (t !== 'dark' && t !== 'light') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      d.dataset.theme = t;
+    } catch (e) {}
+  })(document.documentElement);
+</script>
+</head>
+<body class="shop-page">
+<main id="icerik" class="container shop-main">
+  <h1 class="shop-title">Hesabım</h1>
+  <div id="hesap"></div>
+</main>
+<script type="module" src="assets/js/shop/pages/hesap.js"></script>
+</body>
+</html>
