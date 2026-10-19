@@ -42,3 +42,15 @@ export function placeOrder({ store, inventory, cart }, input) {
   cart.clear();
   return order;
 }
+
+// Yalnızca onay bekleyen ve kullanıcıya ait sipariş iptal edilir; stok geri verilir.
+export function cancelOrder({ store, inventory }, orderId, userId) {
+  const orders = store.get('orders', []);
+  const order = orders.find((o) => o.id === orderId && o.userId === userId);
+  if (!order) throw new Error('SIPARIS_YOK');
+  if (order.status !== 'beklemede') throw new Error('IPTAL_EDILEMEZ');
+  for (const l of order.lines) inventory.restore(l.id, l.qty);
+  const cancelled = { ...order, status: 'iptal', cancelledAt: new Date().toISOString() };
+  store.set('orders', orders.map((o) => (o === order ? cancelled : o)));
+  return cancelled;
+}

@@ -12,6 +12,11 @@ export function createInventory(store, products) {
   return {
     stockOf,
     isSoldOut: (id) => stockOf(id) <= 0,
+    restore(id, qty) {
+      if (!base.has(id)) throw new Error('URUN_YOK');
+      if (!Number.isInteger(qty) || qty < 1) throw new Error('STOK_GECERSIZ');
+      store.set('stock', { ...store.get('stock', {}), [id]: stockOf(id) + qty });
+    },
     decrement(id, qty) {
       const now = stockOf(id);
       if (!Number.isInteger(qty) || qty < 1 || qty > now) throw new Error('STOK_YETERSIZ');

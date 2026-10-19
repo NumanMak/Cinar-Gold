@@ -1,5 +1,5 @@
 import { mountShell } from '../shell.js';
-import { el, formatTL, productImg, stockBadge, addToCart, openNotify, productCard } from '../ui.js';
+import { el, formatTL, productImg, stockBadge, addToCart, openNotify, productCard, favoriteButton } from '../ui.js';
 
 const ctx = await mountShell({ page: 'product' });
 const root = document.getElementById('urun');
@@ -38,6 +38,7 @@ if (!p) {
       el('p', { class: 'pdetail__price' }, formatTL(p.price)),
       el('p', {}, stockBadge(stock)),
       el('p', { class: 'pdetail__desc' }, p.desc),
+      el('div', { class: 'pdetail__fav' }, favoriteButton(p, ctx), el('span', {}, 'Favorilere ekle')),
       el('dl', { class: 'pdetail__specs' },
         el('div', {}, el('dt', {}, 'Ayar'), el('dd', {}, `${p.karat} ayar`)),
         el('div', {}, el('dt', {}, 'Ağırlık'), el('dd', {}, `${String(p.gram).replace('.', ',')} gram`))),

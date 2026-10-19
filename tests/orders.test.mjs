@@ -119,3 +119,27 @@ test('gecersiz teslimat yontemi ZORUNLU_ALAN', () => {
   cart.add(a.id, 1);
   assert.throws(() => placeOrder(deps, { ...buyer, delivery: 'ucak' }), /ZORUNLU_ALAN/);
 });
+
+import { cancelOrder } from '../assets/js/shop/orders.js';
+
+test('cancelOrder beklemedeki siparisi iptal eder ve stogu geri verir', () => {
+  const { deps, cart, inventory, store } = setup();
+  cart.add(a.id, 2);
+  const o = placeOrder(deps, buyer);
+  assert.equal(inventory.stockOf(a.id), a.stock - 2);
+  const c = cancelOrder({ store, inventory }, o.id, 'u1');
+  assert.equal(c.status, 'iptal');
+  assert.equal(inventory.stockOf(a.id), a.stock);
+  assert.equal(listOrders(store, 'u1')[0].status, 'iptal');
+});
+
+test('cancelOrder baska kullanicinin siparisi icin SIPARIS_YOK, iki kez iptal icin IPTAL_EDILEMEZ ve stok tekrar artmaz', () => {
+  const { deps, cart, inventory, store } = setup();
+  cart.add(a.id, 1);
+  const o = placeOrder(deps, buyer);
+  assert.throws(() => cancelOrder({ store, inventory }, o.id, 'u2'), /SIPARIS_YOK/);
+  assert.throws(() => cancelOrder({ store, inventory }, 'CG-000000', 'u1'), /SIPARIS_YOK/);
+  cancelOrder({ store, inventory }, o.id, 'u1');
+  assert.throws(() => cancelOrder({ store, inventory }, o.id, 'u1'), /IPTAL_EDILEMEZ/);
+  assert.equal(inventory.stockOf(a.id), a.stock);
+});

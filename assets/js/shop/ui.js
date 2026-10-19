@@ -19,12 +19,8 @@ export function stockInfo(stock) {
   return { text: 'Stokta', level: 'ok' };
 }
 
-export function productImg(p, sizes = '(min-width: 900px) 25vw, 50vw') {
-  return el('img', {
-    src: `assets/img/${p.img}-640.webp`,
-    srcset: `assets/img/${p.img}-640.webp 640w, assets/img/${p.img}-1080.webp 1080w`,
-    sizes, width: '1080', height: '1350', loading: 'lazy', decoding: 'async', alt: p.name,
-  });
+export function productImg(p) {
+  return el('img', { src: p.image, width: '800', height: '1000', loading: 'lazy', decoding: 'async', alt: p.name });
 }
 
 export function stockBadge(stock) {
@@ -79,7 +75,30 @@ export function addToCart(product, qty, ctx, msgEl) {
   }
 }
 
-export function productCard(p, ctx) {
+const HEART = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>';
+
+// Favori kalbi: basınca ekler/çıkarır; onChange(newState) sayfaya haber verir.
+export function favoriteButton(p, ctx, onChange) {
+  const btn = el('button', { class: 'fav', type: 'button', html: HEART });
+  const label = el('span', { class: 'visually-hidden' });
+  btn.append(label);
+  const sync = () => {
+    const on = ctx.wishlist().has(p.id);
+    btn.setAttribute('aria-pressed', String(on));
+    label.textContent = on ? `${p.name} favorilerden çıkar` : `${p.name} favorilere ekle`;
+  };
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const on = ctx.wishlist().toggle(p.id);
+    sync();
+    ctx.refresh();
+    if (onChange) onChange(on);
+  });
+  sync();
+  return btn;
+}
+
+export function productCard(p, ctx, onFavoriteChange) {
   const stock = ctx.inventory.stockOf(p.id);
   const msg = el('span', { class: 'form-msg', role: 'status' });
   const action = stock > 0
@@ -90,7 +109,9 @@ export function productCard(p, ctx) {
     else openNotify(p, ctx);
   });
   return el('li', { class: 'pcard' },
-    el('a', { class: 'pcard__media', href: `urun.html?id=${encodeURIComponent(p.id)}` }, productImg(p)),
+    el('div', { class: 'pcard__top' },
+      el('a', { class: 'pcard__media', href: `urun.html?id=${encodeURIComponent(p.id)}` }, productImg(p)),
+      favoriteButton(p, ctx, onFavoriteChange)),
     el('div', { class: 'pcard__body' },
       el('h3', { class: 'pcard__name' }, el('a', { href: `urun.html?id=${encodeURIComponent(p.id)}` }, p.name)),
       el('p', { class: 'pcard__meta' }, `${p.karat} ayar, ${String(p.gram).replace('.', ',')} g`),

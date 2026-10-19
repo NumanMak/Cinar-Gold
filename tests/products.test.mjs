@@ -31,12 +31,24 @@ test('her turde tam 2 urun stokta yok', () => {
   for (const t of TYPES) assert.equal(byType(t).filter((p) => p.stock === 0).length, 2, t);
 });
 
-test('gorsel dosyalari mevcut', () => {
+test('her urunun kendi gorseli vardir ve gorseller benzersizdir', () => {
   for (const p of products) {
-    for (const w of [640, 1080]) {
-      assert.ok(existsSync(new URL(`../assets/img/${p.img}-${w}.webp`, import.meta.url)), `${p.img}-${w}`);
-    }
+    assert.ok(existsSync(new URL(`../${p.image}`, import.meta.url)), p.image);
   }
+  assert.equal(new Set(products.map((p) => p.image)).size, products.length);
+});
+
+test('fiyat alanlari: iscilik 0-1 arasi, tas bedeli ve gram pozitif, metal etiketi var', () => {
+  for (const p of products) {
+    assert.ok(p.laborRate > 0 && p.laborRate < 1, p.id);
+    assert.ok(Number.isInteger(p.stoneFee) && p.stoneFee >= 0, p.id);
+    assert.ok(typeof p.metal === 'string' && p.metal.length > 0, p.id);
+  }
+});
+
+test('pirlanta urunlerinin tas bedeli vardir, diger turlerde 0 veya kucuktur', () => {
+  for (const p of products.filter((x) => x.type === 'pirlanta')) assert.ok(p.stoneFee >= 14000, p.id);
+  for (const p of products.filter((x) => x.type !== 'pirlanta')) assert.ok(p.stoneFee <= 700, p.id);
 });
 
 test('fiyat ve stok tam sayi, gram > 0', () => {

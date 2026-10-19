@@ -170,7 +170,7 @@ def t_missing_and_xss(pg):
     pg.ev("""(async()=>{const m=await import('/assets/js/shop/ui.js');
       const ul=document.createElement('ul');ul.id='xss';document.body.append(ul);
       const inv={stockOf:()=>5};
-      ul.append(m.productCard({id:'x',name:'<img src=x onerror=window.__pwn=1>',karat:14,gram:1,price:1,img:'p-ring'},{inventory:inv}));})()""")
+      ul.append(m.productCard({id:'x',name:'<img src=x onerror=window.__pwn=1>',karat:14,gram:1,price:1,image:'assets/img/products/x.svg'},{inventory:inv,refresh(){},wishlist:()=>({has:()=>false,toggle:()=>false})}));})()""")
     time.sleep(0.4)
     check(pg.ev("window.__pwn") is None, "XSS: onerror çalıştı")
     check("<img" in pg.text("#xss .pcard__name"), "ürün adı düz metin olarak görünmüyor")
@@ -240,13 +240,15 @@ def t_account(pg):
     check(pg.ev("JSON.parse(localStorage.getItem('cg:users')||'[]').length") == 0, "izin yokken kullanıcı oluştu")
     pg.click("#form-kayit button[type=submit]")
     pg.accept_consent()
-    pg.wait("!!document.querySelector('.account')")
-    check("<b>Ayşe</b>" in pg.text(".account .shop-lead"), "ad düz metin olarak görünmüyor")
-    check(pg.ev("document.querySelectorAll('.account b').length") == 0, "ad HTML olarak yorumlandı")
+    pg.wait("!!document.querySelector('.account-layout')")
+    check("<b>Ayşe</b>" in pg.text(".account__main .acard__title"), "ad düz metin olarak görünmüyor")
+    check(pg.ev("document.querySelectorAll('.account-layout b').length") == 0, "ad HTML olarak yorumlandı")
+    pg.goto("hesap.html#izinler")
+    pg.wait("!!document.querySelector('#izin-durum')")
     check("verildi" in pg.text("#izin-durum"), "izin durumu yok")
     users = pg.ev("localStorage.getItem('cg:users')")
     check("gizli-sifre-1" not in users, "düz şifre saklanmış")
-    pg.click(".account .pdetail__buy button")
+    pg.click(".account__side .btn")
     pg.wait("!!document.querySelector('.auth')")
     pg.ev("document.querySelector('#form-giris')||0")
     pg.set_value("#form-giris input[name=email]", "ayse@ornek.com")
@@ -255,7 +257,7 @@ def t_account(pg):
     pg.wait("document.querySelector('#form-giris .form-msg[role=alert]').textContent.includes('hatalı')")
     pg.set_value("#form-giris input[name=sifre]", "gizli-sifre-1")
     pg.click("#form-giris button[type=submit]")
-    pg.wait("!!document.querySelector('.account')")
+    pg.wait("!!document.querySelector('.account-layout')")
 
 
 @step("sipariş formu: boşluktan oluşan telefon hatası görünür kalır ve yazılan ad silinmez")
@@ -327,14 +329,18 @@ def t_delivery_account(pg):
     pg.click(".order-form button[type=submit]")
     pg.wait("!!document.querySelector('.done')")
     check("Atatürk Cd. No:25" in pg.text(".done"), "başarı ekranında adres yok")
-    pg.goto("hesap.html")
+    pg.goto("hesap.html#siparisler")
     pg.wait("!!document.querySelector('.orders')")
     check("Adrese teslim: Atatürk Cd. No:25" in pg.text(".orders"), "sipariş adresi hesapta yok")
-    check(pg.ev("document.querySelector('#form-profil textarea').value") == "Atatürk Cd. No:25 Fethiye Muğla", "adres profile kaydedilmedi")
+    pg.goto("hesap.html#adresler")
+    pg.wait("!!document.querySelector('.orders')")
+    check("Atatürk Cd. No:25 Fethiye Muğla" in pg.text(".orders"), "adres, adres defterine eklenmedi")
+    pg.goto("hesap.html#bilgiler")
+    pg.wait("!!document.querySelector('#form-profil')")
     pg.set_value("#form-profil input[name=ad]", "Ayşe Y.")
     pg.click("#form-profil button[type=submit]")
     pg.wait("document.querySelector('#form-profil .form-msg[role=status]').textContent.includes('kaydedildi')")
-    check("Ayşe" in pg.text("[data-account-label]"), "üst bilgideki ad güncellenmedi")
+    check("Ayşe" in pg.text(".usermenu__name"), "üst bilgideki ad güncellenmedi")
     pg.set_value("#form-sifre input[name=eski]", "yanlis-sifre")
     pg.set_value("#form-sifre input[name=yeni]", "yeni-sifre-22")
     pg.click("#form-sifre button[type=submit]")
@@ -349,7 +355,7 @@ def t_alerts(pg):
     pg.ev("localStorage.setItem('cg:notify', JSON.stringify([{id:'x1',productId:%s,email:'a@b.com',phone:'',createdAt:new Date().toISOString()}]))" % json.dumps(SOLD_OUT["id"]))
     pg.goto("hesap.html")
     pg.ev("(()=>{const u=JSON.parse(localStorage.getItem('cg:users'));u[0].email='a@b.com';localStorage.setItem('cg:users',JSON.stringify(u));})()")
-    pg.goto("hesap.html")
+    pg.goto("hesap.html#bildirimler")
     pg.wait("!!document.querySelector('.acard')")
     check("Stok bekleniyor" in pg.ev("document.body.textContent"), "bildirim isteği hesapta yok")
     pg.ev("[...document.querySelectorAll('.link-btn')].find(b=>b.textContent==='Vazgeç').click()")
@@ -396,7 +402,128 @@ def t_gold(pg):
         pg.cdp.send("Page.removeScriptToEvaluateOnNewDocument", {"identifier": sid})
 
 
-SCENARIOS = [t_catalog, t_promo, t_theme, t_soldout, t_missing_and_xss, t_cart_coupon, t_order, t_account, t_order_error, t_search_sort, t_similar, t_delivery_account, t_alerts, t_mobile_overflow, t_gold, t_blocked_storage]
+@step("üst bilgi: misafirde sağ üstte Giriş yap düğmesi, tıklayınca hesap sayfası açılır")
+def t_login_button(pg):
+    for path in ("index.html", "magaza.html"):
+        pg.goto(path)
+        pg.wait("!!document.querySelector('.shop-login')")
+        check(pg.text(".shop-login").strip() == "Giriş yap", f"{path}: düğme metni yanlış")
+        x, y, w = pg.ev("(()=>{const r=document.querySelector('.shop-login').getBoundingClientRect();return [r.right, r.top, innerWidth];})()")
+        check(w * 0.6 < x <= w and y < 140, f"{path}: düğme sağ üstte değil veya taşıyor ({x}, {y}, {w})")
+    pg.click(".shop-login")
+    pg.wait("location.pathname.endsWith('hesap.html')")
+
+
+@step("kullanıcı menüsü: açılır/kapanır, Esc ve dış tıklama kapatır, bağlantılar bölümü açar, sayaçlar doğru")
+def t_user_menu(pg):
+    pg.goto("magaza.html")
+    pg.wait("!!document.querySelector('.usermenu__btn')")
+    check(pg.ev("document.querySelector('.usermenu__btn').getAttribute('aria-expanded')") == "false", "menü kapalı başlamıyor")
+    pg.click(".usermenu__btn")
+    check(pg.ev("document.querySelector('.usermenu__btn').getAttribute('aria-expanded')") == "true", "menü açılmadı")
+    check(pg.ev("document.getElementById('kullanici-menusu').hidden") is False, "menü paneli görünmüyor")
+    labels = pg.ev("[...document.querySelectorAll('#kullanici-menusu [role=menuitem]')].map(e=>e.textContent)")
+    for want in ("Siparişlerim", "Favorilerim", "Adreslerim", "Hesap bilgilerim", "Stok bildirimlerim", "Çıkış yap"):
+        check(any(want in l for l in labels), f"menüde {want} yok: {labels}")
+    check(pg.ev("document.activeElement.textContent.startsWith('Siparişlerim')"), "açılınca ilk öğeye odaklanmadı")
+    pg.ev("document.getElementById('kullanici-menusu').dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowDown',bubbles:true}))")
+    check(pg.ev("document.activeElement.textContent.startsWith('Favorilerim')"), "ok tuşu sonraki öğeye geçmedi")
+    pg.ev("document.getElementById('kullanici-menusu').dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}))")
+    check(pg.ev("document.getElementById('kullanici-menusu').hidden") is True, "Esc menüyü kapatmadı")
+    check(pg.ev("document.activeElement.classList.contains('usermenu__btn')"), "Esc sonrası odak düğmeye dönmedi")
+    pg.click(".usermenu__btn")
+    pg.ev("document.querySelector('h1').click()")
+    check(pg.ev("document.getElementById('kullanici-menusu').hidden") is True, "dış tıklama menüyü kapatmadı")
+    pg.click(".usermenu__btn")
+    pg.ev("[...document.querySelectorAll('#kullanici-menusu a')].find(a=>a.textContent.startsWith('Adreslerim')).click()")
+    pg.wait("location.pathname.endsWith('hesap.html') && location.hash === '#adresler'")
+    pg.wait("document.querySelector('.account__main .acard__title') && document.querySelector('.account__main .acard__title').textContent === 'Adreslerim'")
+
+
+@step("favoriler: kalp ekler, menü sayacı ve hesap sayfası güncellenir, kaldırınca liste boşalır")
+def t_favorites(pg):
+    pg.goto("magaza.html")
+    pg.wait("document.querySelectorAll('#urunler .fav').length === 60")
+    pg.click("#urunler .pcard .fav")
+    check(pg.ev("document.querySelector('#urunler .pcard .fav').getAttribute('aria-pressed')") == "true", "kalp basılı görünmüyor")
+    pg.click(".usermenu__btn")
+    fav = pg.ev("[...document.querySelectorAll('#kullanici-menusu a')].find(a=>a.textContent.startsWith('Favorilerim')).textContent")
+    check(fav.endswith("1"), f"menü sayacı güncellenmedi: {fav}")
+    pg.goto("hesap.html#favoriler")
+    pg.wait("document.querySelectorAll('.account__main .pcard').length === 1")
+    pg.click(".account__main .pcard .fav")
+    pg.wait("document.body.textContent.includes('Favori listeniz boş')")
+
+
+@step("adres defteri: ekle, varsayılan yap, kısa adresi reddet, sil")
+def t_addresses(pg):
+    pg.goto("hesap.html#adresler")
+    pg.wait("!!document.querySelector('#form-adres')")
+    before = pg.ev("document.querySelectorAll('.account__main .orders > li').length")
+    for title, text in (("Ev", "Atatürk Cd. No:5 Fethiye Muğla"), ("İş", "Çarşı Mah. 12. Sk. No:3 Fethiye Muğla")):
+        n = pg.ev("document.querySelectorAll('.account__main .orders > li').length")
+        pg.set_value("#form-adres input[name=baslik]", title)
+        pg.set_value("#form-adres textarea[name=adres]", text)
+        pg.click("#form-adres button[type=submit]")
+        pg.wait(f"document.querySelectorAll('.account__main .orders > li').length === {n + 1}")
+    row = "[...document.querySelectorAll('.account__main .orders > li')].find(li=>li.textContent.includes('Çarşı Mah.'))"
+    check("Varsayılan yap" in pg.ev(f"{row}.textContent"), "ikinci adres varsayılan olmamalı")
+    pg.ev(f"{row}.querySelector('.link-btn').click()")
+    pg.wait(f"!{row}.textContent.includes('Varsayılan yap')")
+    check("Varsayılan" in pg.ev(f"{row}.querySelector('.order__status').textContent"), "varsayılan rozeti yok")
+    pg.set_value("#form-adres input[name=baslik]", "Kısa")
+    pg.set_value("#form-adres textarea[name=adres]", "kısa")
+    pg.click("#form-adres button[type=submit]")
+    pg.wait("document.querySelector('#form-adres .form-msg').textContent.includes('10 karakter')")
+    for key in ("Çarşı Mah.", "Atatürk Cd. No:5"):
+        pg.ev(f"[...document.querySelectorAll('.account__main .orders > li')].find(li=>li.textContent.includes({json.dumps(key)})).querySelector('.link-btn:last-child').click()")
+    pg.wait(f"document.querySelectorAll('.account__main .orders > li').length === {before}")
+
+
+@step("sipariş iptali: onay istenir, durum iptal olur, stok geri gelir")
+def t_cancel_order(pg):
+    pid = IN_STOCK["id"]
+    pg.goto(f"urun.html?id={pid}")
+    pg.wait("!!document.querySelector('.pdetail__buy button')")
+    pg.click(".pdetail__buy button")
+    pg.wait("document.querySelector('.form-msg[role=status]').textContent.includes('Sepete eklendi')")
+    pg.goto("sepet.html")
+    pg.wait("!!document.querySelector('.order-form')")
+    pg.set_value("input[name=telefon]", "05551112233")
+    pg.click(".order-form button[type=submit]")
+    pg.wait("!!document.querySelector('.done')")
+    after_order = pg.ev(f"JSON.parse(localStorage.getItem('cg:stock'))[{json.dumps(pid)}]")
+    pg.goto("hesap.html#siparisler")
+    pg.wait("!!document.querySelector('.orders')")
+    pg.ev("[...document.querySelectorAll('.order .link-btn')].find(b=>b.textContent==='Siparişi iptal et').click()")
+    pg.wait("!![...document.querySelectorAll('.order .btn')].find(b=>b.textContent==='Evet, iptal et')")
+    pg.ev("[...document.querySelectorAll('.order .btn')].find(b=>b.textContent==='Evet, iptal et').click()")
+    pg.wait("document.querySelector('.order--cancelled') !== null")
+    check("İptal edildi" in pg.text(".order--cancelled"), "durum iptal görünmüyor")
+    restored = pg.ev(f"JSON.parse(localStorage.getItem('cg:stock'))[{json.dumps(pid)}]")
+    check(restored == after_order + 1, f"stok geri gelmedi: {after_order} -> {restored}")
+
+
+@step("fiyatlar canlı altın fiyatından hesaplanır; tüm ürün görselleri yüklenir")
+def t_pricing_images(pg):
+    pg.goto("magaza.html")
+    pg.wait("document.querySelectorAll('#urunler .pcard').length === 60")
+    res = pg.ev("""(async () => {
+      const m = await import('/assets/js/shop/pricing.js');
+      const gold = await m.loadGold();
+      const products = await (await fetch('/assets/data/products.json')).json();
+      const p = products[7];
+      const card = [...document.querySelectorAll('#urunler .pcard')].find(c => c.querySelector('.pcard__name').textContent === p.name);
+      const shown = Number(card.querySelector('.pcard__price').textContent.replace(/[^0-9]/g, ''));
+      const bad = [];
+      for (const q of products) { const r = await fetch('/' + q.image, { method: 'HEAD' }); if (!r.ok) bad.push(q.image); }
+      return { shown, expected: m.priceOf(p, gold.items.gram22.sell), snapshot: p.price, bad };
+    })()""")
+    check(res["shown"] == res["expected"], f"fiyat canlı altından hesaplanmıyor: {res}")
+    check(not res["bad"], f"görseli yüklenemeyen ürünler: {res['bad'][:3]}")
+
+
+SCENARIOS = [t_catalog, t_promo, t_theme, t_soldout, t_missing_and_xss, t_cart_coupon, t_order, t_login_button, t_account, t_user_menu, t_favorites, t_addresses, t_order_error, t_search_sort, t_similar, t_delivery_account, t_cancel_order, t_alerts, t_pricing_images, t_mobile_overflow, t_gold, t_blocked_storage]
 
 
 def main() -> int:
