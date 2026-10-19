@@ -38,6 +38,7 @@
 <link rel="preconnect" href="https://finans.truncgil.com" crossorigin>
 <link rel="stylesheet" href="assets/css/fonts.css">
 <link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/shop.css">
 <script>
   (function (d) {
     d.className = d.className.replace('no-js', 'js');
@@ -47,6 +48,19 @@
     // Güvenlik ağı: main.js yüklenemezse içerik gizli kalmasın.
     setTimeout(function () { if (!window.__cg) { d.classList.remove('js'); d.classList.add('is-ready'); } }, 4000);
   })(document.documentElement);
+</script>
+<script>
+  (function (d) {
+    try {
+      var t = JSON.parse(localStorage.getItem('cg:theme'));
+      if (t !== 'dark' && t !== 'light') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      d.dataset.theme = t;
+    } catch (e) {}
+  })(document.documentElement);
+</script>
+<script type="module">
+  import { mountShell } from "./assets/js/shop/shell.js";
+  mountShell({ page: "home" });
 </script>
 <script src="assets/js/vendor/lenis.min.js" defer></script>
 <script src="assets/js/main.js" defer></script>
@@ -164,6 +178,7 @@
     </a>
     <nav class="nav__menu" aria-label="Ana menü">
       <ul class="nav__links" role="list">
+        <li><a class="nav__link" href="magaza.html">Mağaza</a></li>
         <li><a class="nav__link" href="#hakkimizda">Hakkımızda</a></li>
         <li><a class="nav__link" href="#koleksiyonlar">Koleksiyonlar</a></li>
         <li><a class="nav__link" href="#one-cikanlar">Öne Çıkanlar</a></li>
@@ -186,6 +201,7 @@
 <div class="mmenu" id="mobil-menu" hidden>
   <nav class="mmenu__nav" aria-label="Mobil menü">
     <ul class="mmenu__links" role="list">
+      <li><a class="mmenu__link" href="magaza.html">Mağaza</a></li>
       <li><a class="mmenu__link" href="#hakkimizda">Hakkımızda</a></li>
       <li><a class="mmenu__link" href="#koleksiyonlar">Koleksiyonlar</a></li>
       <li><a class="mmenu__link" href="#one-cikanlar">Öne Çıkanlar</a></li>
