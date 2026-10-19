@@ -8,6 +8,7 @@ const ctx = await mountShell({ page: 'account' });
 const { consent, products, api } = ctx;
 const root = document.getElementById('hesap');
 let tab = 'giris';
+let notice = ''; // örn. hesap silindikten sonra misafir görünümünde gösterilen bilgi
 
 const ERRORS = {
   EMAIL_KAYITLI: 'Bu e-posta ile kayıt zaten var.',
@@ -15,6 +16,7 @@ const ERRORS = {
   GIRIS_HATALI: 'E-posta veya şifre hatalı.',
   ZORUNLU_ALAN: 'Tüm alanları doldurun (adres en az 10 karakter olmalı).',
   IPTAL_EDILEMEZ: 'Bu sipariş artık iptal edilemez.',
+  YETKI_YOK: 'Yönetici hesabı bu ekrandan silinemez.',
   SUNUCU_YOK: 'Sunucuya ulaşılamadı, tekrar deneyin.',
   COK_FAZLA_ISTEK: 'Çok fazla deneme yapıldı, lütfen biraz bekleyip tekrar deneyin.',
   SIPARIS_YOK: 'Sipariş bulunamadı.',
@@ -105,6 +107,7 @@ function renderGuest() {
   root.replaceChildren(el('div', { class: 'auth' },
     el('p', { class: 'shop-lead' }, t('Giriş yaparak siparişlerinizi görün, favorilerinizi ve adreslerinizi kaydedin.')),
     el('div', { class: 'shop-filters__types', role: 'group', 'aria-label': t('Hesap işlemi') }, tabBtn('giris', t('Giriş')), tabBtn('kayit', t('Kayıt ol'))),
+    ...(notice ? [el('p', { class: 'form-msg', role: 'status', id: 'hesap-bilgi' }, notice)] : []),
     authForm(tab), ...demoNote()));
 }
 
@@ -252,14 +255,66 @@ function sectionBilgiler(user) {
   return [heading(t('Hesap bilgilerim')), profile, el('h3', { class: 'acard__sub' }, t('Şifre')), pass];
 }
 
+// Kullanıcının verisini JSON dosyası olarak indirir.
+function downloadJson(data) {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = el('a', { href: url, download: 'cinar-gold-verilerim.json' });
+  document.body.append(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
 function sectionIzinler() {
   const status = consent.status();
   const revoke = el('button', { class: 'btn btn--line btn--sm', type: 'button' }, t('İzinleri geri al'));
   revoke.addEventListener('click', () => { consent.revoke(); render(); });
+
+  const msg = el('p', { class: 'form-msg', role: 'alert', id: 'veri-mesaj' });
+  const dl = el('button', { class: 'btn btn--line btn--sm', type: 'button', id: 'veri-indir' }, t('Verilerimi indir'));
+  dl.addEventListener('click', async () => {
+    dl.disabled = true;
+    try { downloadJson(await api.auth.exportData()); msg.textContent = t('Verileriniz indirildi.'); }
+    catch (err) { msg.textContent = errorText(err.message, 'İşlem tamamlanamadı, tekrar deneyin.'); }
+    finally { dl.disabled = false; }
+  });
+
+  // Hesap silme iki adımlıdır: önce uyarı ve onay düğmesi.
+  const zone = el('div', { class: 'danger-zone' });
+  const del = el('button', { class: 'btn btn--line btn--sm', type: 'button', id: 'hesap-sil' }, t('Hesabımı sil'));
+  zone.append(del);
+  del.addEventListener('click', () => {
+    const yes = el('button', { class: 'btn btn--gold btn--sm', type: 'button', id: 'hesap-sil-onay' }, t('Evet, hesabımı kalıcı olarak sil'));
+    const no = el('button', { class: 'link-btn', type: 'button' }, t('Vazgeç'));
+    zone.replaceChildren(
+      el('p', { class: 'form-msg' }, t('Hesabınız, adresleriniz ve favorileriniz kalıcı olarak silinir. Siparişleriniz kayıt için kalır ama kişisel bilgileriniz silinir. Bu işlem geri alınamaz.')),
+      yes, no);
+    no.addEventListener('click', () => zone.replaceChildren(del));
+    yes.addEventListener('click', async () => {
+      yes.disabled = true;
+      try {
+        await api.auth.deleteAccount();
+        notice = t('Hesabınız silindi.');
+        tab = 'giris';
+        await ctx.reloadMe();
+        location.hash = '';
+        await render();
+      } catch (err) {
+        yes.disabled = false;
+        msg.textContent = errorText(err.message, 'İşlem tamamlanamadı, tekrar deneyin.');
+      }
+    });
+  });
+
   return [heading(t('İzinler ve gizlilik')),
     el('p', { class: 'form-msg', id: 'izin-durum' }, status.granted
       ? t('İzin verildi ({tarih}).', { tarih: date(status.at) }) : t('İzin verilmedi. Bir sonraki işleminizde yeniden sorulur.')),
     ...(status.granted ? [revoke] : []),
+    el('h3', { class: 'acard__sub' }, t('Verileriniz')),
+    el('p', { class: 'form-msg' }, t('Hesabınızla ilgili tüm verilerin bir kopyasını indirebilir veya hesabınızı silebilirsiniz.')),
+    el('div', { class: 'order__actions' }, dl, zone),
+    msg,
     ...demoNote()];
 }
 
@@ -273,7 +328,7 @@ function renderUser(user, data) {
   const nav = el('nav', { class: 'account__nav', 'aria-label': t('Hesap bölümleri') },
     ...SECTIONS.map(([id, label]) => el('a', { href: `#${id}`, ...(id === active ? { 'aria-current': 'page' } : {}) }, t(label))));
   const logout = el('button', { class: 'btn btn--line btn--sm', type: 'button' }, t('Çıkış yap'));
-  logout.addEventListener('click', async () => { await api.auth.signOut(); tab = 'giris'; await ctx.reloadMe(); location.hash = ''; await render(); });
+  logout.addEventListener('click', async () => { await api.auth.signOut(); notice = ''; tab = 'giris'; await ctx.reloadMe(); location.hash = ''; await render(); });
   root.replaceChildren(el('div', { class: 'account-layout' },
     el('div', { class: 'account__side' }, nav, logout),
     el('section', { class: 'acard account__main', id: `bolum-${active}`, 'aria-live': 'polite' }, ...BUILDERS[active](user, data))));

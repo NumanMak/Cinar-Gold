@@ -288,6 +288,51 @@ test('supabase: sifre degistirme once eski sifreyi dogrular, kisa yeni sifreyi r
   assert.deepEqual(put.body, { password: 'yeni-sifre-22' });
 });
 
+test('supabase: veri disa aktarma export_my_data rpc ile, hesap silme delete_my_account rpc ile yapilir ve oturum temizlenir; misafir istek atmaz', async () => {
+  const { api, calls, store } = harness((call) => {
+    if (call.url.includes('/rpc/export_my_data')) return { body: { email: 'ayse@ornek.com', profile: { name: 'Ayşe' }, addresses: [], orders: [], wishlist: [], stock_alerts: [], consents: [] } };
+    if (call.url.includes('/rpc/delete_my_account')) return { status: 204 };
+    return customerRoutes(call);
+  });
+  await assert.rejects(api.auth.exportData(), /^Error: GIRIS_HATALI$/);
+  await assert.rejects(api.auth.deleteAccount(), /^Error: GIRIS_HATALI$/);
+  assert.equal(calls.filter((c) => c.url.includes('/rpc/')).length, 0);
+  await api.auth.signIn('ayse@ornek.com', 'gizli-sifre-1');
+  const d = await api.auth.exportData();
+  assert.equal(d.profile.name, 'Ayşe');
+  assert.equal(calls.find((c) => c.url.includes('export_my_data')).method, 'POST');
+  await api.auth.deleteAccount();
+  assert.ok(calls.some((c) => c.url.includes('delete_my_account')));
+  assert.equal(store.get('sb-session', null), null);
+  assert.equal(await api.auth.user(), null);
+});
+
+test('supabase: yonetici hesabini silmeye calisinca sunucu YETKI_YOK doner ve oturum acik kalir', async () => {
+  const { api, store } = harness((call) => {
+    if (call.url.includes('/rpc/delete_my_account')) return { status: 400, body: { code: 'P0001', message: 'YETKI_YOK' } };
+    return adminRoutes(call);
+  });
+  await api.auth.signIn('y@ornek.com', 'gizli-sifre-1');
+  await assert.rejects(api.auth.deleteAccount(), /^Error: YETKI_YOK$/);
+  assert.ok(store.get('sb-session', null));
+});
+
+test('supabase: izin kaydi yalniz oturumda, yalniz zorunlu izinler varsa ve ayni izin icin bir kez yazilir', async () => {
+  const { api, calls } = harness((call) => (call.url.includes('/rest/v1/consents') ? { status: 201 } : customerRoutes(call)));
+  await api.consents.record({ kvkk: true, islem: true, iletisim: false, at: 't1' });
+  assert.equal(calls.filter((c) => c.url.includes('/consents')).length, 0, 'misafir icin sunucuya yazilmamali');
+  await api.auth.signIn('ayse@ornek.com', 'gizli-sifre-1');
+  await api.consents.record({ kvkk: true, islem: false, at: 't1' });
+  assert.equal(calls.filter((c) => c.url.includes('/consents')).length, 0, 'zorunlu izinler eksikse yazilmamali');
+  await api.consents.record({ kvkk: true, islem: true, iletisim: true, at: 't1' });
+  await api.consents.record({ kvkk: true, islem: true, iletisim: true, at: 't1' });
+  const posts = calls.filter((c) => c.url.includes('/consents'));
+  assert.equal(posts.length, 1);
+  assert.deepEqual(posts[0].body, { user_id: 'u1', kvkk: true, islem: true, iletisim: true });
+  await api.consents.record({ kvkk: true, islem: true, iletisim: true, at: 't2' });
+  assert.equal(calls.filter((c) => c.url.includes('/consents')).length, 2);
+});
+
 test('supabase: adaptor modu supabase ve yonetici olusturma kapali (yonetici yalniz panelden atanir)', async () => {
   const { api } = harness(customerRoutes);
   assert.equal(api.mode, 'supabase');

@@ -154,6 +154,13 @@ export async function mountShell({ page }) {
     account.update(me, counts, api);
   };
 
+  // Oturum açıkken verilen izin sunucuya da kaydedilir (başarısızlık kullanıcıyı engellemez).
+  const syncConsent = async () => {
+    const st = consent.status();
+    if (!st.granted || !me) return;
+    try { await api.consents.record({ ...st.choices, at: st.at }); } catch (e) { console.error(e); }
+  };
+
   const refresh = () => {
     document.getElementById('sepet-sayac').textContent = String(cart.count());
     actions.themeBtn.setAttribute('aria-pressed', String(theme.current() === 'dark'));
@@ -165,8 +172,8 @@ export async function mountShell({ page }) {
   async function requireConsent() {
     if (consent.status().granted) return true;
     const opener = document.activeElement;
-    const choices = await askConsent();
-    if (choices) consent.grant(choices);
+    const choices = await askConsent(api.mode);
+    if (choices) { consent.grant(choices); syncConsent(); }
     if (opener && typeof opener.focus === 'function') opener.focus();
     return !!choices;
   }
@@ -174,13 +181,13 @@ export async function mountShell({ page }) {
   return {
     store, products, api, inventory, cart, consent, wishlist, requireConsent, refresh,
     me: () => me,
-    reloadMe: async () => { await loadMe(); refresh(); return me; },
+    reloadMe: async () => { await loadMe(); refresh(); syncConsent(); return me; },
     reloadStock: loadStock,
   };
 }
 
 // İzin penceresi: kabulde seçimleri, vazgeçişte null döner.
-function askConsent() {
+function askConsent(mode) {
   return new Promise((resolve) => {
     const box = (name, text, required) => {
       const input = el('input', { type: 'checkbox', name });
@@ -194,7 +201,9 @@ function askConsent() {
     const cancel = el('button', { class: 'btn btn--line', type: 'button' }, t('Vazgeç'));
     const form = el('form', { method: 'dialog', class: 'consent__form' },
       el('h2', { id: 'izin-baslik', class: 'consent__title' }, t('Kişisel verileriniz')),
-      el('p', { class: 'consent__text' }, t('Çınar Gold Kuyumculuk olarak adınız, e-postanız, telefonunuz ve sipariş bilgileriniz hesabınızı yönetmek, siparişinizi hazırlamak ve stok bildirimi yapmak amacıyla işlenir. Bu demo sürümde veriler yalnızca bu tarayıcıda saklanır. İzninizi dilediğiniz zaman hesap sayfasından geri alabilirsiniz.')),
+      el('p', { class: 'consent__text' }, mode === 'local'
+        ? t('Çınar Gold Kuyumculuk olarak adınız, e-postanız, telefonunuz ve sipariş bilgileriniz hesabınızı yönetmek, siparişinizi hazırlamak ve stok bildirimi yapmak amacıyla işlenir. Bu demo sürümde veriler yalnızca bu tarayıcıda saklanır. İzninizi dilediğiniz zaman hesap sayfasından geri alabilirsiniz.')
+        : t('Çınar Gold Kuyumculuk (veri sorumlusu) olarak adınız, e-postanız, telefonunuz, adresleriniz ve sipariş bilgileriniz; hesabınızı yönetmek, siparişinizi hazırlamak, stok bildirimi yapmak ve yasal yükümlülükleri yerine getirmek amacıyla işlenir. Veriler Avrupa Birliği içindeki (Frankfurt) sunucularda saklanır. Hesap sayfanızdan verilerinizi indirebilir, hesabınızı silebilir ve izninizi geri alabilirsiniz. Başvurularınız için: 0507 351 73 47.')),
       kvkk.label, islem.label, iletisim.label,
       el('div', { class: 'consent__actions' }, cancel, accept));
     const dialog = el('dialog', { class: 'consent', 'aria-labelledby': 'izin-baslik' }, form);

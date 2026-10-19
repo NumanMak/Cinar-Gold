@@ -4,9 +4,9 @@ import { createAuth } from '../auth.js';
 import { createInventory } from '../inventory.js';
 import { createCart } from '../cart.js';
 import { createNotify } from '../notify.js';
-import { createWishlist, mergeGuestWishlist } from '../wishlist.js';
+import { createWishlist, mergeGuestWishlist, clearWishlist } from '../wishlist.js';
 import { createStore } from '../storage.js';
-import { placeOrder, listOrders, listAllOrders, cancelOrder, setOrderStatus } from '../orders.js';
+import { placeOrder, listOrders, listAllOrders, cancelOrder, setOrderStatus, anonymizeOrders } from '../orders.js';
 
 export function createLocalApi({ store, products }) {
   const auth = createAuth(store);
@@ -39,6 +39,26 @@ export function createLocalApi({ store, products }) {
       hasAdmin: async () => auth.hasAdmin(),
       async signOut() { auth.logout(); },
       async user() { return current(); },
+      // KVKK: kullanıcının kendi verisinin tamamı (şifre bilgisi içermez).
+      async exportData() {
+        const u = requireUser();
+        return {
+          email: u.email,
+          profile: { name: u.name, phone: u.phone, role: u.role },
+          addresses: u.addresses.map((a) => ({ title: a.title, text: a.text, is_default: a.isDefault })),
+          orders: listOrders(store, u.id),
+          wishlist: createWishlist(store, u.id).list(),
+          stock_alerts: notify.forContact({ email: u.email, phone: u.phone }),
+          consents: [],
+        };
+      },
+      async deleteAccount() {
+        const u = requireUser();
+        if (u.role === 'admin') throw new Error('YETKI_YOK');
+        anonymizeOrders(store, u.id);
+        clearWishlist(store, u.id);
+        auth.deleteAccount();
+      },
       async updateProfile(patch) { requireUser(); return auth.updateProfile({ name: patch.name, phone: patch.phone, address: patch.address }); },
       async changePassword(oldPassword, newPassword) { requireUser(); await auth.changePassword(oldPassword, newPassword); },
       addresses: {
@@ -74,6 +94,9 @@ export function createLocalApi({ store, products }) {
       async adminList() { requireAdmin(); return listAllOrders(store); },
       async adminSetStatus(id, status) { requireAdmin(); return setOrderStatus({ store, inventory }, id, status); },
     },
+
+    // Yerel modda izin zaten tarayıcıda tutulur; sunucuya kayıt yoktur.
+    consents: { async record() {} },
 
     wishlist: {
       async list() { return createWishlist(store, current()?.id ?? null).list(); },

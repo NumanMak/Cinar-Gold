@@ -28,3 +28,4 @@ export function mergeGuestWishlist(store, userId) {
 // Misafir favorilerini okur ve temizler (sunucu adaptörü girişte hesaba taşır).
 export const readGuestWishlist = (store) => read(store, null);
 export const clearGuestWishlist = (store) => store.remove(keyOf(null));
+export const clearWishlist = (store, owner) => store.remove(keyOf(owner));

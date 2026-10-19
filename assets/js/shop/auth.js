@@ -125,6 +125,15 @@ export function createAuth(store) {
       const next = { ...user, salt: hex(salt), hash: await hash(newPassword, salt) };
       store.set('users', users().map((u) => (u.id === id ? next : u)));
     },
+    // Kendi hesabını siler (yönetici silinemez). Siparişlerin anonimleştirilmesi ve favorilerin silinmesi çağıranın işidir.
+    deleteAccount() {
+      const id = store.get('session', null);
+      const user = users().find((u) => u.id === id);
+      if (!user) throw new Error('GIRIS_HATALI');
+      if (user.role === 'admin') throw new Error('YETKI_YOK');
+      store.set('users', users().filter((u) => u.id !== id));
+      store.remove('session');
+    },
     logout: () => store.remove('session'),
     current() {
       const id = store.get('session', null);

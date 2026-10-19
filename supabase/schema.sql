@@ -430,3 +430,58 @@ end;
 $$;
 revoke all on function public.admin_set_stock(text, integer) from public;
 grant execute on function public.admin_set_stock(text, integer) to authenticated;
+
+-- ============================================================ KVKK: veri dışa aktarma ve hesap silme
+
+-- Kullanıcının kendi verisinin tamamı (şifre, jeton veya iç kimlik bilgisi içermez).
+create or replace function public.export_my_data()
+returns jsonb
+language plpgsql
+stable
+security definer
+set search_path = public
+as $$
+declare
+  v_uid uuid := auth.uid();
+begin
+  if v_uid is null then
+    raise exception 'GIRIS_HATALI';
+  end if;
+  return jsonb_build_object(
+    'email', (select u.email from auth.users u where u.id = v_uid),
+    'profile', (select jsonb_build_object('name', p.name, 'phone', p.phone, 'role', p.role, 'created_at', p.created_at) from public.profiles p where p.id = v_uid),
+    'addresses', coalesce((select jsonb_agg(jsonb_build_object('title', a.title, 'text', a.text, 'is_default', a.is_default, 'created_at', a.created_at)) from public.addresses a where a.user_id = v_uid), '[]'::jsonb),
+    'orders', coalesce((
+      select jsonb_agg(to_jsonb(o) || jsonb_build_object('lines', coalesce((select jsonb_agg(jsonb_build_object('product_id', l.product_id, 'name', l.name, 'qty', l.qty, 'unit_price', l.unit_price)) from public.order_lines l where l.order_id = o.id), '[]'::jsonb)))
+      from public.orders o where o.user_id = v_uid), '[]'::jsonb),
+    'wishlist', coalesce((select jsonb_agg(w.product_id order by w.created_at) from public.wishlist w where w.user_id = v_uid), '[]'::jsonb),
+    'stock_alerts', coalesce((select jsonb_agg(jsonb_build_object('product_id', s.product_id, 'email', s.email, 'phone', s.phone, 'created_at', s.created_at)) from public.stock_alerts s where s.user_id = v_uid), '[]'::jsonb),
+    'consents', coalesce((select jsonb_agg(jsonb_build_object('kvkk', c.kvkk, 'islem', c.islem, 'iletisim', c.iletisim, 'at', c.at)) from public.consents c where c.user_id = v_uid), '[]'::jsonb)
+  );
+end;
+$$;
+revoke all on function public.export_my_data() from public;
+grant execute on function public.export_my_data() to authenticated;
+
+-- Kullanıcı kendi hesabını siler. Siparişler muhasebe için kalır ama kişisel bilgiler anonimleştirilir; yönetici hesabı silinemez.
+create or replace function public.delete_my_account()
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_uid uuid := auth.uid();
+begin
+  if v_uid is null then
+    raise exception 'GIRIS_HATALI';
+  end if;
+  if public.is_admin() then
+    raise exception 'YETKI_YOK';
+  end if;
+  update public.orders set user_id = null, name = 'silindi', phone = 'silindi', address = '' where user_id = v_uid;
+  delete from auth.users where id = v_uid;
+end;
+$$;
+revoke all on function public.delete_my_account() from public;
+grant execute on function public.delete_my_account() to authenticated;

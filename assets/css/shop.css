@@ -359,3 +359,5 @@ select#sirala { min-height: 42px; padding: 0 12px; border-radius: var(--r-media)
 .order__status--onaylandi { border-color: #3f8f55; color: #3f8f55; }
 .order__status--tamamlandi { border-color: var(--muted); color: var(--muted); }
 .order--tamamlandi { opacity: .8; }
+
+.danger-zone { display: grid; gap: 10px; justify-items: start; }

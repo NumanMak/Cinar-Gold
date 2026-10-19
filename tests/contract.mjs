@@ -225,5 +225,54 @@ export function contract(label, makeApi) {
     await makeAdmin(api);
     assert.ok((await api.alerts.adminList()).some((x) => x.email === mail('misafir')));
   });
-}
 
+  T('veri disa aktarma: profil, adres, siparis ve favorileri icerir, sifre bilgisi icermez; misafir GIRIS_HATALI', async ({ api }) => {
+    assert.equal(await code(api.auth.exportData()), 'GIRIS_HATALI');
+    await api.auth.signUp({ name: 'Ayşe', email: mail('ayse'), password: pw });
+    await api.auth.addresses.add({ title: 'Ev', text: 'Atatürk Cd. No:5 Fethiye Muğla' });
+    await api.wishlist.toggle(b.id);
+    const o = await api.orders.place([{ id: a.id, qty: 1 }], customer, '');
+    const d = await api.auth.exportData();
+    assert.equal(d.email, mail('ayse'));
+    assert.equal(d.profile.name, 'Ayşe');
+    assert.equal(d.addresses.length, 1);
+    assert.deepEqual(d.wishlist, [b.id]);
+    assert.deepEqual(d.orders.map((x) => x.id), [o.id]);
+    const text = JSON.stringify(d).toLowerCase();
+    for (const secret of ['hash', 'salt', 'password', 'refresh_token', 'access_token']) assert.equal(text.includes(secret), false, `${secret} disa aktarimda olmamali`);
+  });
+
+  T('hesap silme: siparisler anonimlesir, hesap, adres ve favoriler silinir, ayni e-posta ile temiz bir hesap acilabilir', async ({ api, makeAdmin }) => {
+    await api.auth.signUp({ name: 'Ayşe', email: mail('ayse'), password: pw });
+    await api.auth.addresses.add({ title: 'Ev', text: 'Atatürk Cd. No:5 Fethiye Muğla' });
+    await api.wishlist.toggle(b.id);
+    const o = await api.orders.place([{ id: a.id, qty: 1 }], customer, '');
+    await api.auth.signOut();
+    const admin = await makeAdmin(api);
+    await api.orders.adminSetStatus(o.id, 'iptal'); // stok iade edilsin; silme sonrasi siparis kaydi yalniz muhasebe icin kalir
+    await api.auth.signOut();
+    await api.auth.signIn(mail('ayse'), pw);
+    await api.auth.deleteAccount();
+    assert.equal(await api.auth.user(), null);
+    assert.equal(await code(api.auth.signIn(mail('ayse'), pw)), 'GIRIS_HATALI');
+    await api.auth.signIn(admin.email, admin.password);
+    const kept = (await api.orders.adminList()).find((x) => x.id === o.id);
+    assert.ok(kept, 'siparis kaydi muhasebe icin kalmali');
+    assert.equal(kept.userId, null);
+    assert.equal(kept.name, 'silindi');
+    assert.equal(kept.phone, 'silindi');
+    assert.equal(kept.address, '');
+    await api.auth.signOut();
+    await api.auth.signUp({ name: 'Yeni', email: mail('ayse'), password: pw });
+    assert.deepEqual(await api.auth.addresses.list(), []);
+    assert.deepEqual(await api.wishlist.list(), []);
+    assert.deepEqual(await api.orders.mine(), []);
+  });
+
+  T('hesap silme: misafir GIRIS_HATALI, yonetici hesabi silinemez (YETKI_YOK)', async ({ api, makeAdmin }) => {
+    assert.equal(await code(api.auth.deleteAccount()), 'GIRIS_HATALI');
+    await makeAdmin(api);
+    assert.equal(await code(api.auth.deleteAccount()), 'YETKI_YOK');
+    assert.equal((await api.auth.user()).role, 'admin');
+  });
+}

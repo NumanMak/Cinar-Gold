@@ -160,6 +160,17 @@ export function createSupabaseApi(config, { fetchFn = globalThis.fetch?.bind(glo
         if (!e) throw new Error('ZORUNLU_ALAN');
         await request('/auth/v1/recover', { method: 'POST', body: { email: e }, token: config.anonKey });
       },
+      // KVKK: kendi verisinin tamamı (sunucu fonksiyonu, şifre ve jeton içermez).
+      async exportData() {
+        if (!session) throw new Error('GIRIS_HATALI');
+        return request('/rest/v1/rpc/export_my_data', { method: 'POST', body: {} });
+      },
+      // Hesabı siler: siparişler anonimleşir, kişisel veriler silinir. Yönetici hesabı silinemez.
+      async deleteAccount() {
+        if (!session) throw new Error('GIRIS_HATALI');
+        await request('/rest/v1/rpc/delete_my_account', { method: 'POST', body: {} });
+        setSession(null);
+      },
       async updateProfile(patch) {
         if (!session) throw new Error('GIRIS_HATALI');
         const body = {};
@@ -259,6 +270,17 @@ export function createSupabaseApi(config, { fetchFn = globalThis.fetch?.bind(glo
       async adminSetStatus(id, status) {
         await requireAdmin();
         return orderOut(first(await request('/rest/v1/rpc/admin_set_order_status', { method: 'POST', body: { p_id: id, p_status: status } })));
+      },
+    },
+
+    // KVKK izin kaydı: yalnızca oturum açıkken ve aynı izin için bir kez yazılır.
+    consents: {
+      async record({ kvkk, islem, iletisim = false, at }) {
+        if (!session || !kvkk || !islem) return;
+        const key = `${uid()}:${at ?? ''}`;
+        if (store.get('consent-rec', null) === key) return;
+        await request('/rest/v1/consents', { method: 'POST', body: { user_id: uid(), kvkk: true, islem: true, iletisim: !!iletisim }, prefer: 'return=minimal' });
+        store.set('consent-rec', key);
       },
     },
 

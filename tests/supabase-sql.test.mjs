@@ -128,3 +128,23 @@ test('musteri kendi satirlarina erisir: addresses, wishlist, orders icin auth.ui
   }
   assert.match(sql, /create policy\s+orders_select\s+on public\.orders\s+for select\s+using\s*\(\s*user_id = auth\.uid\(\) or public\.is_admin\(\)\s*\)/i);
 });
+
+test('veri disa aktarma ve hesap silme fonksiyonlari: security definer, yalniz giris yapmis, yonetici silinemez, siparisler anonimlesir', () => {
+  const exp = fnBody('export_my_data');
+  assert.match(exp, /security definer/i);
+  assert.match(exp, /auth\.uid\(\)/);
+  assert.match(exp, /GIRIS_HATALI/);
+  assert.doesNotMatch(exp, /encrypted_password|raw_app_meta_data|refresh_token/i, 'disa aktarimda sifre/jeton bilgisi olmamali');
+  const del = fnBody('delete_my_account');
+  assert.match(del, /security definer/i);
+  assert.match(del, /GIRIS_HATALI/);
+  assert.match(del, /is_admin\(\)/);
+  assert.match(del, /YETKI_YOK/);
+  const anon = del.search(/update public\.orders[\s\S]*?'silindi'/i);
+  const remove = del.search(/delete from auth\.users/i);
+  assert.ok(anon >= 0 && remove > anon, 'siparisler kullanici silinmeden once anonimlestirilmeli');
+  for (const f of ['export_my_data', 'delete_my_account']) {
+    assert.match(lower, new RegExp(`revoke all on function public\\.${f}\\b[^;]*from public`));
+    assert.match(lower, new RegExp(`grant execute on function public\\.${f}\\b[^;]*to authenticated`));
+  }
+});
