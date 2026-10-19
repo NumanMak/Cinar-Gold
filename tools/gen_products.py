@@ -1,5 +1,5 @@
 """Katalog üretici: assets/data/products.json dosyasını deterministik olarak yazar.
-Kullanım: python tools\gen_products.py
+Kullanım: python tools/gen_products.py
 Stok, fiyat ve açıklamaları düzenlemek için bu dosyayı değiştirip yeniden çalıştırın.
 """
 import json
