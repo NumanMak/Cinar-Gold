@@ -44,3 +44,47 @@
 @media (prefers-contrast: more) {
   .pcard, .cart-side { border-color: var(--pearl); }
 }
+
+/* ===== Cesur sürüm: ana sayfa (hafif sürüme dönmek için git etiketi kayit-noktasi-2) ===== */
+:root { --r-card: 24px; --r-media: 16px; --glass: color-mix(in srgb, var(--pearl) 5%, transparent); --glass-edge: color-mix(in srgb, var(--pearl) 14%, transparent); }
+
+/* Üst menü: kaydırınca daha derin cam, üstte ışık yakalayan ince kenar */
+.nav::after { background: rgba(8, 8, 9, .55); -webkit-backdrop-filter: blur(28px) saturate(190%); backdrop-filter: blur(28px) saturate(190%); }
+.nav.is-scrolled { border-bottom-color: color-mix(in srgb, var(--pearl) 8%, transparent); box-shadow: inset 0 -1px 0 var(--glass-edge); }
+
+/* Büyük başlıklar: daha iri, sıkı iz, ince ağırlık */
+.hero__title { letter-spacing: -.055em; }
+.h-section { letter-spacing: -.04em; line-height: 1.02; font-weight: 250; }
+.sec-head__text, .lead { letter-spacing: -.005em; }
+
+/* Cam paneller: yuvarlak, ince ışık kenarı, derin gölge, hover'da yay ile yükselir */
+.product__card, .why__item, .info {
+  border-radius: var(--r-card);
+  background: linear-gradient(180deg, var(--glass), transparent 70%);
+  border: 1px solid var(--glass-edge);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--pearl) 10%, transparent), 0 30px 60px -36px rgb(0 0 0 / .8);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  backdrop-filter: blur(14px) saturate(150%);
+  transition: transform .5s var(--spring), box-shadow .5s var(--spring), border-color .35s;
+}
+.product__card:hover, .why__item:hover { transform: translateY(-6px); border-color: color-mix(in srgb, var(--gold) 45%, var(--glass-edge)); }
+.product__card:active, .why__item:active { transform: scale(.985); transition-duration: 90ms; }
+
+/* Görseller yumuşak köşeli, kategori kartları da aynı dilde */
+.about__media, .product__media, .cat__body, .craft__inner, .modal__inner { border-radius: var(--r-card); overflow: hidden; }
+
+/* Neden Biz: bitişik hücreler yerine ayrı cam kartlar */
+.why__grid { gap: 16px; background: none; border: 0; overflow: visible; }
+.market__price { letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+
+/* Düğmeler: cam çizgili düğme, altın düğmede iç parlaklık */
+.btn--line { background: var(--glass); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+.btn--gold { box-shadow: inset 0 1px 0 rgb(255 255 255 / .45), 0 12px 28px -14px color-mix(in srgb, var(--gold) 70%, transparent); }
+
+@media (prefers-reduced-motion: reduce) {
+  .product__card:hover, .why__item:hover, .product__card:active, .why__item:active { transform: none; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .nav::after { background: var(--black); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .product__card, .why__item, .info, .btn--line { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--graphite); }
+}
