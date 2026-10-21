@@ -1,0 +1,46 @@
+/* Apple tasarım denemesi (emilkowalski/skills apple-design ilkeleri): mevcut stillerin üstüne biner.
+   Geri almak için: <link> satırlarını kaldırın ya da git etiketi kayit-noktasi-1'e dönün. */
+
+:root {
+  /* Yay (spring) benzeri yumuşak oturma: hızlı başlar, aşmadan oturur */
+  --spring: linear(0, .32 8%, .62 17%, .82 27%, .94 38%, .99 50%, 1);
+  --r-card: 16px;
+  --r-media: 10px;
+}
+
+/* 1. Anında geri bildirim: basınca hemen küçülür, bırakınca yayla geri döner */
+.btn, .chip, .link-btn, .field__toggle { transition-timing-function: var(--spring); }
+.btn:active, .chip:active, .link-btn:active { scale: .96; transition-duration: 90ms; }
+.pcard { transition: transform .45s var(--spring), box-shadow .45s var(--spring), border-color .3s; }
+.pcard:hover { transform: translateY(-4px); box-shadow: 0 18px 40px -18px rgb(0 0 0 / .55); border-color: color-mix(in srgb, var(--gold) 35%, var(--line)); }
+.pcard:active { transform: scale(.985); transition-duration: 90ms; }
+
+/* 2. Malzeme ve derinlik: mağaza çubuğu yarı saydam cam, sert çizgi yerine ince kenar */
+.shop-nav {
+  background: color-mix(in srgb, var(--black) 72%, transparent);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-bottom-color: color-mix(in srgb, var(--pearl) 8%, transparent);
+}
+.cart-side, .acard, .done { box-shadow: 0 24px 48px -32px rgb(0 0 0 / .6); }
+
+/* 3. Tipografi: boyuta göre iz ve satır aralığı; büyük başlık sıkı, küçük metin biraz açık */
+.shop-main h1, .page-title, .pdetail h1 { letter-spacing: -.03em; line-height: 1.05; font-weight: 300; }
+.pcard__name, .pcard__price { letter-spacing: -.01em; }
+.pcard__meta, .field, .chip { letter-spacing: .005em; }
+
+/* 4. Formlar ve çipler: odakta yumuşak altın halka */
+.chip, .field input, .field select { transition: border-color .3s, background-color .3s, box-shadow .3s; }
+.field input:focus-visible, .field select:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--gold) 28%, transparent); }
+
+/* 5. Erişilebilirlik: azaltılmış hareket, saydamlık ve yüksek karşıtlık tercihleri */
+@media (prefers-reduced-motion: reduce) {
+  .pcard:hover, .pcard:active { transform: none; }
+  .btn:active, .chip:active, .link-btn:active { scale: 1; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .shop-nav { background: var(--black); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+@media (prefers-contrast: more) {
+  .pcard, .cart-side { border-color: var(--pearl); }
+}
