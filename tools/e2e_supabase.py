@@ -52,6 +52,25 @@ def t_catalog(pg):
     check(shown == price, f"ekrandaki fiyat sunucu fiyatı değil: {shown} != {price}")
 
 
+@step("misafir: sepette sipariş formu yerine giriş paneli görünür, sunucu girişsiz siparişi reddeder")
+def t_guest(pg):
+    pg.goto(f"urun.html?id={PID}")
+    pg.wait("!!document.querySelector('.pdetail__buy button')")
+    pg.click(".pdetail__buy button")
+    pg.wait("document.querySelector('.form-msg[role=status]').textContent.includes('Sepete eklendi')")
+    pg.goto("sepet.html")
+    pg.wait("!!document.querySelector('#giris-gerekli')")
+    check(pg.ev("!document.querySelector('.order-form input[name=telefon]')"), "misafire sipariş formu gösterildi")
+    r = pg.ev("""(async () => {
+      const { CONFIG } = await import('./assets/js/shop/config.js');
+      const res = await fetch(CONFIG.url + '/rest/v1/rpc/place_order', { method: 'POST', headers: { apikey: CONFIG.anonKey, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lines: [{ id: %s, qty: 1 }], customer: { name: 'TEST', phone: '1', payment: 'havale', delivery: 'magaza' }, coupon: '' }) });
+      return res.status;
+    })()""" % json.dumps(PID))
+    check(r in (401, 403), f"girişsiz sipariş sunucuca reddedilmedi: {r}")
+    pg.ev("localStorage.removeItem('cg:cart')")
+
+
 @step("hesap: kayıt (izin sorulur), oturum açık, çıkış ve yanlış/doğru giriş")
 def t_signup(pg):
     pg.goto("hesap.html")
@@ -92,7 +111,7 @@ def t_order(pg):
     pg.wait("!!document.querySelector('.sum__row--disc')")
     pg.set_value("input[name=ad]", "TEST E2E")
     pg.set_value("input[name=telefon]", "05551112233")
-    pg.click(".order-form button[type=submit]")
+    pg.order_submit()
     pg.wait("!!document.querySelector('.done')", timeout=20)
     check("CG-" in pg.text(".done"), "sipariş numarası yok")
     after = server_stock(pg)
@@ -160,9 +179,12 @@ class SbPage(Page):
         super()._collect(method, p)
         if len(self.errors) > before and "auth/v1/token?grant_type=password" in self.errors[-1] and "400" in self.errors[-1]:
             self.errors.pop()
+        # Girişsiz siparişin reddedilmesi (401) bu senaryoda bilerek denenir.
+        if len(self.errors) > before and "rpc/place_order" in self.errors[-1] and "401" in self.errors[-1]:
+            self.errors.pop()
 
 
-SCENARIOS = [t_catalog, t_signup, t_order, t_cancel, t_privacy, t_admin]
+SCENARIOS = [t_catalog, t_guest, t_signup, t_order, t_cancel, t_privacy, t_admin]
 
 
 def main() -> int:
