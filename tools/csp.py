@@ -11,7 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG = ROOT / "assets" / "js" / "shop" / "config.js"
-PAGES = ["index.html", "magaza.html", "urun.html", "sepet.html", "hesap.html", "admin.html", "404.html"]
+PAGES = ["index.html", "magaza.html", "urun.html", "sepet.html", "hesap.html", "admin.html", "404.html", "gizlilik.html", "satis.html"]
 INLINE = re.compile(r"<script(?![^>]*\bsrc=)(?P<attrs>[^>]*)>(?P<body>.*?)</script>", re.S)
 META_CSP = re.compile(r'[ \t]*<meta http-equiv="Content-Security-Policy"[^>]*>\n?')
 META_REF = re.compile(r'[ \t]*<meta name="referrer"[^>]*>\n?')

@@ -91,7 +91,7 @@ test('place_order fiyati ve kuponu sunucuda hesaplar, stok satirlarini kilitler'
 });
 
 test('hata kodlari tanimli', () => {
-  for (const code of ['STOK_YETERSIZ', 'URUN_YOK', 'SEPET_BOS', 'ZORUNLU_ALAN', 'SIPARIS_YOK', 'IPTAL_EDILEMEZ', 'DURUM_GECERSIZ', 'YETKI_YOK', 'STOK_GECERSIZ']) {
+  for (const code of ['STOK_YETERSIZ', 'URUN_YOK', 'SEPET_BOS', 'ZORUNLU_ALAN', 'SIPARIS_YOK', 'IPTAL_EDILEMEZ', 'DURUM_GECERSIZ', 'YETKI_YOK', 'STOK_GECERSIZ', 'GIRIS_GEREKLI', 'SIPARIS_LIMITI', 'FIYAT_ESKI']) {
     assert.ok(sql.includes(code), `${code} yok`);
   }
 });
@@ -147,4 +147,31 @@ test('veri disa aktarma ve hesap silme fonksiyonlari: security definer, yalniz g
     assert.match(lower, new RegExp(`revoke all on function public\\.${f}\\b[^;]*from public`));
     assert.match(lower, new RegExp(`grant execute on function public\\.${f}\\b[^;]*to authenticated`));
   }
+});
+
+test('siparis girisli: anon calistiramaz, bekleyen siparis siniri ve taze fiyat kontrolu var', () => {
+  const body = fnBody('place_order');
+  assert.match(body, /auth\.uid\(\) is null[\s\S]*?GIRIS_GEREKLI/);
+  assert.match(body, /status = 'beklemede'\) >= 3[\s\S]*?SIPARIS_LIMITI/);
+  assert.match(body, /interval '24 hours'[\s\S]*?FIYAT_ESKI/);
+  assert.match(lower, /revoke all on function public\.place_order\(jsonb, jsonb, text\) from public, anon/);
+  assert.match(lower, /grant execute on function public\.place_order\(jsonb, jsonb, text\) to authenticated;/);
+  assert.doesNotMatch(lower, /grant execute on function public\.place_order[^;]*anon/);
+});
+
+test('altin fiyati otomatik: yalnizca cron calistirir, herkese kapali, bozuk veri ve asiri sapma reddedilir', () => {
+  const body = fnBody('refresh_gold_price');
+  assert.match(body, /security definer/i);
+  assert.match(body, /set search_path\s*=\s*public/i);
+  assert.match(body, /v_old \* 0\.85 and v_old \* 1\.15/);
+  assert.match(body, /exception when others/i);
+  assert.match(lower, /revoke all on function public\.refresh_gold_price\(\) from public, anon, authenticated/);
+  assert.doesNotMatch(lower, /grant execute on function public\.refresh_gold_price/);
+  assert.match(lower, /cron\.schedule\('altin-fiyati', '\*\/10 \* \* \* \*'/);
+  assert.match(lower, /create extension if not exists pg_net/);
+  assert.match(lower, /revoke all on public\.gold_fetch from anon, authenticated/);
+});
+
+test('izin kaydi aydinlatma metni surumunu tutar', () => {
+  assert.match(lower, /add column if not exists notice_version text not null default 'v1'/);
 });

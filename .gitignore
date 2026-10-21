@@ -16,3 +16,6 @@ desktop.ini
 tools/ozsafir/
 tools/ozsafir_*.py
 *.mp4
+
+# Güvenlik denetim raporları (açık listesi içerir, yayınlanmaz)
+.denetim/

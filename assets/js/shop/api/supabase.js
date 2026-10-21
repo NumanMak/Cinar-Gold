@@ -3,7 +3,7 @@
 // Arayüz sözleşmesi tests/api-contract.test.mjs içindedir; protokol ayrıntıları tests/api-supabase.test.mjs ile denetlenir.
 import { createWishlist, readGuestWishlist, clearGuestWishlist } from '../wishlist.js';
 
-const CODES = new Set(['STOK_YETERSIZ', 'URUN_YOK', 'SEPET_BOS', 'ZORUNLU_ALAN', 'SIPARIS_YOK', 'IPTAL_EDILEMEZ', 'DURUM_GECERSIZ', 'YETKI_YOK', 'STOK_GECERSIZ']);
+const CODES = new Set(['STOK_YETERSIZ', 'URUN_YOK', 'SEPET_BOS', 'ZORUNLU_ALAN', 'SIPARIS_YOK', 'IPTAL_EDILEMEZ', 'DURUM_GECERSIZ', 'YETKI_YOK', 'STOK_GECERSIZ', 'GIRIS_GEREKLI', 'SIPARIS_LIMITI', 'FIYAT_ESKI']);
 const MIN_ADDRESS = 10;
 const MIN_PASSWORD = 8;
 const filled = (s) => String(s ?? '').trim() !== '';
@@ -275,11 +275,11 @@ export function createSupabaseApi(config, { fetchFn = globalThis.fetch?.bind(glo
 
     // KVKK izin kaydı: yalnızca oturum açıkken ve aynı izin için bir kez yazılır.
     consents: {
-      async record({ kvkk, islem, iletisim = false, at }) {
+      async record({ kvkk, islem, iletisim = false, at, notice = 'v2' }) {
         if (!session || !kvkk || !islem) return;
         const key = `${uid()}:${at ?? ''}`;
         if (store.get('consent-rec', null) === key) return;
-        await request('/rest/v1/consents', { method: 'POST', body: { user_id: uid(), kvkk: true, islem: true, iletisim: !!iletisim }, prefer: 'return=minimal' });
+        await request('/rest/v1/consents', { method: 'POST', body: { user_id: uid(), kvkk: true, islem: true, iletisim: !!iletisim, notice_version: notice }, prefer: 'return=minimal' });
         store.set('consent-rec', key);
       },
     },

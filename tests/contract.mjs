@@ -42,6 +42,7 @@ export function contract(label, makeApi) {
   });
 
   T('siparis stogu dusurur; toplam katalog fiyatindan hesaplanir; istemci fiyati yok sayilir', async ({ api }) => {
+    await api.auth.signUp({ name: 'A', email: mail('a'), password: pw });
     const before = await stockOf(api, a.id);
     const order = await api.orders.place([{ id: a.id, qty: 2, price: 1, unitPrice: 1 }], { ...customer, total: 1 }, '');
     assert.equal(order.total, (await priceOf(a.id)) * 2);
@@ -51,6 +52,7 @@ export function contract(label, makeApi) {
   });
 
   T('CINAR10 kuponu %10 indirim verir, gecersiz kupon vermez', async ({ api }) => {
+    await api.auth.signUp({ name: 'A', email: mail('a'), password: pw });
     const o1 = await api.orders.place([{ id: a.id, qty: 1 }], customer, ' cinar10 ');
     const price = await priceOf(a.id);
     assert.equal(o1.discount, Math.round(price * 0.1));
@@ -60,6 +62,7 @@ export function contract(label, makeApi) {
   });
 
   T('gecersiz siparisler reddedilir ve stok degismez', async ({ api }) => {
+    await api.auth.signUp({ name: 'A', email: mail('a'), password: pw });
     const before = await stockOf(api, a.id);
     assert.equal(await code(api.orders.place([], customer, '')), 'SEPET_BOS');
     assert.equal(await code(api.orders.place([{ id: a.id, qty: 1 }], { ...customer, name: ' ' }, '')), 'ZORUNLU_ALAN');
@@ -72,10 +75,20 @@ export function contract(label, makeApi) {
     assert.equal(await stockOf(api, a.id), before);
   });
 
-  T('misafir siparis verebilir; mine() misafirde bos', async ({ api }) => {
-    const o = await api.orders.place([{ id: a.id, qty: 1 }], customer, '');
-    assert.ok(o.id);
+  T('misafir siparis veremez (GIRIS_GEREKLI), stok degismez; mine() misafirde bos', async ({ api }) => {
+    const before = await stockOf(api, a.id);
+    assert.equal(await code(api.orders.place([{ id: a.id, qty: 1 }], customer, '')), 'GIRIS_GEREKLI');
+    assert.equal(await stockOf(api, a.id), before);
     assert.deepEqual(await api.orders.mine(), []);
+  });
+
+  T('en fazla 3 bekleyen siparis (SIPARIS_LIMITI); biri iptal edilince yeni siparis verilir', async ({ api }) => {
+    await api.auth.signUp({ name: 'A', email: mail('a'), password: pw });
+    const placed = [];
+    for (let i = 0; i < 3; i++) placed.push(await api.orders.place([{ id: a.id, qty: 1 }], customer, ''));
+    assert.equal(await code(api.orders.place([{ id: a.id, qty: 1 }], customer, '')), 'SIPARIS_LIMITI');
+    await api.orders.cancelMine(placed[0].id);
+    assert.ok((await api.orders.place([{ id: a.id, qty: 1 }], customer, '')).id);
   });
 
   T('musteri yalniz kendi siparislerini gorur', async ({ api }) => {

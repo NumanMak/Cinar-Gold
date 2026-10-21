@@ -77,10 +77,14 @@ export function createLocalApi({ store, products }) {
     orders: {
       // Satırlarda yalnızca id ve qty okunur; fiyat ve toplam her zaman katalogdan hesaplanır.
       async place(lines, customer, coupon = '') {
+        // Gerçek arka uçla aynı kurallar: sipariş için giriş şart, en çok 3 bekleyen sipariş.
+        const u = current();
+        if (!u) throw new Error('GIRIS_GEREKLI');
+        if (listOrders(store, u.id).filter((o) => o.status === 'beklemede').length >= 3) throw new Error('SIPARIS_LIMITI');
         const cart = createCart(createStore(null), products, inventory);
         for (const l of lines) cart.add(String(l.id), Number(l.qty));
         return placeOrder({ store, products, inventory, cart }, {
-          userId: current()?.id ?? null,
+          userId: u.id,
           name: customer.name, phone: customer.phone, payment: customer.payment,
           delivery: customer.delivery, address: customer.address, code: coupon,
         });

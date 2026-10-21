@@ -78,6 +78,11 @@ class Page:
         self.ev(f"(()=>{{const e=document.querySelector({json.dumps(sel)});e.value={json.dumps(value)};"
                 f"e.dispatchEvent(new Event('input',{{bubbles:true}}));e.dispatchEvent(new Event('change',{{bubbles:true}}));}})()")
 
+    def order_submit(self):
+        # Sipariş formunda mesafeli satış koşulları onay kutusu zorunludur.
+        self.ev("document.querySelector('.order-form input[name=sozlesme]').checked = true")
+        self.click(".order-form button[type=submit]")
+
     def accept_consent(self):
         self.wait("!!document.querySelector('dialog.consent[open] #izin-baslik')")
         self.click("dialog.consent input[name=kvkk]")
@@ -89,6 +94,21 @@ class Page:
         self.wait("!!document.querySelector('dialog.consent[open] #izin-baslik')")
         self.click("dialog.consent button[type=button]")
         self.wait("!document.querySelector('dialog.consent #izin-baslik')")
+
+
+def signup(pg, name, email, password):
+    """Gerçek akışla kayıt olur (izin penceresi dahil); oturum açık kalır."""
+    pg.goto("hesap.html")
+    pg.wait("!!document.querySelector('.auth')")
+    pg.ev("[...document.querySelectorAll('.auth .chip')].find(b=>b.textContent==='Kayıt ol').click()")
+    pg.wait("!!document.querySelector('#form-kayit')")
+    pg.set_value("#form-kayit input[name=ad]", name)
+    pg.set_value("#form-kayit input[name=email]", email)
+    pg.set_value("#form-kayit input[name=sifre]", password)
+    pg.click("#form-kayit button[type=submit]")
+    if not pg.ev("(JSON.parse(localStorage.getItem('cg:consent')||'{}')).granted"):
+        pg.accept_consent()
+    pg.wait("!!document.querySelector('.account-layout')")
 
 
 def step(name):
@@ -208,15 +228,26 @@ def t_cart_coupon(pg):
 @step("sipariş: izinden vazgeçilirse oluşmaz; izin verilirse oluşur, stok düşer, sepet boşalır")
 def t_order(pg):
     pg.goto("sepet.html")
-    pg.ev("localStorage.removeItem('cg:consent')")  # önceki adımda verilen izin sıfırlanır
+    # misafir sipariş veremez: form yerine giriş paneli görünür
+    pg.wait("!!document.querySelector('#giris-gerekli')")
+    check(pg.ev("!document.querySelector('input[name=ad]')"), "misafire sipariş formu gösterildi")
+    check("hesap.html" in pg.ev("document.querySelector('#giris-gerekli a.btn').getAttribute('href')"), "giriş bağlantısı yok")
+    signup(pg, "Test Kullanıcı", "siparis@ornek.com", "gizli-sifre-1")
+    pg.goto("sepet.html")
+    pg.ev("localStorage.removeItem('cg:consent')")  # kayıtta verilen izin sıfırlanır: sipariş anında yeniden sorulur
     pg.wait("!!document.querySelector('.order-form')")
-    pg.set_value("input[name=ad]", "Test Kullanıcı")
+    # satış koşulları onaylanmadan sipariş gönderilmez
     pg.set_value("input[name=telefon]", "05551112233")
     pg.click(".order-form button[type=submit]")
+    time.sleep(0.5)
+    check(pg.ev("!document.querySelector('dialog.consent[open]') && !document.querySelector('.done')"), "onaysız sipariş ilerledi")
+    pg.set_value("input[name=ad]", "Test Kullanıcı")
+    pg.set_value("input[name=telefon]", "05551112233")
+    pg.order_submit()
     pg.decline_consent()
     pg.wait("document.querySelector('.order-form .form-msg[role=alert]').textContent.includes('izin')")
     check(pg.ev("JSON.parse(localStorage.getItem('cg:orders')||'[]').length") == 0, "izin yokken sipariş oluştu")
-    pg.click(".order-form button[type=submit]")
+    pg.order_submit()
     pg.accept_consent()
     pg.wait("!!document.querySelector('.done')")
     check("CG-" in pg.text(".done"), "sipariş numarası yok")
@@ -226,6 +257,8 @@ def t_order(pg):
     check(pg.text("#sepet-sayac") == "0", "sepet boşalmadı")
     pg.goto(f"urun.html?id={IN_STOCK['id']}")
     pg.wait("!!document.querySelector('.stock')")
+    # sonraki adımlar kendi hesabını açar: bu adımın kullanıcı ve oturumu temizlenir (sipariş kaydı kalır)
+    pg.ev("['users','session','consent'].forEach(k=>localStorage.removeItem('cg:'+k))")
 
 
 @step("hesap: izin önce sorulur; kayıt, çıkış, hatalı ve doğru giriş; ad HTML olarak yorumlanmaz")
@@ -280,7 +313,7 @@ def t_order_error(pg):
     pg.wait("!!document.querySelector('.order-form')")
     pg.set_value("input[name=ad]", "Test Kişi")
     pg.set_value("input[name=telefon]", "   ")
-    pg.click(".order-form button[type=submit]")
+    pg.order_submit()
     pg.wait("document.querySelector('.order-form .form-msg[role=alert]').textContent.includes('doldurun')")
     check(pg.ev("document.querySelector('input[name=ad]').value") == "Test Kişi", "ad alanı silindi")
 
@@ -332,11 +365,11 @@ def t_delivery_account(pg):
     check(pg.ev("document.getElementById('adres-alani').hidden") is False, "adrese teslimde adres alanı yok")
     pg.set_value("input[name=telefon]", "05551112233")
     pg.set_value("textarea[name=adres]", "kısa")
-    pg.click(".order-form button[type=submit]")
+    pg.order_submit()
     pg.wait("document.querySelector('.order-form .form-msg[role=alert]').textContent.includes('adres')")
     check(pg.ev("JSON.parse(localStorage.getItem('cg:orders')||'[]').length") == 1, "kısa adresle sipariş oluştu")
     pg.set_value("textarea[name=adres]", "Atatürk Cd. No:25 Fethiye Muğla")
-    pg.click(".order-form button[type=submit]")
+    pg.order_submit()
     pg.wait("!!document.querySelector('.done')")
     check("Atatürk Cd. No:25" in pg.text(".done"), "başarı ekranında adres yok")
     pg.goto("hesap.html#siparisler")
@@ -500,7 +533,7 @@ def t_cancel_order(pg):
     pg.goto("sepet.html")
     pg.wait("!!document.querySelector('.order-form')")
     pg.set_value("input[name=telefon]", "05551112233")
-    pg.click(".order-form button[type=submit]")
+    pg.order_submit()
     pg.wait("!!document.querySelector('.done')")
     after_order = pg.ev(f"JSON.parse(localStorage.getItem('cg:stock'))[{json.dumps(pid)}]")
     pg.goto("hesap.html#siparisler")
@@ -667,7 +700,7 @@ def t_admin(pg):
     pg.goto("sepet.html")
     pg.wait("!!document.querySelector('.order-form')")
     pg.set_value("input[name=telefon]", "05551112233")
-    pg.click(".order-form button[type=submit]")
+    pg.order_submit()
     pg.wait("!!document.querySelector('.done')")
     stock_after = pg.ev(f"JSON.parse(localStorage.getItem('cg:stock'))[{json.dumps(IN_STOCK['id'])}]")
     # müşteri çıkış, yönetici girişi
@@ -779,7 +812,7 @@ def t_privacy(pg):
     pg.goto("sepet.html")
     pg.wait("!!document.querySelector('.order-form')")
     pg.set_value("input[name=telefon]", "05551112233")
-    pg.click(".order-form button[type=submit]")
+    pg.order_submit()
     pg.wait("!!document.querySelector('.done')")
     pg.goto("hesap.html#izinler")
     pg.wait("!!document.querySelector('#veri-indir')")

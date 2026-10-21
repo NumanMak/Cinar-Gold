@@ -96,6 +96,14 @@ create table if not exists public.consents (
   iletisim boolean not null default false,
   at timestamptz not null default now()
 );
+-- Kullanıcının onayladığı aydınlatma metninin sürümü (metin değişince istemci yeni sürümü gönderir).
+alter table public.consents add column if not exists notice_version text not null default 'v1' check (length(notice_version) <= 20);
+
+-- Altın fiyatı çekme durumu (yalnızca refresh_gold_price kullanır; hiçbir rolün erişimi yok).
+create table if not exists public.gold_fetch (
+  id integer primary key check (id = 1),
+  request_id bigint
+);
 
 -- ============================================================ RLS açık
 
@@ -104,6 +112,8 @@ alter table public.addresses enable row level security;
 alter table public.products_catalog enable row level security;
 alter table public.products_stock enable row level security;
 alter table public.gold_price enable row level security;
+alter table public.gold_fetch enable row level security;
+revoke all on public.gold_fetch from anon, authenticated;
 alter table public.orders enable row level security;
 alter table public.order_lines enable row level security;
 alter table public.wishlist enable row level security;
@@ -247,6 +257,7 @@ declare
   v_delivery text := coalesce(nullif(customer ->> 'delivery', ''), 'magaza');
   v_address text := case when coalesce(nullif(customer ->> 'delivery', ''), 'magaza') = 'adres' then btrim(coalesce(customer ->> 'address', '')) else '' end;
   v_gold numeric;
+  v_gold_at timestamptz;
   v_item jsonb;
   v_qty numeric;
   v_id text;
@@ -258,6 +269,15 @@ declare
   v_stock integer;
   v_price integer;
 begin
+  -- Sipariş için giriş şart; kullanıcı başına en çok 3 bekleyen sipariş (sahte sipariş ve stok tüketme önlemi).
+  if auth.uid() is null then
+    raise exception 'GIRIS_GEREKLI';
+  end if;
+  -- Aynı kullanıcının eşzamanlı siparişleri sırayla işlenir; sınır aşılamaz.
+  perform 1 from public.profiles where id = auth.uid() for update;
+  if (select count(*) from public.orders where user_id = auth.uid() and status = 'beklemede') >= 3 then
+    raise exception 'SIPARIS_LIMITI';
+  end if;
   if lines is null or jsonb_typeof(lines) <> 'array' or jsonb_array_length(lines) = 0 then
     raise exception 'SEPET_BOS';
   end if;
@@ -271,9 +291,13 @@ begin
     raise exception 'ZORUNLU_ALAN';
   end if;
 
-  select g.gram22_sell into v_gold from public.gold_price g where g.id = 1;
+  select g.gram22_sell, g.updated_at into v_gold, v_gold_at from public.gold_price g where g.id = 1;
   if v_gold is null then
     raise exception 'URUN_YOK';
+  end if;
+  -- Fiyat 24 saatten eskiyse sipariş alınmaz (otomatik güncelleme durmuş olabilir).
+  if v_gold_at < now() - interval '24 hours' then
+    raise exception 'FIYAT_ESKI';
   end if;
 
   -- Satırları doğrula.
@@ -333,8 +357,8 @@ begin
   return v_order;
 end;
 $$;
-revoke all on function public.place_order(jsonb, jsonb, text) from public;
-grant execute on function public.place_order(jsonb, jsonb, text) to anon, authenticated;
+revoke all on function public.place_order(jsonb, jsonb, text) from public, anon;
+grant execute on function public.place_order(jsonb, jsonb, text) to authenticated;
 
 -- Müşteri kendi bekleyen siparişini iptal eder; stok geri verilir.
 create or replace function public.cancel_my_order(p_id text)
@@ -485,3 +509,51 @@ end;
 $$;
 revoke all on function public.delete_my_account() from public;
 grant execute on function public.delete_my_account() to authenticated;
+
+-- ============================================================ Altın fiyatı (otomatik)
+-- Yayındaki assets/data/gold.json (Özsafir Gold, GitHub Actions ile 20 dakikada bir yenilenir) pg_net ile okunur, pg_cron her 10 dakikada çalıştırır.
+-- İki aşamalı: önce önceki isteğin cevabı işlenir, sonra yeni istek atılır (fiyat en geç ~20 dakikada güncellenir).
+create extension if not exists pg_net;
+create extension if not exists pg_cron;
+
+create or replace function public.refresh_gold_price()
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_req bigint;
+  r record;
+  v_json jsonb;
+  v_new numeric;
+  v_old numeric;
+  v_at timestamptz;
+begin
+  select request_id into v_req from public.gold_fetch where id = 1;
+  if v_req is not null then
+    select * into r from net._http_response where id = v_req;
+    if found and r.status_code = 200 then
+      begin
+        v_json := r.content::jsonb;
+        v_new := (v_json #>> '{items,gram22,sell}')::numeric;
+        v_at := (v_json ->> 'fetchedAt')::timestamptz;
+      exception when others then
+        v_new := null;
+      end;
+      select gram22_sell into v_old from public.gold_price where id = 1;
+      -- Bozuk ya da aşırı sapan veri reddedilir (tek seferde en çok %15); gelecek tarihli veri kabul edilmez.
+      if v_new is not null and v_at is not null and v_new > 0
+         and v_new between v_old * 0.85 and v_old * 1.15 and v_at <= now() + interval '5 minutes' then
+        update public.gold_price set gram22_sell = v_new, updated_at = v_at where id = 1 and updated_at <= v_at;
+      end if;
+    end if;
+  end if;
+  select net.http_get(url := 'https://numanmak.github.io/Cinar-Gold/assets/data/gold.json', timeout_milliseconds := 5000) into v_req;
+  insert into public.gold_fetch (id, request_id) values (1, v_req)
+  on conflict (id) do update set request_id = excluded.request_id;
+end;
+$$;
+revoke all on function public.refresh_gold_price() from public, anon, authenticated;
+
+select cron.schedule('altin-fiyati', '*/10 * * * *', 'select public.refresh_gold_price()');

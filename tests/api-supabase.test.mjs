@@ -328,7 +328,7 @@ test('supabase: izin kaydi yalniz oturumda, yalniz zorunlu izinler varsa ve ayni
   await api.consents.record({ kvkk: true, islem: true, iletisim: true, at: 't1' });
   const posts = calls.filter((c) => c.url.includes('/consents'));
   assert.equal(posts.length, 1);
-  assert.deepEqual(posts[0].body, { user_id: 'u1', kvkk: true, islem: true, iletisim: true });
+  assert.deepEqual(posts[0].body, { user_id: 'u1', kvkk: true, islem: true, iletisim: true, notice_version: 'v2' });
   await api.consents.record({ kvkk: true, islem: true, iletisim: true, at: 't2' });
   assert.equal(calls.filter((c) => c.url.includes('/consents')).length, 2);
 });

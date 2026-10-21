@@ -368,3 +368,14 @@ select#sirala { min-height: 42px; padding: 0 12px; border-radius: var(--r-media)
 .order--tamamlandi { opacity: .8; }
 
 .danger-zone { display: grid; gap: 10px; justify-items: start; }
+
+/* Hukuki sayfalar */
+.legal { max-width: 760px; }
+.legal h2 { margin: 28px 0 8px; font-size: 1.125rem; color: var(--gold); }
+.legal p, .legal li { color: var(--text-2); line-height: 1.7; }
+.legal ul { padding-left: 20px; margin: 8px 0; }
+.legal a { color: var(--gold); text-decoration: underline; }
+.legal__meta { color: var(--muted); font-size: .8125rem; margin-bottom: 8px; }
+.shop-foot__links a { color: inherit; text-decoration: underline; }
+.consent__text a { color: var(--gold); text-decoration: underline; }
+.field__pw + * { margin-top: 0; }

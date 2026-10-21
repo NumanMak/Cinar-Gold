@@ -16,6 +16,9 @@ const ERRORS = {
   SEPET_BOS: 'Sepetiniz boş.',
   ZORUNLU_ALAN: 'Ad soyad, telefon, ödeme yöntemi ve (adrese teslimde) en az 10 karakterlik açık adresi doldurun.',
   SUNUCU_YOK: 'Sunucuya ulaşılamadı, tekrar deneyin.',
+  GIRIS_GEREKLI: 'Sipariş vermek için giriş yapmanız gerekiyor.',
+  SIPARIS_LIMITI: 'En fazla 3 bekleyen siparişiniz olabilir. Mevcut siparişlerinizin onaylanmasını bekleyin ya da birini iptal edin.',
+  FIYAT_ESKI: 'Fiyatlar şu anda güncelleniyor. Lütfen biraz sonra tekrar deneyin ya da WhatsApp ile yazın.',
   COK_FAZLA_ISTEK: 'Çok fazla deneme yapıldı, lütfen biraz bekleyip tekrar deneyin.',
 };
 // Sepeti değiştirmiş olabilecek hatalar: sepet yeniden çizilir ve mesaj yeni formda gösterilir.
@@ -77,8 +80,19 @@ function couponForm(q) {
   return form;
 }
 
+// Girişsiz ziyaretçi sipariş veremez (sahte sipariş ve stok tüketmeyi önler); giriş yapabilir ya da WhatsApp'tan yazabilir.
+function loginPrompt() {
+  const text = t('Merhaba, Çınar Gold web sitesinden sipariş vermek istiyorum.');
+  return el('section', { class: 'order-form', id: 'giris-gerekli' },
+    el('h2', { class: 'order-form__title' }, t('Sipariş için giriş yapın')),
+    el('p', { class: 'form-msg' }, t('Siparişlerinizi takip edebilmeniz ve sahte siparişleri önlemek için sipariş vermeden önce hesabınızla giriş yapmanız gerekir.')),
+    el('a', { class: 'btn btn--gold', href: 'hesap.html' }, t('Giriş yap veya kayıt ol')),
+    el('a', { class: 'link-btn', href: `https://wa.me/905073517347?text=${encodeURIComponent(text)}`, target: '_blank', rel: 'noopener' }, t('ya da WhatsApp ile yazın')));
+}
+
 function orderForm(q) {
   const user = ctx.me();
+  if (!user) return loginPrompt();
   const name = el('input', { type: 'text', name: 'ad', autocomplete: 'name', required: '', value: user ? user.name : '' });
   const phone = el('input', { type: 'tel', name: 'telefon', autocomplete: 'tel', required: '', value: user ? user.phone : '' });
   const address = el('textarea', { name: 'adres', rows: '3', autocomplete: 'street-address', placeholder: t('Mahalle, cadde/sokak, bina ve daire no, ilçe, il') }, user ? user.address : '');
@@ -110,7 +124,11 @@ function orderForm(q) {
     addressField,
     el('fieldset', { class: 'order-form__pay' }, el('legend', {}, t('Ödeme yöntemi')),
       pay('havale', t('Havale / EFT'), true), pay('magaza', t('Mağazada ödeme'), false)),
-    el('p', { class: 'form-msg' }, t('Demo mağaza: sipariş yalnızca bu tarayıcıda kaydedilir, ödeme alınmaz. Onay için mağazamız sizinle WhatsApp üzerinden iletişime geçer.')),
+    el('p', { class: 'form-msg' }, api.mode === 'local'
+      ? t('Demo mağaza: sipariş yalnızca bu tarayıcıda kaydedilir, ödeme alınmaz. Onay için mağazamız sizinle WhatsApp üzerinden iletişime geçer.')
+      : t('Ödeme şimdi alınmaz. Onay için mağazamız sizinle WhatsApp üzerinden iletişime geçer.')),
+    el('label', { class: 'check' }, el('input', { type: 'checkbox', name: 'sozlesme', required: '' }),
+      el('span', {}, el('a', { href: 'satis.html', target: '_blank', rel: 'noopener' }, t('Ön bilgilendirme ve mesafeli satış koşullarını')), t(' okudum, kabul ediyorum.'))),
     msg, submit);
 
   const syncDelivery = () => {

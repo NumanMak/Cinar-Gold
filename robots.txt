@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.cinargold.com.tr/sitemap.xml
+Sitemap: https://numanmak.github.io/Cinar-Gold/sitemap.xml

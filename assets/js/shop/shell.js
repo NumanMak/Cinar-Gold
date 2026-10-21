@@ -57,7 +57,8 @@ function buildShopFooter() {
   return el('footer', { class: 'shop-foot' },
     el('div', { class: 'container' },
       el('p', {}, t('Çınar Gold Kuyumculuk, Cumhuriyet Mah., Atatürk Cd. No:25/A, Fethiye. Tel: 0507 351 73 47')),
-      el('p', { class: 'shop-foot__demo' }, t('Mağaza demo sürümdür: hesap, stok ve siparişler yalnızca bu tarayıcıda saklanır.'))));
+      el('p', { class: 'shop-foot__links' },
+        el('a', { href: 'gizlilik.html' }, t('Gizlilik ve aydınlatma')), ' · ', el('a', { href: 'satis.html' }, t('Mesafeli satış ve iade')))));
 }
 
 export async function mountShell({ page }) {
@@ -99,6 +100,8 @@ export async function mountShell({ page }) {
 
   // Arka uç (yerel veya Supabase). Ulaşılamazsa sayfa çökmez: katalogdaki başlangıç stoğu ve misafir görünümü kullanılır.
   const api = await createApi(CONFIG, { store, products });
+  // Demo notu yalnızca tarayıcı içi (yerel) modda gösterilir.
+  if (api.mode === 'local') document.querySelector('.shop-foot .container')?.append(el('p', { class: 'shop-foot__demo' }, t('Mağaza demo sürümdür: hesap, stok ve siparişler yalnızca bu tarayıcıda saklanır.')));
   // Gerçek arka uçta fiyatlar sunucudaki products_priced görünümünden gelir (sipariş tutarıyla aynı kaynak).
   if (api.prices) {
     try {
@@ -158,7 +161,7 @@ export async function mountShell({ page }) {
   const syncConsent = async () => {
     const st = consent.status();
     if (!st.granted || !me) return;
-    try { await api.consents.record({ ...st.choices, at: st.at }); } catch (e) { console.error(e); }
+    try { await api.consents.record({ ...st.choices, at: st.at, notice: st.notice }); } catch (e) { console.error(e); }
   };
 
   const refresh = () => {
@@ -204,6 +207,7 @@ function askConsent(mode) {
       el('p', { class: 'consent__text' }, mode === 'local'
         ? t('Çınar Gold Kuyumculuk olarak adınız, e-postanız, telefonunuz ve sipariş bilgileriniz hesabınızı yönetmek, siparişinizi hazırlamak ve stok bildirimi yapmak amacıyla işlenir. Bu demo sürümde veriler yalnızca bu tarayıcıda saklanır. İzninizi dilediğiniz zaman hesap sayfasından geri alabilirsiniz.')
         : t('Çınar Gold Kuyumculuk (veri sorumlusu) olarak adınız, e-postanız, telefonunuz, adresleriniz ve sipariş bilgileriniz; hesabınızı yönetmek, siparişinizi hazırlamak, stok bildirimi yapmak ve yasal yükümlülükleri yerine getirmek amacıyla işlenir. Veriler Avrupa Birliği içindeki (Frankfurt) sunucularda saklanır. Hesap sayfanızdan verilerinizi indirebilir, hesabınızı silebilir ve izninizi geri alabilirsiniz. Başvurularınız için: 0507 351 73 47.')),
+      el('p', { class: 'consent__text' }, el('a', { href: 'gizlilik.html', target: '_blank', rel: 'noopener' }, t('Aydınlatma metninin tamamını okuyun'))),
       kvkk.label, islem.label, iletisim.label,
       el('div', { class: 'consent__actions' }, cancel, accept));
     const dialog = el('dialog', { class: 'consent', 'aria-labelledby': 'izin-baslik' }, form);

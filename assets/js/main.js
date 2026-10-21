@@ -713,6 +713,16 @@
     onReady();
   }
 
+  // Google Haritalar yalnızca kullanıcı isteyince yüklenir: IP adresi Google'a ancak o zaman gider.
+  $$('[data-load-map]').forEach((btn) => btn.addEventListener('click', () => {
+    const frame = document.createElement('iframe');
+    frame.title = btn.dataset.title;
+    frame.src = btn.dataset.src;
+    frame.referrerPolicy = 'no-referrer';
+    frame.allowFullscreen = true;
+    btn.closest('.map').replaceChildren(frame);
+  }));
+
   const showIntro = doc.classList.contains('js') && !doc.classList.contains('no-intro');
   if (!showIntro) {
     requestAnimationFrame(() => requestAnimationFrame(ready));

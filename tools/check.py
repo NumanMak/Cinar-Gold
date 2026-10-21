@@ -7,7 +7,7 @@ from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-PAGES = ["index.html", "magaza.html", "urun.html", "sepet.html", "hesap.html", "admin.html"]
+PAGES = ["index.html", "magaza.html", "urun.html", "sepet.html", "hesap.html", "admin.html", "gizlilik.html", "satis.html"]
 ok = True
 
 for page in PAGES:
