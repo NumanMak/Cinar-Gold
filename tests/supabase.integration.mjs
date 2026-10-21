@@ -117,11 +117,11 @@ async function customerApi(tag) {
   return sharedCustomers.get(tag);
 }
 
-test('yarış: stoğu 1 olan ürünü iki misafir aynı anda alır, yalnızca biri başarılı olur, stok negatif olmaz', { skip }, async () => {
+test('yarış: stoğu 1 olan ürünü iki müşteri aynı anda alır, yalnızca biri başarılı olur, stok negatif olmaz', { skip }, async () => {
   const admin = await makeAdminApi();
   await admin.api.stock.adminSet(A.id, 1);
   try {
-    const g1 = newApi().api; const g2 = newApi().api;
+    const g1 = (await customerApi('R1')).api; const g2 = (await customerApi('R2')).api;
     const results = await Promise.allSettled([
       g1.orders.place([{ id: A.id, qty: 1 }], customer, ''),
       g2.orders.place([{ id: A.id, qty: 1 }], customer, ''),
@@ -140,7 +140,8 @@ test('yarış: sekiz eşzamanlı sipariş, stok 3 iken tam üçü başarılı ol
   const admin = await makeAdminApi();
   await admin.api.stock.adminSet(B.id, 3);
   try {
-    const results = await Promise.allSettled(Array.from({ length: 8 }, () => newApi().api.orders.place([{ id: B.id, qty: 1 }], customer, '')));
+    const u1 = (await customerApi('R1')).api; const u2 = (await customerApi('R2')).api;
+    const results = await Promise.allSettled(Array.from({ length: 8 }, (_, i) => (i % 2 ? u1 : u2).orders.place([{ id: B.id, qty: 1 }], customer, '')));
     assert.equal(results.filter((r) => r.status === 'fulfilled').length, 3);
     assert.equal((await admin.api.stock.load())[B.id], 0);
   } finally {
@@ -149,12 +150,13 @@ test('yarış: sekiz eşzamanlı sipariş, stok 3 iken tam üçü başarılı ol
 });
 
 test('fiyat manipülasyonu: sunucu istemciden gelen fiyat, toplam ve indirim alanlarını yok sayar', { skip }, async () => {
+  const token = tokenOf((await customerApi('T')).store);
   const before = (await newApi().api.stock.load())[A.id];
   // Üst düzeye fazladan parametre eklemek fonksiyon imzasına uymadığı için sunucuca reddedilir.
-  const extra = await raw('/rest/v1/rpc/place_order', { method: 'POST', body: { lines: [{ id: A.id, qty: 1 }], customer: { ...customer, name: 'TEST fiyat' }, coupon: '', total: 1, price: 1 } });
+  const extra = await raw('/rest/v1/rpc/place_order', { token, method: 'POST', body: { lines: [{ id: A.id, qty: 1 }], customer: { ...customer, name: 'TEST fiyat' }, coupon: '', total: 1, price: 1 } });
   assert.ok(extra.status >= 400, 'bilinmeyen üst düzey parametre kabul edilmemeli');
   // İç içe alanlardaki fiyat/indirim denemeleri okunmaz.
-  const r = await raw('/rest/v1/rpc/place_order', { method: 'POST', body: {
+  const r = await raw('/rest/v1/rpc/place_order', { token, method: 'POST', body: {
     lines: [{ id: A.id, qty: 1, price: 1, unit_price: 1, unitPrice: 1, total: 1 }],
     customer: { ...customer, name: 'TEST fiyat', total: 1, subtotal: 1, discount: 99999, price: 1 },
     coupon: '',
@@ -167,6 +169,7 @@ test('fiyat manipülasyonu: sunucu istemciden gelen fiyat, toplam ve indirim ala
 });
 
 test('geçersiz girdiler reddedilir ve stok/sipariş oluşmaz', { skip }, async () => {
+  const token = tokenOf((await customerApi('G')).store);
   const before = (await newApi().api.stock.load())[A.id];
   const bad = [
     [{ id: A.id, qty: 0 }], [{ id: A.id, qty: -1 }], [{ id: A.id, qty: 1.5 }], [{ id: A.id, qty: 11 }], [{ id: A.id, qty: '2' }], [{ id: A.id, qty: null }],
@@ -174,23 +177,23 @@ test('geçersiz girdiler reddedilir ve stok/sipariş oluşmaz', { skip }, async 
     Array.from({ length: 31 }, () => ({ id: A.id, qty: 1 })),
   ];
   for (const lines of bad) {
-    const r = await raw('/rest/v1/rpc/place_order', { method: 'POST', body: { lines, customer: { ...customer, name: 'TEST kotu' }, coupon: '' } });
+    const r = await raw('/rest/v1/rpc/place_order', { token, method: 'POST', body: { lines, customer: { ...customer, name: 'TEST kotu' }, coupon: '' } });
     assert.notEqual(r.status, 200, `kabul edilmemeliydi: ${JSON.stringify(lines).slice(0, 80)}`);
   }
   for (const notArray of [null, {}, 'x', 5]) {
-    const r = await raw('/rest/v1/rpc/place_order', { method: 'POST', body: { lines: notArray, customer: { ...customer, name: 'TEST kotu' }, coupon: '' } });
+    const r = await raw('/rest/v1/rpc/place_order', { token, method: 'POST', body: { lines: notArray, customer: { ...customer, name: 'TEST kotu' }, coupon: '' } });
     assert.notEqual(r.status, 200);
   }
   const cust = [{ name: '' }, { phone: ' ' }, { payment: 'bitcoin' }, { delivery: 'ucak' }, { delivery: 'adres', address: 'kısa' }];
   for (const over of cust) {
-    const r = await raw('/rest/v1/rpc/place_order', { method: 'POST', body: { lines: [{ id: A.id, qty: 1 }], customer: { ...customer, name: 'TEST kotu', ...over }, coupon: '' } });
+    const r = await raw('/rest/v1/rpc/place_order', { token, method: 'POST', body: { lines: [{ id: A.id, qty: 1 }], customer: { ...customer, name: 'TEST kotu', ...over }, coupon: '' } });
     assert.notEqual(r.status, 200, `müşteri alanı kabul edilmemeliydi: ${JSON.stringify(over)}`);
   }
   assert.equal((await newApi().api.stock.load())[A.id], before);
 });
 
 test('kupon: yalnızca CINAR10 (büyük/küçük harf ve boşluk duyarsız) indirim verir', { skip }, async () => {
-  const { api } = newApi();
+  const { api } = await customerApi('K');
   const ok = await api.orders.place([{ id: A.id, qty: 1 }], customer, ' cinar10 ');
   assert.ok(ok.discount > 0);
   const none = await api.orders.place([{ id: B.id, qty: 1 }], customer, "CINAR10'; update orders set total=0;--");
@@ -319,8 +322,30 @@ test('iptal: yalnızca sahibi ve yalnızca bekleyen sipariş; stok bir kez iade 
 });
 
 test('hata gövdeleri hassas bilgi sızdırmaz (sunucu hatası ayrıntısı, SQL, jeton)', { skip }, async () => {
-  const r = await raw('/rest/v1/rpc/place_order', { method: 'POST', body: { lines: [{ id: A.id, qty: 'x' }], customer, coupon: '' } });
+  const token = tokenOf((await customerApi('T')).store);
+  const r = await raw('/rest/v1/rpc/place_order', { token, method: 'POST', body: { lines: [{ id: A.id, qty: 'x' }], customer, coupon: '' } });
   const body = JSON.stringify(r.data);
   assert.equal(/service_role|password|secret|jwt|eyJ/i.test(body), false, body);
   assert.equal(/at (\/|[A-Z]:)/.test(body), false, 'yığın izi sızmamalı');
+});
+
+test('girişsiz sipariş: anonim kullanıcı place_order çalıştıramaz, stok değişmez', { skip }, async () => {
+  const before = (await newApi().api.stock.load())[A.id];
+  const viaAdapter = await newApi().api.orders.place([{ id: A.id, qty: 1 }], customer, '').then(() => 'kabul', (e) => e.message);
+  assert.match(viaAdapter, /GIRIS_GEREKLI|YETKI|SUNUCU_HATASI/);
+  const r = await raw('/rest/v1/rpc/place_order', { method: 'POST', body: { lines: [{ id: A.id, qty: 1 }], customer: { ...customer, name: 'TEST anonim' }, coupon: '' } });
+  assert.notEqual(r.status, 200, 'anonim sipariş kabul edilmemeli');
+  assert.equal((await newApi().api.stock.load())[A.id], before);
+});
+
+test('altın fiyatı: sunucu fiyatı taze (24 saatten yeni) ve yalnızca sunucu işlevi güncelleyebilir', { skip }, async () => {
+  const g = (await raw('/rest/v1/gold_price?select=gram22_sell,updated_at')).data[0];
+  assert.ok(Date.now() - Date.parse(g.updated_at) < 24 * 3600 * 1000, `fiyat eski: ${g.updated_at} (otomatik güncelleme çalışmıyor olabilir)`);
+  const u = await customerApi('G');
+  const upd = await raw('/rest/v1/gold_price?id=eq.1', { token: tokenOf(u.store), method: 'PATCH', body: { gram22_sell: 1 }, prefer: 'return=representation' });
+  assert.ok(upd.status >= 400 || (Array.isArray(upd.data) && upd.data.length === 0), 'müşteri fiyatı değiştirememeli');
+  const rpc = await raw('/rest/v1/rpc/refresh_gold_price', { token: tokenOf(u.store), method: 'POST', body: {} });
+  assert.notEqual(rpc.status, 200, 'müşteri fiyat yenilemeyi çalıştıramamalı');
+  const rpcAnon = await raw('/rest/v1/rpc/refresh_gold_price', { method: 'POST', body: {} });
+  assert.notEqual(rpcAnon.status, 200);
 });
