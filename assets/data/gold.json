@@ -1,32 +1,32 @@
 {
  "source": "Özsafir Gold",
  "sourceUrl": "https://ozsafirgold.com/tr",
- "fetchedAt": "2026-10-30T08:56:58+00:00",
- "updatedAt": "11:04",
+ "fetchedAt": "2026-10-30T15:36:00+00:00",
+ "updatedAt": "17:57",
  "items": {
   "gram22": {
-   "buy": 5750,
-   "sell": 6075
+   "buy": 5650,
+   "sell": 5975
   },
   "quarter": {
-   "buy": 10050,
-   "sell": 10600
+   "buy": 9850,
+   "sell": 10425
   },
   "half": {
-   "buy": 20100,
-   "sell": 21200
+   "buy": 19700,
+   "sell": 20850
   },
   "full": {
-   "buy": 40200,
-   "sell": 42400
+   "buy": 39400,
+   "sell": 41700
   },
   "ata": {
-   "buy": 41300,
-   "sell": 43600
+   "buy": 40600,
+   "sell": 42900
   },
   "resat": {
-   "buy": 41300,
-   "sell": 43600
+   "buy": 40600,
+   "sell": 42900
   }
  }
 }
